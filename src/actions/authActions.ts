@@ -1,14 +1,19 @@
 import {Dispatch} from "react-redux";
+import { history } from '../store/history';
 
 import { authService } from "../services/authService";
 import { userService } from "../services/userService";
+import { change } from "redux-form";
 
 export const authActionTypes = {
     AUTH_LOGIN_PENDING: "AUTH_LOGIN_PENDING",
     AUTH_LOGIN_SUCCESSFUL: "AUTH_LOGIN_SUCCESSFUL",
     AUTH_LOGIN_ERROR: "AUTH_LOGIN_ERROR",
     AUTH_SET_TOKEN: "AUTH_SET_TOKEN",
-    AUTH_CLEAR_TOKEN: "AUTH_CLEAR_TOKEN"
+    AUTH_CLEAR_TOKEN: "AUTH_CLEAR_TOKEN",
+    SIGNUP_PENDING: "SIGNUP_PENDING",
+    SIGNUP_SUCCESSFUL: "SIGNUP_SUCCESSFUL",
+    SIGNUP_ERROR: "SIGNUP_ERROR"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -71,6 +76,7 @@ export const submitAuth = (email: string, password: string) => async (dispatch: 
 
     try {
         await authService.login(email, password);
+        history.push('/home');
     } catch (e) {
         dispatch({
             type: authActionTypes.AUTH_LOGIN_ERROR,
@@ -80,3 +86,26 @@ export const submitAuth = (email: string, password: string) => async (dispatch: 
         });
     }
 };
+
+export const signup = (email: string, firstName: string, lastName: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: authActionTypes.SIGNUP_PENDING,
+        payload: {}
+    });
+
+    try {
+        await authService.signup(email, firstName, lastName, password, confirmPassword);
+        history.push('/home');
+    } catch (e) {
+        dispatch({
+            type: authActionTypes.SIGNUP_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const recaptcha = () => (dispatch: Dispatch<any>) => {
+    dispatch(change('signupForm', 'recaptcha', true));
+}

@@ -23,11 +23,15 @@ const NavMenu = (props: any) => (
                         </li> : null 
                     }
 
-                        
+                    {!props.authSession.isAuthenticated ?  
+                        <li>
+                            <NavLink exact className="app-navlink" to="/signup">
+                                Sign Up
+                            </NavLink>
+                        </li> : null 
+                    }    
 
-                        {props.authSession.isAuthenticated ? <NavMenuLogOutLinkContainer/> : <NavMenuLoginLink/>}
-
-                        
+                        {props.authSession.isAuthenticated ? <NavMenuLogOutLinkContainer/> : <NavMenuLoginLink/>}                      
                         
                     </ul>
             </div>

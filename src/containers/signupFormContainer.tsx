@@ -22,9 +22,8 @@ class SignupFormContainer extends React.Component {
         await this.props.actions.signup(values.email, values.firstName, values.lastName, values.password, values.confirmPassword);
     };
 
-    onChange(value: any) {
-        this.props.actions.recaptcha();
-        console.log("Captcha value:", value);
+    async onChange(value: any) {
+        this.props.actions.recaptcha(value);
     }
 
     render() {

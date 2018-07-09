@@ -106,6 +106,11 @@ export const signup = (email: string, firstName: string, lastName: string, passw
     }
 };
 
-export const recaptcha = () => (dispatch: Dispatch<any>) => {
-    dispatch(change('signupForm', 'recaptcha', true));
+export const recaptcha = (recaptchaResponse: string) => async (dispatch: Dispatch<any>) => {
+    try {
+        const response = await authService.recaptcha(recaptchaResponse);
+        dispatch(change('signupForm', 'recaptcha', response.data.success));
+    } catch (e) {
+        dispatch(change('signupForm', 'recaptcha', false));
+    }
 }

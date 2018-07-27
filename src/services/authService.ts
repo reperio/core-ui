@@ -11,6 +11,14 @@ class AuthService {
 
         return JSON.parse(window.atob(base64));
     }
+
+    async signup(email: string, firstName: string, lastName: string, password: string, confirmPassword: string) {
+        return await axios.post(`/auth/signup`, {email, firstName, lastName, password, confirmPassword});
+    }
+
+    async recaptcha(response: string) {
+        return await axios.post(`/auth/recaptcha`, {response});
+    }
 }
 
 export const authService = new AuthService();

@@ -58,6 +58,33 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 user: null
             };
         }
+        case authActionTypes.SIGNUP_PENDING: {
+            return {
+                isPending: true,
+                isAuthenticated: false,
+                isError: false,
+                errorMessage: null,
+                user: null
+            };
+        }
+        case authActionTypes.SIGNUP_SUCCESSFUL: {
+            return {
+                isPending: false,
+                isAuthenticated: true,
+                isError: false,
+                errorMessage: null,
+                user: action.payload.user
+            };
+        }
+        case authActionTypes.SIGNUP_ERROR: {
+            return {
+                isPending: false,
+                isAuthenticated: false,
+                isError: true,
+                errorMessage: action.payload.message,
+                user: null
+            };
+        }
         default: {
             return state;
         }

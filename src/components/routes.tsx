@@ -6,12 +6,14 @@ import LoginFormContainer from "../containers/loginFormContainer";
 import PrivateRouteContainer from "../containers/privateRouteContainer";
 import PublicRouteContainer from "../containers/publicRouteContainer";
 import MainDashboardContainer from "../containers/mainDashboardContainer";
+import SignupFormContainer from '../containers/signupFormContainer';
 
 const Routes = () => (
     <div className="app-content">
         <Switch>
             <PrivateRouteContainer exact path="/home" component={MainDashboardContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />
+            <PublicRouteContainer exact path="/signup" component={SignupFormContainer} />
             <Route>
                 <Redirect to="/home"/>
             </Route>

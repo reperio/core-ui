@@ -45,7 +45,7 @@ export const setAuthToken = (authToken: string, forceActionDispatch = false) => 
     if (parsedToken != null && Math.round((new Date()).getTime() / 1000) < parsedToken.exp) {
         window.localStorage.setItem("authToken", authToken);
         if (forceActionDispatch || oldParsedToken == null || oldParsedToken.currentUserId !== parsedToken.currentUserId) {
-            const {data: user} = await userService.getUserById(parsedToken.currentUserId);
+            const {data: {data: user}} = await userService.getUserById(parsedToken.currentUserId);
             dispatch({
                 type: authActionTypes.AUTH_SET_TOKEN,
                 payload: {authToken, user}

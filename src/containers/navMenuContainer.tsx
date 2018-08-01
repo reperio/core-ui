@@ -2,20 +2,24 @@ import React from 'react'
 import {connect} from "react-redux";
 
 import NavMenu from "../components/navMenu/navMenu";
+import { State } from '../store/initialState';
 
 class NavMenuContainer extends React.Component {
     props: any;
 
     render() {
         return (
-            <NavMenu authSession={this.props.authSession} />
+            <div className="r-nav-menu">
+                <NavMenu authSession={this.props.authSession} applications={this.props.applications} />
+            </div>
         );
     }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
     return {
-        authSession: state.authSession
+        authSession: state.authSession,
+        applications: state.applications
     };
 }
 

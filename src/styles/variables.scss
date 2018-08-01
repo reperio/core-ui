@@ -1,18 +1,31 @@
-
-$primary-color: #4285C3;
 $secondary-color: #c7d8e8;
 
 $nav-menu-background: #F0F0F0;
 $nav-menu-border: #95989A;
 
-$status-card-good: #D1FFDD;
-$status-card-warning: #FFFFD1;
-$status-card-bad: #FFD1D1;
+$black-label: rgb(0, 0, 0);
 
-$error: #DB0000;
-$success: green;
-$neutral: #999999;
-$warning: yellow;
+$min-input-height: 40px;
 
-$dark1: #333;
-$dark2: #666;
+$namespace: "r";
+
+$reperio-red: rgb(173, 52, 50);
+$reperio-dark-red: rgb(137, 42, 40);
+$reperio-disabled-red: rgb(199, 113, 111);
+$reperio-blue: rgb(66, 133, 195);
+$reperio-dark-blue: rgb(58, 115, 168);
+$reperio-disabled-checkbox-blue: rgb(188, 224, 253);
+$reperio-disabled-blue: rgb(166, 189, 211);
+$reperio-teal: rgb(42, 191, 200);
+$reperio-dark-teal: rgb(36, 159, 167);
+$reperio-disabled-teal: rgb(124, 212, 217);
+$reperio-charcoal: rgb(98, 98, 98);
+$reperio-dark-charcoal: rgb(75, 75, 75);
+$reperio-disabled-charcoal: rgb(191, 191, 191);
+$reperio-placeholder-gray: rgb(197, 197, 197);
+$reperio-menu-highlight: rgb(216, 216, 216);
+$reperio-input-border: rgba(149, 152, 154, 1);
+$reperio-disabled-placeholder: rgba(168, 164, 164, 1);
+
+$reperio-content-background: #FFF;
+$reperio-navbar-background: rgb(227, 227, 227);

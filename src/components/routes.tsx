@@ -9,7 +9,7 @@ import MainDashboardContainer from "../containers/mainDashboardContainer";
 import SignupFormContainer from '../containers/signupFormContainer';
 
 const Routes = () => (
-    <div className="app-content">
+    <div className="r-app-content">
         <Switch>
             <PrivateRouteContainer exact path="/home" component={MainDashboardContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />

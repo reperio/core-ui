@@ -5,7 +5,7 @@ import {bindActionCreators} from "redux";
 import LoginForm from "../components/loginForm";
 
 class LoginFormValues {
-    email: string;
+    primaryEmail: string;
     password: string;
 }
 
@@ -13,7 +13,7 @@ class LoginFormContainer extends React.Component {
     props: any;
 
     async onSubmit(values: LoginFormValues) {
-        await this.props.actions.submitAuth(values.email, values.password);
+        await this.props.actions.submitAuth(values.primaryEmail, values.password);
     };
 
     render() {

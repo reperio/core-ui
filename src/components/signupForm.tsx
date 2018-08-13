@@ -1,37 +1,39 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import {Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
-import { AnyMxRecord } from 'dns';
+const Button = require('@reperio/ui-components').Button;
+const Textbox = require('@reperio/ui-components').Textbox;
+
+const text = (props:any) => {
+    const {input, meta, ...rest} = props;
+        return (<Textbox {...input} {...rest} />
+)};
+
 
 const SignupForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
         <h2>Sign Up</h2>
         <FormGroup>
-            <Field name="firstName" component="input" className="form-control" type="text" placeholder="First Name"
-                   style={{maxWidth: "280px"}}/>
+            <Field name="firstName" placeholder="First Name" type="text" component={text} />
         </FormGroup>
         <FormGroup>
-            <Field name="lastName" component="input" className="form-control" type="text" placeholder="Last Name"
-                   style={{maxWidth: "280px"}}/>
+            <Field name="lastName" placeholder="Last Name" type="text" component={text} />
         </FormGroup>
         <FormGroup>
-            <Field name="email" component="input" className="form-control" type="text" placeholder="Email"
-                   style={{maxWidth: "280px"}}/>
+            <Field name="email" placeholder="Email" type="email" component={text} />
         </FormGroup>
         <FormGroup>
-            <Field name="password" component="input" className="form-control" type="password"
-                   placeholder="Password" style={{maxWidth: "280px"}}/>
+            <Field name="password" placeholder="Password" type="text" component={text} />
         </FormGroup>
         <FormGroup>
-            <Field name="confirmPassword" component="input" className="form-control" type="password"
-                   placeholder="Confirm Password" style={{maxWidth: "280px"}}/>
+            <Field name="confirmPassword" placeholder="Confirm Password" type="password" component={text} />
         </FormGroup>
         <FormGroup>
             {props.children}
         </FormGroup>
         <FormGroup>
-            <button disabled={props.recaptcha !== true} className="btn btn-primary" type="submit">Sign up</button>
+            <Button color="neutral" disabled={props.recaptcha !== true} text="Sign Up" />
         </FormGroup>
     </form>
 );

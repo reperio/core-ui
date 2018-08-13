@@ -3,20 +3,11 @@ import { Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
 const Button = require('@reperio/ui-components').Button;
 const Textbox = require('@reperio/ui-components').Textbox;
-const Checkbox = require('@reperio/ui-components').Checkbox;
 
 const text = (props:any) => {
     const {input, meta, ...rest} = props;
         return (<Textbox {...input} {...rest} />
 )};
-
-// const test2 = (props:any) => {
-//         return (<Checkbox label={...props.label} checked={...props.input.value} {...props.input} />
-// )};
-
-const handleCheckboxChange = (event: any) => {
-    this.setState({checked: event.target.checked});
-}
 
 const LoginForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>

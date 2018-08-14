@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@reperio/ui-components": "^0.1.9",
     "@types/react-router-bootstrap": "^0.24.4",
     "@types/socket.io-client": "^1.4.32",
     "axios": "^0.18.0",
@@ -26,7 +27,7 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
-    "redux-form": "^7.2.3",
+    "redux-form": "^7.4.2",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
@@ -36,7 +37,7 @@
     "@types/react-redux": "^5.0.15",
     "@types/react-router-dom": "^4.2.4",
     "@types/react-router-redux": "^5.0.12",
-    "@types/redux-form": "^7.0.14",
+    "@types/redux-form": "^7.4.5",
     "css-loader": "^0.28.10",
     "http-server": "^0.11.1",
     "node-sass": "^4.7.2",

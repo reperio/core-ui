@@ -1,21 +1,21 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
+import { TextboxElement, ButtonElement } from '@reperio/ui-components';
 
 const LoginForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
-        <h2>Please sign in</h2>
+        <h2>Login</h2>
+        <hr />
         <FormGroup>
-            <Field name="email" component="input" className="form-control" type="text" placeholder="Email"
-                   style={{maxWidth: "280px"}}/>
+            <Field name="email" placeholder="Email" type="text" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
-            <Field name="password" component="input" className="form-control" type="password"
-                   placeholder="Password" style={{maxWidth: "280px"}}/>
+            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
-            <button className="btn btn-primary" type="submit">Sign in</button>
+            <ButtonElement name="signin" color="neutral" text="Sign In" />
         </FormGroup>
     </form>
 );

@@ -9,7 +9,7 @@ const LoginForm = (props: any) => (
         <h2>Login</h2>
         <hr />
         <FormGroup>
-            <Field name="email" placeholder="Email" type="text" component={TextboxElement} />
+            <Field name="primaryEmail" placeholder="Email" type="text" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
             <Field name="password" placeholder="Password" type="password" component={TextboxElement} />

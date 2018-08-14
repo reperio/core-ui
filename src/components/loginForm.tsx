@@ -1,13 +1,7 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
-const Button = require('@reperio/ui-components').Button;
-const Textbox = require('@reperio/ui-components').Textbox;
-
-const text = (props:any) => {
-    const {input, meta, ...rest} = props;
-        return (<Textbox {...input} {...rest} />
-)};
+import { TextboxElement, ButtonElement } from '@reperio/ui-components';
 
 const LoginForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
@@ -15,13 +9,13 @@ const LoginForm = (props: any) => (
         <h2>Login</h2>
         <hr />
         <FormGroup>
-            <Field name="email" placeholder="Email" type="text" component={text} />
+            <Field name="email" placeholder="Email" type="text" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
-            <Field name="password" placeholder="Password" type="password" component={text} />
+            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
-            <Button color="neutral" text="Sign In" />
+            <ButtonElement name="signin" color="neutral" text="Sign In" />
         </FormGroup>
     </form>
 );

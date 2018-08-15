@@ -17,7 +17,7 @@ const SignupForm = (props: any) => (
             <Field name="email" placeholder="Email" type="email" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
-            <Field name="password" placeholder="Password" type="text" component={TextboxElement} />
+            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
             <Field name="confirmPassword" placeholder="Confirm Password" type="password" component={TextboxElement} />

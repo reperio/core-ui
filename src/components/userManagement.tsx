@@ -1,7 +1,7 @@
 import React from 'react'
 import {Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
-import { GridElement } from '@reperio/ui-components';
+import { GridElement, ButtonElement } from '@reperio/ui-components';
 
 const gridColumns = [
     {
@@ -25,6 +25,9 @@ const UserManagement = (props: any) => (
     <div>
         <h2>User Management</h2>
         <hr />
+        <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />
+        <br />
+        <br />
         <GridElement
             columns={gridColumns} 
             data={props.gridData}

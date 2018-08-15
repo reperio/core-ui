@@ -2,7 +2,7 @@ import React from 'react'
 
 const MainDashboard = (props: any) => (
     <div>
-        <p>Welcome, {props.authSession.user.email}!</p>
+        <p>Welcome, {props.authSession.user.primaryEmail}!</p>
     </div>
 );
 

@@ -6,7 +6,10 @@ import { change } from "redux-form";
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
     USERS_GET_SUCCESS: "USERS_GET_SUCCESS",
-    USERS_GET_ERROR: "USERS_GET_ERROR"
+    USERS_GET_ERROR: "USERS_GET_ERROR",
+    USERS_CREATE_PENDING: "USERS_CREATE_PENDING",
+    USERS_CREATE_SUCCESS: "USERS_CREATE_SUCCESS",
+    USERS_CREATE_ERROR: "USERS_CREATE_ERROR"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -19,6 +22,9 @@ function getErrorMessageFromStatusCode(statusCode: number) {
 }
 
 export const getUsers = () => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_GET_PENDING
+    });
 
     try {
         const users = await userService.getUsers();
@@ -26,6 +32,28 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
             type: usersActionTypes.USERS_GET_SUCCESS,
             payload: users.data
         });
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_GET_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const createUser = (primaryEmail: string, firstName: string, lastName: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_CREATE_PENDING
+    });
+
+    try {
+        const user = await userService.createUser(primaryEmail, firstName, lastName, organizationIds);
+        dispatch({
+            type: usersActionTypes.USERS_CREATE_SUCCESS,
+            payload: user.data
+        });
+        history.push('/users');
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_GET_ERROR,

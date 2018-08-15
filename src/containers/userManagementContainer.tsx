@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import UserManagement from "../components/userManagement";
 import { getUsers } from '../actions/usersActions';
+import { locationChange } from '../actions/navActions';
 import { State } from '../store/initialState';
 
 class UserManagementContainer extends React.Component {
@@ -12,9 +13,13 @@ class UserManagementContainer extends React.Component {
         await this.props.actions.getUsers();
     }
 
+    navigateToUserCreate() {
+        this.props.actions.locationChange('/userCreate');
+    }
+
     render() {
         return (
-            <UserManagement gridData={this.props.users.users} />
+            <UserManagement gridData={this.props.users.users} navigateToUserCreate={this.navigateToUserCreate.bind(this)} />
         );
     }
 }
@@ -28,7 +33,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getUsers}, dispatch)
+        actions: bindActionCreators({getUsers, locationChange}, dispatch)
     };
 }
 

@@ -23,6 +23,14 @@ const NavMenu = (props: any) => (
                         </li> : null 
                     }
 
+                    {props.authSession.isAuthenticated ?  
+                        <li>
+                            <NavLink exact className="app-navlink" to="/users">
+                                Users
+                            </NavLink>
+                        </li> : null 
+                    }
+
                     {!props.authSession.isAuthenticated ?  
                         <li>
                             <NavLink exact className="app-navlink" to="/signup">

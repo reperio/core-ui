@@ -8,7 +8,7 @@ export function usersReducer(state = initialState.users, action: {type: string, 
                 isPending: true,
                 isError: false,
                 errorMessage: null,
-                users: null
+                users: []
             };
         }
         case usersActionTypes.USERS_GET_SUCCESS: {
@@ -16,7 +16,7 @@ export function usersReducer(state = initialState.users, action: {type: string, 
                 isPending: false,
                 isError: false,
                 errorMessage: null,
-                users: action.payload.user
+                users: action.payload
             };
         }
         case usersActionTypes.USERS_GET_ERROR: {
@@ -24,7 +24,7 @@ export function usersReducer(state = initialState.users, action: {type: string, 
                 isPending: false,
                 isError: true,
                 errorMessage: action.payload.message,
-                users: null
+                users: []
             };
         }
         default: {

@@ -7,23 +7,23 @@ const gridColumns = [
     {
         Header: "First Name",
         accessor: "firstName",
-        Placeholder: "test"
+        Placeholder: "First Name"
     },
     {
         Header: "Last Name",
         accessor: "lastName",
-        Placeholder: "test1"
+        Placeholder: "Last Name"
     },
     {
-        Header: "Age",
-        accessor: "age",
-        Placeholder: "test2"
+        Header: "Email",
+        accessor: "primaryEmail",
+        Placeholder: "Email"
     }
 ]
 
 const UserManagement = (props: any) => (
     <div>
-        <h2>User UserManagement</h2>
+        <h2>User Management</h2>
         <hr />
         <GridElement
             columns={gridColumns} 

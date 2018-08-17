@@ -26,7 +26,7 @@ const SignupForm = (props: any) => (
             {props.children}
         </FormGroup>
         <FormGroup>
-            <ButtonElement color="neutral" disabled={props.recaptcha !== true} text="Sign Up" />
+            <ButtonElement type="submit" color="neutral" disabled={props.recaptcha !== true} text="Sign Up" />
         </FormGroup>
     </form>
 );

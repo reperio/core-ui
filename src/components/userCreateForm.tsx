@@ -16,10 +16,17 @@ const UserCreateForm = (props: any) => (
             <Field name="primaryEmail" placeholder="Primary Email" type="email" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
+            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
+        </FormGroup>
+        <FormGroup>
+            <Field name="confirmPassword" placeholder="Confirm Password" type="password" component={TextboxElement} />
+        </FormGroup>
+        <FormGroup>
             <Field name="organizations" multi options={props.organizations.map((organization:any) => { return {value: organization.id, label:organization.name}})} placeholder="Organizations" component={PickerElement} />
         </FormGroup>
         <FormGroup>
-            <ButtonElement color="neutral" text="Create User" />
+            <ButtonElement type="submit"  color="neutral" text="Create User" />
+            <ButtonElement type="button" color="cancel" text="Cancel" onClick={() => props.navigateToUserManagement()} />
         </FormGroup>
     </form>
 );

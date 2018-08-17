@@ -17,6 +17,8 @@ function getErrorMessageFromStatusCode(statusCode: number) {
         case 400:
         case 401:
         case 403:
+        case 409:
+            return "A user with that email already exists"
         default:
             return "An error occurred, please contact your system administrator"}
 }
@@ -42,13 +44,13 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const createUser = (primaryEmail: string, firstName: string, lastName: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const createUser = (primaryEmail: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_CREATE_PENDING
     });
 
     try {
-        const user = await userService.createUser(primaryEmail, firstName, lastName, organizationIds);
+        const user = await userService.createUser(primaryEmail, firstName, lastName, password, confirmPassword, organizationIds);
         dispatch({
             type: usersActionTypes.USERS_CREATE_SUCCESS,
             payload: user.data

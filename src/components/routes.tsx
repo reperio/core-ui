@@ -10,6 +10,7 @@ import SignupFormContainer from '../containers/signupFormContainer';
 import usersContainer from '../containers/usersContainer';
 import userCreateFormContainer from '../containers/userCreateFormContainer';
 import userManagementFormContainer from '../containers/userManagementFormContainer';
+import permissionManagementContainer from "../containers/permissions/permissionManagementContainer";
 
 const Routes = () => (
     <div className="app-content">
@@ -18,6 +19,9 @@ const Routes = () => (
             <PrivateRouteContainer exact path="/users" component={usersContainer} />
             <PrivateRouteContainer exact path="/users/new" component={userCreateFormContainer} />
             <PrivateRouteContainer exact path="/users/:userId/edit" component={userManagementFormContainer} />
+            <PrivateRouteContainer exact path="/userCreate" component={userCreateFormContainer} />
+            <PrivateRouteContainer exact path="/userManagement" component={userManagementFormContainer} />
+            <PrivateRouteContainer exact path="/permissions" component={permissionManagementContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />
             <PublicRouteContainer exact path="/signup" component={SignupFormContainer} />
             <Route>

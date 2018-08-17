@@ -26,6 +26,12 @@ const NavMenu = (props: any) => (
                         Users
                     </NavItem>
                 </LinkContainer> : null,
+            props.authSession.isAuthenticated ?
+                <LinkContainer key="2" exact to="/permissions">
+                    <NavItem>
+                        Permissions
+                    </NavItem>
+                </LinkContainer> : null,
             !props.authSession.isAuthenticated ?
                 <LinkContainer key="3" exact to="/signup">
                     <NavItem>

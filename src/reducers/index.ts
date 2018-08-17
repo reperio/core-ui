@@ -3,10 +3,12 @@ import { reducer as formReducer } from 'redux-form'
 import { authSessionReducer } from "./authSessionReducer"
 import { usersReducer } from "./usersReducer";
 import { userManagementReducer } from "./userManagementReducer";
+import { permissionsReducer } from "./permissionReducer"
 
 export const rootReducer = combineReducers({
     form: formReducer,
     authSession: authSessionReducer,
     users: usersReducer,
-    userManagement: userManagementReducer
+    userManagement: userManagementReducer,
+    permissions: permissionsReducer
 });

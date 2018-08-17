@@ -1,6 +1,4 @@
 import React from 'react'
-import {Field, reduxForm } from 'redux-form'
-import {FormGroup} from "react-bootstrap";
 import { GridElement, ButtonElement } from '@reperio/ui-components';
 
 const gridColumns = [
@@ -21,9 +19,9 @@ const gridColumns = [
     }
 ]
 
-const UserManagement = (props: any) => (
+const Users = (props: any) => (
     <div>
-        <h2>User Management</h2>
+        <h2>Users</h2>
         <hr />
         <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />
         <br />
@@ -36,4 +34,4 @@ const UserManagement = (props: any) => (
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things
-export default UserManagement;
+export default Users;

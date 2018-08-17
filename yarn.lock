@@ -13,9 +13,9 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@reperio/ui-components@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.1.9.tgz#a838140cb0886731d42dfa77e94ef98f81359880"
+"@reperio/ui-components@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.1.11.tgz#79801d0acda1e23703425bdbaf60cf3e6324e16f"
   dependencies:
     moment "^2.22.2"
     react "^16.4.2"

@@ -9,8 +9,8 @@ class UserService {
         return await axios.get(`/users`);
     }
 
-    async createUser(primaryEmail: string, firstName: string, lastName: string, organizationIds: string[]) {
-        return await axios.post(`/users`, {primaryEmail, firstName, lastName, organizationIds});
+    async createUser(primaryEmail: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) {
+        return await axios.post(`/users`, {primaryEmail, firstName, lastName, password, confirmPassword, organizationIds});
     }
 }
 

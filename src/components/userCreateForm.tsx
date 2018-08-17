@@ -26,7 +26,7 @@ const UserCreateForm = (props: any) => (
         </FormGroup>
         <FormGroup>
             <ButtonElement type="submit"  color="neutral" text="Create User" />
-            <ButtonElement type="button" color="cancel" text="Cancel" onClick={() => props.navigateToUserManagement()} />
+            <ButtonElement type="button" color="cancel" text="Cancel" onClick={() => props.navigateToUsers()} />
         </FormGroup>
     </form>
 );

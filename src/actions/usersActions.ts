@@ -9,7 +9,10 @@ export const usersActionTypes = {
     USERS_GET_ERROR: "USERS_GET_ERROR",
     USERS_CREATE_PENDING: "USERS_CREATE_PENDING",
     USERS_CREATE_SUCCESS: "USERS_CREATE_SUCCESS",
-    USERS_CREATE_ERROR: "USERS_CREATE_ERROR"
+    USERS_CREATE_ERROR: "USERS_CREATE_ERROR",
+    USERS_EDIT_PENDING: "USERS_EDIT_PENDING",
+    USERS_EDIT_SUCCESS: "USERS_EDIT_SUCCESS",
+    USERS_EDIT_ERROR: "USERS_EDIT_ERROR"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -44,6 +47,28 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
+export const editUser = (userId: string, primaryEmail: string, firstName: string, lastName: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_EDIT_PENDING
+    });
+
+    try {
+        const user = await userService.editUser(userId, primaryEmail, firstName, lastName, organizationIds);
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_SUCCESS,
+            payload: user.data
+        });
+        history.push('/users');
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
 export const createUser = (primaryEmail: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_CREATE_PENDING
@@ -58,7 +83,7 @@ export const createUser = (primaryEmail: string, firstName: string, lastName: st
         history.push('/users');
     } catch (e) {
         dispatch({
-            type: usersActionTypes.USERS_GET_ERROR,
+            type: usersActionTypes.USERS_CREATE_ERROR,
             payload: {
                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }

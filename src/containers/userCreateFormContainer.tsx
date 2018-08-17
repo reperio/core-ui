@@ -22,14 +22,14 @@ class UserCreateFormContainer extends React.Component {
         await this.props.actions.createUser(values.primaryEmail, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations.map((organization:any) => {return organization.value}));
     };
 
-    async navigateToUserManagement() {
+    async navigateToUsers() {
         this.props.actions.locationChange('/users');
     }
 
     render() {
         return (
             <div>
-                <UserCreateForm navigateToUserManagement={this.navigateToUserManagement.bind(this)} onSubmit={this.onSubmit.bind(this)} organizations={this.props.authSession.user.userOrganizations.map((userOrganization:any) => { return userOrganization.organization})} />
+                <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} onSubmit={this.onSubmit.bind(this)} organizations={this.props.authSession.user.userOrganizations.map((userOrganization:any) => { return userOrganization.organization})} />
             </div>
         );
     }

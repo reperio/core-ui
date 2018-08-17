@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PermissionManagement from "../../components/permissions/permissionManagement";
 import { getPermissions } from '../../actions/permissionsActions';
+import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
 import {Redirect} from "react-router";
 
@@ -14,7 +15,7 @@ class PermissionManagementContainer extends React.Component {
     }
 
     redirectToEditorCreate() {
-        //TODO add redirect
+        this.props.actions.locationChange('/permissions/new');
     }
 
     render() {
@@ -32,7 +33,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getPermissions}, dispatch)
+        actions: bindActionCreators({getPermissions, locationChange}, dispatch)
     };
 }
 

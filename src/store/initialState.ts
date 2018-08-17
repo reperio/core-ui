@@ -3,6 +3,7 @@ export class State {
     users: StateUsers;
     userManagement: StateUserManagement;
     permissions: StatePermissions;
+    permissionEditor: StatePermissionEditor;
 }
 
 export class StateAuthSession {
@@ -33,6 +34,13 @@ export class StatePermissions {
     permissions: any[];
 }
 
+export class StatePermissionEditor {
+    isPending: boolean;
+    isError: boolean;
+    errorMessage: string;
+    initialPermission: any;
+}
+
 export const initialState: State = {
     authSession: {
         isPending: false,
@@ -58,5 +66,11 @@ export const initialState: State = {
         isError: false,
         errorMessage: null,
         permissions: []
+    },
+    permissionEditor: {
+        isPending: false,
+        isError: false,
+        errorMessage: null,
+        initialPermission: null
     }
 };

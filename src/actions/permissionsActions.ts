@@ -54,7 +54,7 @@ export const clearEditorInitialPermission = () => (dispatch: Dispatch<any>) => {
 };
 
 export const loadEditorInitialPermission = (permissionId: string) => async (dispatch: Dispatch<any>) => {
-    const permission = permissionId != null ? await permissionService.getPermissionById(permissionId) : {};
+    const permission = permissionId != null ? await permissionService.getPermissionById(permissionId) : null;
 
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_EDITOR_LOAD_INITIAL_PERMISSION,
@@ -79,7 +79,7 @@ export const savePermission = (permission: any) => async (dispatch: Dispatch<any
             await permissionService.createPermission({name: permission.name, description: permission.description});
         }
         else{
-            // TODO: Add update service method
+            await permissionService.editPermission(permission.id, {name: permission.name, description: permission.description});
         }
         
         history.push('/permissions');

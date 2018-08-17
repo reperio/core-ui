@@ -12,6 +12,10 @@ class PermissionService {
     async createPermission(permission: any) {
         return await axios.post(`/permissions`, permission);
     }
+
+    async editPermission(permissionId: string, permission: any) {
+        return await axios.put(`/permissions/${permissionId}`, permission);
+    }
 }
 
 export const permissionService = new PermissionService();

@@ -3,20 +3,26 @@ import {Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
 import {ButtonElement, GridElement} from '@reperio/ui-components';
 
-const gridColumns = [
-    {
-        Header: "Name",
-        accessor: "name",
-        Placeholder: "Name"
-    },
-    {
-        Header: "Description",
-        accessor: "description",
-        Placeholder: "Description"
-    }
-]
+const PermissionManagement = (props: any) => {
+    const gridColumns = [
+        {
+            Header: "Name",
+            accessor: "name",
+            Placeholder: "Name"
+        },
+        {
+            Header: "Description",
+            accessor: "description",
+            Placeholder: "Description"
+        },
+        {
+            Header: "",
+            id: "edit",
+            Cell: ({row}: any) => (<ButtonElement color="neutral" text="Edit" onClick={() => {props.redirectToEditorEdit(row._original.id)}}/>)
+        }
+    ];
 
-const PermissionManagement = (props: any) => (
+    return (
     <div>
         <h2>Permission Management</h2>
         <ButtonElement color="neutral" text="Add Permission" onClick={() => {props.redirectToEditorCreate()}}/>
@@ -25,7 +31,7 @@ const PermissionManagement = (props: any) => (
             columns={gridColumns}
             data={props.gridData}
             filterable={true} />
-    </div>
-);
+    </div>)
+};
 
 export default PermissionManagement;

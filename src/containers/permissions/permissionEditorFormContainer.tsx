@@ -37,7 +37,8 @@ class PermissionEditorFormContainer extends React.Component {
     render() {
         return (
             <div>
-                <PermissionEditorForm initialPermission={this.props.initialValues}
+                <PermissionEditorForm initialValues={this.props.initialPermission}
+                                      isNewDescription={this.props.isNewDescription}
                                       onCancel={this.onCancel.bind(this)}
                                       onSubmit={this.onSubmit.bind(this)}
                                       errorMessage={this.props.errorMessage}
@@ -51,12 +52,12 @@ function mapStateToProps(state: State) {
     const selector = formValueSelector('permissionEditorForm');
     const initialPermission = state.permissionEditor.initialPermission;
     return {
-        initialValues: initialPermission != null ? {
-            id: initialPermission.id,
-            name: initialPermission.name,
-            description: initialPermission.description
+        initialPermission: initialPermission != null ? {
+            id: initialPermission.data.id,
+            name: initialPermission.data.name,
+            description: initialPermission.data.description
         } : null,
-        isNewDescription: selector(state, "id") == null,
+        isNewDescription: initialPermission != null ? false : true,
         errorMessage: state.permissionEditor.errorMessage,
         isError: state.permissionEditor.isError
     };

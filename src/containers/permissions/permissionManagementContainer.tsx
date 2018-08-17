@@ -18,9 +18,13 @@ class PermissionManagementContainer extends React.Component {
         this.props.actions.locationChange('/permissions/new');
     }
 
+    redirectToEditorEdit(permissionId: number) {
+        this.props.actions.locationChange(`/permissions/${permissionId}/edit`);
+    }
+
     render() {
         return (
-            <PermissionManagement redirectToEditorCreate={this.redirectToEditorCreate.bind(this)} gridData={this.props.permissions.permissions} />
+            <PermissionManagement redirectToEditorCreate={this.redirectToEditorCreate.bind(this)} redirectToEditorEdit={this.redirectToEditorEdit.bind(this)} gridData={this.props.permissions.permissions} />
         );
     }
 }

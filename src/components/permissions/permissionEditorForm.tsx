@@ -6,7 +6,7 @@ import { TextboxElement, ButtonElement } from '@reperio/ui-components';
 const PermissionEditorForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.isError ? <p className="alert alert-danger">{props.errorMessage}</p> : ""}
-        <h2>{props.initialPermission != null ? "Create Permission" : "Edit Permission"}</h2>
+        <h2>{props.isNewDescription ? "Create Permission" : "Edit Permission"}</h2>
         <FormGroup>
             <Field name="name" placeholder="Name" type="text" component={TextboxElement} />
         </FormGroup>
@@ -21,4 +21,4 @@ const PermissionEditorForm = (props: any) => (
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things
-export default reduxForm({ form: 'permissionEditorForm' })(PermissionEditorForm) as any;
+export default reduxForm({ form: 'permissionEditorForm', enableReinitialize: true })(PermissionEditorForm) as any;

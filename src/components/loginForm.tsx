@@ -15,7 +15,7 @@ const LoginForm = (props: any) => (
             <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
         </FormGroup>
         <FormGroup>
-            <ButtonElement name="signin" color="neutral" text="Sign In" />
+            <ButtonElement type="submit" name="signin" color="neutral" text="Sign In" />
         </FormGroup>
     </form>
 );

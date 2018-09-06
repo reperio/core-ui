@@ -1,5 +1,5 @@
 import React from 'react'
-import { GridElement, ButtonElement } from '@reperio/ui-components';
+import { Grid, ButtonElement, Wrapper } from '@reperio/ui-components';
 
 const gridColumns = [
     {
@@ -20,17 +20,30 @@ const gridColumns = [
 ]
 
 const Users = (props: any) => (
-    <div>
-        <h2>Users</h2>
-        <hr />
-        <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />
-        <br />
-        <br />
-        <GridElement
-            columns={gridColumns} 
-            data={props.gridData}
-            filterable={true} />
-    </div>
+    <form>
+        <div className="row">
+            <Wrapper>
+                <div className="col-xs-12">
+                    <h2>Users</h2>
+                    <hr />
+                    <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />
+                    <br />
+                    <br />
+                    <Grid
+                        columns={gridColumns} 
+                        data={props.gridData}
+                        rowClick={(state: any, rowInfo: any) => { 
+                            return { onClick: (e:any) => {
+                                if (e.target.innerHTML !== '<span>&nbsp;</span>') {
+                                    props.navigateToManagement(rowInfo.original)
+                                }
+                            }}
+                        }}
+                        filterable={true} />
+                </div>
+            </Wrapper>
+        </div>
+    </form>
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things

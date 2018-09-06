@@ -23,7 +23,7 @@ class UserCreateFormContainer extends React.Component {
     };
 
     async navigateToUsers() {
-        this.props.actions.locationChange('/users');
+        this.props.actions.locationChange('/users', null, null);
     }
 
     render() {

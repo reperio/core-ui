@@ -18,7 +18,9 @@ class LoginFormContainer extends React.Component {
 
     render() {
         return (
-            <LoginForm onSubmit={this.onSubmit.bind(this)} authSession={this.props.authSession} />
+            <div>
+                <LoginForm onSubmit={this.onSubmit.bind(this)} authSession={this.props.authSession} />
+            </div>
         );
     }
 }

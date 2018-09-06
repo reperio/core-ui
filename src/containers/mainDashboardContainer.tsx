@@ -8,7 +8,9 @@ class MainDashboardContainer extends React.Component {
 
     render() {
         return (
-            <MainDashboard authSession={this.props.authSession} />
+            <div>
+                <MainDashboard authSession={this.props.authSession} />
+            </div>
         );
     }
 }

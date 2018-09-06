@@ -1,7 +1,8 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
-import { change } from "redux-form";
+import { change, formValueSelector, arrayPush, arrayRemove } from "redux-form";
+import { store } from "../store/store";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -90,3 +91,34 @@ export const createUser = (primaryEmail: string, firstName: string, lastName: st
         });
     }
 };
+
+export const selectOrganization = (something: any) => (dispatch: Dispatch<any>) => {
+    dispatch(change('userManagementForm', 'selectedOrganization', {name: something.label, id: something.value}));
+}
+
+export const addOrganization = (something: any) => (dispatch: Dispatch<any>) => {
+    if (something.id != null) {
+        dispatch(arrayPush('userManagementForm', 'organizations', something));
+    }
+}
+
+export const removeOrganization = (id: any) => (dispatch: Dispatch<any>) => {
+    dispatch(arrayRemove('userManagementForm', 'organizations', id));
+}
+
+export const populateUserOrganizations = (userOrganizations: any, adminUserOrganizations: any) => (dispatch: Dispatch<any>) => {
+
+    const adminOrganizations = adminUserOrganizations
+        .map((userOrganization:any) => { 
+            return {
+                name: userOrganization.organization.name, id: userOrganization.organization.id
+            }
+        });
+
+    const adminOrganizationIds = adminOrganizations.map((organization:any) => organization.id);
+    const visibleOrganizations = userOrganizations
+        .filter((userOrganization:any) => {
+            return adminOrganizationIds.includes(userOrganization.id)
+        })
+    dispatch(change('userManagementForm', 'organizations', visibleOrganizations));
+}

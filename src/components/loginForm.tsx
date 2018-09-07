@@ -1,22 +1,32 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
-import { TextboxElement, ButtonElement } from '@reperio/ui-components';
+import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
 
 const LoginForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
-        {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
-        <h2>Login</h2>
-        <hr />
-        <FormGroup>
-            <Field name="primaryEmail" placeholder="Email" type="text" component={TextboxElement} />
-        </FormGroup>
-        <FormGroup>
-            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
-        </FormGroup>
-        <FormGroup>
-            <ButtonElement type="submit" name="signin" color="neutral" text="Sign In" />
-        </FormGroup>
+        <div className="row">
+            <Wrapper>
+                <div className="col-xs-12">
+                    <div className="row">
+                        {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
+                        <h2>Login</h2>
+                        <hr />
+                    </div>
+                    <div className="row">
+                        <FormGroup>
+                            <Field name="primaryEmail" placeholder="Email" type="text" component={TextboxElement} />
+                        </FormGroup>
+                        <FormGroup>
+                            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
+                        </FormGroup>
+                        <FormGroup>
+                            <ButtonElement type="submit" name="signin" color="neutral" text="Sign In" />
+                        </FormGroup>
+                    </div>
+                </div>
+            </Wrapper>
+        </div>
     </form>
 );
 

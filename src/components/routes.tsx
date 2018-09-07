@@ -9,6 +9,7 @@ import MainDashboardContainer from "../containers/mainDashboardContainer";
 import SignupFormContainer from '../containers/signupFormContainer';
 import usersContainer from '../containers/usersContainer';
 import userCreateFormContainer from '../containers/userCreateFormContainer';
+import userManagementFormContainer from '../containers/userManagementFormContainer';
 
 const Routes = () => (
     <div className="app-content">
@@ -16,6 +17,7 @@ const Routes = () => (
             <PrivateRouteContainer exact path="/home" component={MainDashboardContainer} />
             <PrivateRouteContainer exact path="/users" component={usersContainer} />
             <PrivateRouteContainer exact path="/userCreate" component={userCreateFormContainer} />
+            <PrivateRouteContainer exact path="/userManagement" component={userManagementFormContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />
             <PublicRouteContainer exact path="/signup" component={SignupFormContainer} />
             <Route>

@@ -11,7 +11,8 @@ const NavMenu = (props: any) => (
             name: `${props.authSession.user.firstName} ${props.authSession.user.lastName}`,
             accountName: 'Reper.io',
             phone: '1234567890',
-            email:props.authSession.user.primaryEmail} : null}
+            email:props.authSession.user.primaryEmail,
+            onLogout: props.logout} : null}
         linkContainers={[
             props.authSession.isAuthenticated ?
                 <LinkContainer key="1" exact to="/home">
@@ -48,48 +49,6 @@ const NavMenu = (props: any) => (
         ]}
         >
     </Navbar>
-    // <div className="app-sidebar">
-    //     <div className="nav-side-menu">
-    //         <div className="brand">Brand Logo</div>
-    //         <i className="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-        
-    //             <div className="menu-list">
-        
-    //                 <ul id="menu-content" className="menu-content collapse out">
-    //                 {props.authSession.isAuthenticated ?  
-    //                     <li>
-    //                         <NavLink exact className="app-navlink" to="/home">
-    //                             Home
-    //                         </NavLink>
-    //                     </li> : null 
-    //                 }
-
-    //                 {props.authSession.isAuthenticated ?  
-    //                     <li>
-    //                         <NavLink exact className="app-navlink" to="/users">
-    //                             Users
-    //                         </NavLink>
-    //                     </li> : null 
-    //                 }
-
-    //                 {!props.authSession.isAuthenticated ?  
-    //                     <li>
-    //                         <NavLink exact className="app-navlink" to="/signup">
-    //                             Sign Up
-    //                         </NavLink>
-    //                     </li> : null 
-    //                 }    
-
-    //                     {props.authSession.isAuthenticated ? <NavMenuLogOutLinkContainer/> : <NavMenuLoginLink/>}                      
-                        
-    //                 </ul>
-    //         </div>
-    //     </div>
-    // </div>
-    // // <div>
-    // //     {props.authSession.isAuthenticated ? <LinkContainer to="/home"><NavItem>Home</NavItem></LinkContainer> : null}
-    // //     {props.authSession.isAuthenticated ? <NavMenuLogOutLinkContainer/> : <NavMenuLoginLink/>}
-    // // </div>
 );
 
 export default NavMenu;

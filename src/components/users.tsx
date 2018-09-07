@@ -24,22 +24,24 @@ const Users = (props: any) => (
         <div className="row">
             <Wrapper>
                 <div className="col-xs-12">
-                    <h2>Users</h2>
-                    <hr />
-                    <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />
-                    <br />
-                    <br />
-                    <Grid
-                        columns={gridColumns} 
-                        data={props.gridData}
-                        rowClick={(state: any, rowInfo: any) => { 
-                            return { onClick: (e:any) => {
-                                if (e.target.innerHTML !== '<span>&nbsp;</span>') {
-                                    props.navigateToManagement(rowInfo.original)
-                                }
+                    <div className="row">
+                        <h2>Users</h2>
+                        <hr />
+                        <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />
+                    </div>
+                    <div className="row">
+                        <Grid
+                            columns={gridColumns} 
+                            data={props.gridData}
+                            rowClick={(state: any, rowInfo: any) => { 
+                                return { onClick: (e:any) => {
+                                    if (e.target.innerHTML !== '<span>&nbsp;</span>') {
+                                        props.navigateToManagement(rowInfo.original)
+                                    }
+                                }}
                             }}
-                        }}
-                        filterable={true} />
+                            filterable={true} />
+                    </div>
                 </div>
             </Wrapper>
         </div>

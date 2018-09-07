@@ -57,24 +57,18 @@ const UserManagementForm = (props: any) => (
                             </div>
                             <div className="row">
                                 <div className="col-xs-6">
-                                    <FormGroup>
-                                        <label>First Name</label>
-                                        <Field name="user.firstName" placeholder="First Name" type="text" component={TextboxElement} />
-                                    </FormGroup>
+                                    <label>First Name</label>
+                                    <Field name="user.firstName" placeholder="First Name" type="text" component={TextboxElement} />
                                 </div>
                                 <div className="col-xs-6">
-                                    <FormGroup>
-                                        <label>Last Name</label>
-                                        <Field name="user.lastName" placeholder="Last Name" type="text" component={TextboxElement} />
-                                    </FormGroup>
+                                    <label>Last Name</label>
+                                    <Field name="user.lastName" placeholder="Last Name" type="text" component={TextboxElement} />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <FormGroup>
-                                        <label>Primary Email Address</label>
-                                        <Field name="user.primaryEmail" placeholder="Primary Email" type="email" component={TextboxElement} />
-                                    </FormGroup>
+                                    <label>Primary Email Address</label>
+                                    <Field name="user.primaryEmail" placeholder="Primary Email" type="email" component={TextboxElement} />
                                 </div>
                             </div>
                         </div>
@@ -90,9 +84,7 @@ const UserManagementForm = (props: any) => (
                             </div>
                             <div className="row">
                                 <div className="col-xs-8">
-                                    <FormGroup>
-                                        <Field name="chooseOrganizations" options={props.organizations.map((organization:any) => { return {value: organization.id, label:organization.name}})} placeholder="Organizations" component={PickerElement} onChange={props.selectOrganization} />
-                                    </FormGroup>
+                                    <Field name="chooseOrganizations" options={props.organizations.map((organization:any) => { return {value: organization.id, label:organization.name}})} placeholder="Organizations" component={PickerElement} onChange={props.selectOrganization} />
                                 </div>
                                 <div className="col-xs-4">
                                     {props.addedOrganizations != null && props.selectedOrganization != null && props.addedOrganizations.find((organization: any) => {return organization.id === props.selectedOrganization.value}) != null ? 
@@ -108,13 +100,11 @@ const UserManagementForm = (props: any) => (
                             </div>
                             <div className="row">
                                 <div className="col-md-12">
-                                    <FormGroup>
-                                        <FieldArray name="organizations"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.organizations}
-                                                    removeOrganization={props.removeOrganization}
-                                                    component={organizationsFieldArray}/>
-                                    </FormGroup>
+                                    <FieldArray name="organizations"
+                                                rerenderOnEveryChange={true}
+                                                initialValues={props.initialValues.organizations}
+                                                removeOrganization={props.removeOrganization}
+                                                component={organizationsFieldArray}/>
                                 </div>
                             </div>
                         </div>
@@ -122,11 +112,13 @@ const UserManagementForm = (props: any) => (
                 </div>
                 <div className="row user-management-controls-bottom">
                     <Wrapper>
-                        <div className="col-xs-6 user-management-submission-controls">
-                            <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
-                        </div>
-                        <div className="col-xs-6 user-management-submission-controls">
-                            <ButtonElement type="submit"  color="success" wide text="Save" />
+                        <div className="col-xs-12 user-management-submission-controls-container">
+                            <div className="col-xs-6 user-management-submission-controls">
+                                <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
+                            </div>
+                            <div className="col-xs-6 user-management-submission-controls">
+                                <ButtonElement type="submit"  color="success" wide text="Save" />
+                            </div>
                         </div>
                     </Wrapper>
                 </div>
@@ -153,11 +145,13 @@ const UserManagementForm = (props: any) => (
                 </div>
                 <div className="row">
                     <Wrapper>
-                        <div className="col-xs-6 user-management-submission-controls">
-                            <ButtonElement type="button" color="cancel" text="Cancel" onClick={() => props.navigateToUsers()} wide />
-                        </div>
-                        <div className="col-xs-6 user-management-submission-controls">
-                            <ButtonElement type="submit"  color="success" text="Save" wide />
+                        <div className="col-xs-12 user-management-submission-controls-container">
+                            <div className="col-xs-6 user-management-submission-controls">
+                                <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
+                            </div>
+                            <div className="col-xs-6 user-management-submission-controls">
+                                <ButtonElement type="submit"  color="success" wide text="Save" />
+                            </div>
                         </div>
                     </Wrapper>
                 </div>

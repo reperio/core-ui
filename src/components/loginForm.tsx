@@ -5,13 +5,15 @@ import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
 
 const LoginForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
-        <div className="col-md-12">
-            <div className="row">
-                <Wrapper>
-                    <div className="col-xs-12">
+        <div className="row">
+            <Wrapper>
+                <div className="col-xs-12">
+                    <div className="row">
                         {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
                         <h2>Login</h2>
                         <hr />
+                    </div>
+                    <div className="row">
                         <FormGroup>
                             <Field name="primaryEmail" placeholder="Email" type="text" component={TextboxElement} />
                         </FormGroup>
@@ -22,8 +24,8 @@ const LoginForm = (props: any) => (
                             <ButtonElement type="submit" name="signin" color="neutral" text="Sign In" />
                         </FormGroup>
                     </div>
-                </Wrapper>
-            </div>
+                </div>
+            </Wrapper>
         </div>
     </form>
 );

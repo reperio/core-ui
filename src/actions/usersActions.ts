@@ -2,7 +2,6 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
 import { change, arrayPush, arrayRemove } from "redux-form";
-import { store } from "../store/store";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -97,7 +96,6 @@ export const selectOrganization = (organization: any) => (dispatch: Dispatch<any
 }
 
 export const addOrganization = (organization: any) => (dispatch: Dispatch<any>) => {
-    const state = store.getState();
     if (organization != null && organization.id != null) {
         dispatch(arrayPush('userManagementForm', 'organizations', organization));
         dispatch(change('userManagementForm', 'selectedOrganization', null));

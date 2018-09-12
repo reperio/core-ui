@@ -98,7 +98,6 @@ const UserManagementForm = (props: any) => (
                                                     })
                                             }
                                             pickerValue={props.selectedOrganization ? {label:props.selectedOrganization.name, value: props.selectedOrganization.id}: ""}
-                                            clearable={false}
                                             placeholder="Organizations" 
                                             component={PickerElement} 
                                             onChange={props.selectOrganization} />

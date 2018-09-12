@@ -9,10 +9,10 @@ const organizationsFieldArray = (props: any) => (
         {props.initialValues.map((member:any, index:number) =>
             <div key={index}>
                 <div className="row">
-                    <div className="col-xs-9">
+                    <div className="col-xs-8 user-management-organizations">
                         {props.initialValues[index].name}
                     </div>
-                    <div className="col-xs-3">
+                    <div className="col-xs-4">
                         <ButtonElement type="button" color="danger" text="Leave" onClick={() => props.removeOrganization(index)} />
                     </div>
                 </div>
@@ -84,18 +84,27 @@ const UserManagementForm = (props: any) => (
                             </div>
                             <div className="row">
                                 <div className="col-xs-8">
-                                    <Field name="chooseOrganizations" options={props.organizations.map((organization:any) => { return {value: organization.id, label:organization.name}})} placeholder="Organizations" component={PickerElement} onChange={props.selectOrganization} />
+                                    <Field  name="selectedOrganization"
+                                            options={
+                                                props.organizations
+                                                    .filter((organization:any) => {
+                                                        return !props.initialValues.organizations.map((x:any)=> x.id).includes(organization.id)
+                                                    })
+                                                    .map((organization:any, index: number) => { 
+                                                        return {
+                                                            value: organization.id,
+                                                            label:organization.name
+                                                        }
+                                                    })
+                                            }
+                                            pickerValue={props.selectedOrganization ? {label:props.selectedOrganization.name, value: props.selectedOrganization.id}: ""}
+                                            clearable={false}
+                                            placeholder="Organizations" 
+                                            component={PickerElement} 
+                                            onChange={props.selectOrganization} />
                                 </div>
                                 <div className="col-xs-4">
-                                    {props.addedOrganizations != null && props.selectedOrganization != null && props.addedOrganizations.find((organization: any) => {return organization.id === props.selectedOrganization.value}) != null ? 
-                                    <div>
-                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addOrganization(props.selectedOrganization)}} disabled={true} />
-                                    </div>
-                                    : 
-                                    <div>
-                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addOrganization(props.selectedOrganization)}} disabled={false} />
-                                    </div>
-                                    }
+                                    <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addOrganization(props.selectedOrganization)}} />
                                 </div>
                             </div>
                             <div className="row">

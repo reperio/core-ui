@@ -27,16 +27,16 @@ class UserManagementFormContainer extends React.Component {
         this.props.actions.locationChange('/users', null, null);
     }
 
-    selectOrganization(something: any) {
-        this.props.actions.selectOrganization(something);
+    selectOrganization(organization: any) {
+        this.props.actions.selectOrganization(organization);
     }
 
-    removeOrganization(something: any) {
-        this.props.actions.removeOrganization(something);
+    removeOrganization(organization: any) {
+        this.props.actions.removeOrganization(organization);
     }
 
-    addOrganization(something: any) {
-        this.props.actions.addOrganization(something);
+    addOrganization(organization: any) {
+        this.props.actions.addOrganization(organization);
     }
 
     render() {

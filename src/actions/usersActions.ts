@@ -1,7 +1,7 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
-import { change, formValueSelector, arrayPush, arrayRemove } from "redux-form";
+import { change, formValueSelector, arrayPush, arrayRemove, untouch } from "redux-form";
 import { store } from "../store/store";
 
 export const usersActionTypes = {
@@ -92,13 +92,16 @@ export const createUser = (primaryEmail: string, firstName: string, lastName: st
     }
 };
 
-export const selectOrganization = (something: any) => (dispatch: Dispatch<any>) => {
-    dispatch(change('userManagementForm', 'selectedOrganization', {name: something.label, id: something.value}));
+export const selectOrganization = (organization: any) => (dispatch: Dispatch<any>) => {
+    dispatch(change('userManagementForm', 'selectedOrganization', organization.value ? {name: organization.label, id: organization.value} : ""));
 }
 
-export const addOrganization = (something: any) => (dispatch: Dispatch<any>) => {
-    if (something.id != null) {
-        dispatch(arrayPush('userManagementForm', 'organizations', something));
+export const addOrganization = (organization: any) => (dispatch: Dispatch<any>) => {
+    const state = store.getState();
+    if (organization != null && organization.id != null) {
+        dispatch(arrayPush('userManagementForm', 'organizations', organization));
+        dispatch(change('userManagementForm', 'selectedOrganization', null));
+        dispatch(change('userManagementForm', 'chooseOrganizations', null));
     }
 }
 

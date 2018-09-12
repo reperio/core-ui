@@ -1,7 +1,7 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
-import { change, formValueSelector, arrayPush, arrayRemove, untouch } from "redux-form";
+import { change, arrayPush, arrayRemove } from "redux-form";
 import { store } from "../store/store";
 
 export const usersActionTypes = {
@@ -101,7 +101,6 @@ export const addOrganization = (organization: any) => (dispatch: Dispatch<any>) 
     if (organization != null && organization.id != null) {
         dispatch(arrayPush('userManagementForm', 'organizations', organization));
         dispatch(change('userManagementForm', 'selectedOrganization', null));
-        dispatch(change('userManagementForm', 'chooseOrganizations', null));
     }
 }
 

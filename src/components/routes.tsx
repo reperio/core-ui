@@ -16,8 +16,8 @@ const Routes = () => (
         <Switch>
             <PrivateRouteContainer exact path="/home" component={MainDashboardContainer} />
             <PrivateRouteContainer exact path="/users" component={usersContainer} />
-            <PrivateRouteContainer exact path="/userCreate" component={userCreateFormContainer} />
-            <PrivateRouteContainer exact path="/userManagement" component={userManagementFormContainer} />
+            <PrivateRouteContainer exact path="/users/new" component={userCreateFormContainer} />
+            <PrivateRouteContainer exact path="/users/:userId/edit" component={userManagementFormContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />
             <PublicRouteContainer exact path="/signup" component={SignupFormContainer} />
             <Route>

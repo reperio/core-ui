@@ -14,18 +14,19 @@ class UsersContainer extends React.Component {
     }
 
     navigateToUserCreate() {
-        this.props.actions.locationChange('/userCreate', null, null);
+        this.props.actions.locationChange('/users/new', null, null);
     }
 
-    navigateToManagement(user: any) {
-        this.props.actions.populateUserOrganizations(user.userOrganizations.map((userOrganization:any) => {return {id: userOrganization.organization.id, name: userOrganization.organization.name}}), this.props.authSession.user.userOrganizations);
-        this.props.actions.locationChange('/userManagement', Object.assign(user, {organizations: user.userOrganizations.map((userOrganization:any) => {return {id: userOrganization.organization.id, name: userOrganization.organization.name}})}), 'userManagementForm');
+    navigateToManagement(userId: any) {
+        this.props.actions.locationChange(`users/${userId}/edit`);
     }
 
     render() {
         return (
             <div>
-                <Users gridData={this.props.users.users} navigateToManagement={this.navigateToManagement.bind(this)} navigateToUserCreate={this.navigateToUserCreate.bind(this)} />
+                <Users  gridData={this.props.users.users} 
+                        navigateToManagement={this.navigateToManagement.bind(this)} 
+                        navigateToUserCreate={this.navigateToUserCreate.bind(this)} />
             </div>
         );
     }

@@ -36,7 +36,7 @@ const Users = (props: any) => (
                             rowClick={(state: any, rowInfo: any) => { 
                                 return { onClick: (e:any) => {
                                     if (e.target.innerHTML !== '<span>&nbsp;</span>') {
-                                        props.navigateToManagement(rowInfo.original)
+                                        props.navigateToManagement(rowInfo.original.id)
                                     }
                                 }}
                             }}

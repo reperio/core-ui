@@ -1,6 +1,7 @@
 export class State {
     authSession: StateAuthSession;
     users: StateUsers;
+    userManagement: StateUserManagement;
 }
 
 export class StateAuthSession {
@@ -18,6 +19,13 @@ export class StateUsers {
     users: any[];
 }
 
+export class StateUserManagement {
+    isPending: boolean;
+    isError: boolean;
+    errorMessage: string;
+    initialUser: any
+}
+
 export const initialState: State = {
     authSession: {
         isPending: false,
@@ -31,5 +39,11 @@ export const initialState: State = {
         isError: false,
         errorMessage: null,
         users: []
+    },
+    userManagement: {
+        isPending: false,
+        isError: false,
+        errorMessage: null,
+        initialUser: null
     }
 };

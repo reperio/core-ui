@@ -7,7 +7,7 @@ const LoginForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>
-                <div className="col-xs-12">
+                <div className="col-xs-12 col-md-8">
                     <div className="row">
                         {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
                         <h2>Login</h2>

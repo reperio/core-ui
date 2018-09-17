@@ -7,17 +7,17 @@ const UserCreateForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>
-                <div className="col-xs-12">
+                <div className="col-md-8 col-xs-12">
                     <div className="row">
                         <h2>User Create</h2>
                         <hr />
                     </div>
                     <div className="row">
-                        <div className="col-xs-6">
+                        <div className="col-md-6">
                             <label>First Name</label>
                             <Field name="firstName" placeholder="First Name" type="text" component={TextboxElement} />
                         </div>
-                        <div className="col-xs-6">
+                        <div className="col-md-6">
                             <label>Last Name</label>
                             <Field name="lastName" placeholder="Last Name" type="text" component={TextboxElement} />
                         </div>

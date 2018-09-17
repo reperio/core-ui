@@ -48,7 +48,7 @@ export const setAuthToken = (authToken: string, forceActionDispatch = false) => 
             const {data: user} = await userService.getUserById(parsedToken.currentUserId);
             dispatch({
                 type: authActionTypes.AUTH_SET_TOKEN,
-                payload: {authToken, user: user.data}
+                payload: {authToken, user}
             });
         }
     } else {

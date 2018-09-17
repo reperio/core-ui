@@ -12,14 +12,14 @@ class UserCreateFormValues {
     lastName: string;
     password: string;
     confirmPassword: string;
-    organizations: any[];
+    organizations: any;
 }
 
 class UserCreateFormContainer extends React.Component {
     props: any;
 
     async onSubmit(values: UserCreateFormValues) {
-        await this.props.actions.createUser(values.primaryEmail, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations.map((organization:any) => {return organization.value}));
+        await this.props.actions.createUser(values.primaryEmail, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations == ("" || null) ? [] : values.organizations.map((organization:any) => {return organization.value}));
     };
 
     async navigateToUsers() {

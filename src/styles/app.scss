@@ -163,6 +163,31 @@ label {
   word-break: break-all;
 }
 
+.permission-management-submission-controls-container {
+  padding:15px;
+}
+
+.permission-management-submission-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.permission-management-container {
+  display: flex;
+}
+
+.permission-management-left {
+  flex: 3 0 392px;
+}
+
+.permission-management-right {
+  flex: initial;
+  max-width: 100%;
+  width: 500px;
+  padding-left: 15px;
+}
+
 form {
   padding: 15px;
 }
@@ -171,10 +196,16 @@ form {
   .user-management-right{display:block;}
   .user-management-top{display:none;}
   .user-management-controls-bottom{display:none;}
+  .permission-management-right{display:block;}
+  .permission-management-top{display:none;}
+  .permission-management-controls-bottom{display:none;}
 }
 
 @media all and (max-width: 992px) {
   .user-management-right{display:none;}
   .user-management-top{display:block;}
   .user-management-controls-bottom{display:block;}
+  .permission-management-right{display:none;}
+  .permission-management-top{display:block;}
+  .permission-management-controls-bottom{display:block;}
 }

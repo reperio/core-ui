@@ -1,14 +1,14 @@
-import {initialState, StatePermissionEditor, StatePermissions} from "../store/initialState";
+import {initialState, StatePermissionManagement, StatePermissions} from "../store/initialState";
 import { permissionsActionTypes } from "../actions/permissionsActions";
 
-export function permissionEditorReducer(state = initialState.permissionEditor, action: {type: string, payload: any}): StatePermissionEditor {
+export function permissionManagementReducer(state = initialState.permissionManagement, action: {type: string, payload: any}): StatePermissionManagement {
     switch (action.type) {
-        case permissionsActionTypes.PERMISSIONS_EDITOR_LOAD_INITIAL_PERMISSION: {
+        case permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION: {
             const {permission} = action.payload;
             return {
                 isPending: true,
                 isError: false,
-                initialPermission: permission,
+                initialPermission: permission.data,
                 errorMessage: null
             };
         }
@@ -17,14 +17,14 @@ export function permissionEditorReducer(state = initialState.permissionEditor, a
                 isPending: true,
                 isError: false,
                 errorMessage: null,
-                initialPermission: null
+                initialPermission: state.initialPermission
             };
         }
         case permissionsActionTypes.PERMISSIONS_SAVE_SUCCESS: {
             return {
                 isPending: false,
                 isError: false,
-                errorMessage: action.payload.message,
+                errorMessage: null,
                 initialPermission: null
             };
         }
@@ -33,7 +33,7 @@ export function permissionEditorReducer(state = initialState.permissionEditor, a
                 isPending: false,
                 isError: true,
                 errorMessage: action.payload.message,
-                initialPermission: null
+                initialPermission: state.initialPermission
             };
         }
         default: {

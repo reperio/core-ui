@@ -1,9 +1,7 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { permissionService } from "../services/permissionService";
-import {change, reset} from "redux-form";
-import {authActionTypes} from "./authActions";
-import {push} from "react-router-redux";
+import {reset} from "redux-form";
 
 export const permissionsActionTypes = {
     PERMISSIONS_GET_PENDING: "PERMISSIONS_GET_PENDING",
@@ -12,7 +10,7 @@ export const permissionsActionTypes = {
     PERMISSIONS_SAVE_PENDING: "PERMISSIONS_SAVE_PENDING",
     PERMISSIONS_SAVE_SUCCESS: "PERMISSIONS_SAVE_SUCCESS",
     PERMISSIONS_SAVE_ERROR: "PERMISSIONS_SAVE_ERROR",
-    PERMISSIONS_EDITOR_LOAD_INITIAL_PERMISSION: "PERMISSIONS_EDITOR_LOAD_INITIAL_PERMISSION"
+    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -46,42 +44,36 @@ export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const clearEditorInitialPermission = () => (dispatch: Dispatch<any>) => {
+export const clearManagementInitialPermission = () => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: permissionsActionTypes.PERMISSIONS_EDITOR_LOAD_INITIAL_PERMISSION,
-        payload: { permission: null as any }
+        type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION,
+        payload: { permission: {data: null as any }}
     });
 };
 
-export const loadEditorInitialPermission = (permissionId: string) => async (dispatch: Dispatch<any>) => {
+export const loadManagementInitialPermission = (permissionId: string) => async (dispatch: Dispatch<any>) => {
     const permission = permissionId != null ? await permissionService.getPermissionById(permissionId) : null;
 
     dispatch({
-        type: permissionsActionTypes.PERMISSIONS_EDITOR_LOAD_INITIAL_PERMISSION,
+        type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION,
         payload: { permission }
     });
 
-    dispatch(reset("permissionEditor"))
+    dispatch(reset("permissionManagement"))
 };
 
-export const cancelSavePermission = () => async (dispatch: Dispatch<any>) => {
-    dispatch(push("/permissions"));
-};
-
-export const savePermission = (permission: any) => async (dispatch: Dispatch<any>) => {
+export const editPermission = (id: string, displayName: string, name: string, description: string, isSystemAdminPermission:boolean) => async (dispatch: Dispatch<any>) => {
     dispatch({
-        type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING,
-        payload: {}
+        type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
     });
 
     try {
-        if(permission.id == null){
-            await permissionService.createPermission({name: permission.name, description: permission.description});
-        }
-        else{
-            await permissionService.editPermission(permission.id, {name: permission.name, description: permission.description});
-        }
+        await permissionService.editPermission(id, {description, displayName, isSystemAdminPermission, name});
         
+        dispatch({
+            type: permissionsActionTypes.PERMISSIONS_SAVE_SUCCESS
+
+        });
         history.push('/permissions');
     } catch (e) {
         dispatch({

@@ -4,7 +4,7 @@ import { authSessionReducer } from "./authSessionReducer"
 import { usersReducer } from "./usersReducer";
 import { userManagementReducer } from "./userManagementReducer";
 import { permissionsReducer } from "./permissionReducer"
-import { permissionEditorReducer } from "./permissionEditorReducer";
+import { permissionManagementReducer } from "./permissionManagementReducer";
 
 export const rootReducer = combineReducers({
     form: formReducer,
@@ -12,5 +12,5 @@ export const rootReducer = combineReducers({
     users: usersReducer,
     userManagement: userManagementReducer,
     permissions: permissionsReducer,
-    permissionEditor: permissionEditorReducer
+    permissionManagement: permissionManagementReducer
 });

@@ -1,44 +1,72 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import PermissionManagement from "../../components/permissions/permissionManagement";
-import { getPermissions } from '../../actions/permissionsActions';
-import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
-import {Redirect} from "react-router";
+import { loadManagementInitialPermission, editPermission, clearManagementInitialPermission } from '../../actions/permissionsActions';
+import { locationChange } from '../../actions/navActions';
+import PermissionManagementForm from '../../components/permissions/permissionManagementForm';
+import { formValueSelector, change } from 'redux-form';
 
-class PermissionManagementContainer extends React.Component {
+class UserManagementFormValues {
+    id: number;
+    displayName: string;
+    description: string;
+    isSystemAdminPermission: boolean;
+    name: string;
+}
+
+class PermissionManagementFormContainer extends React.Component {
     props: any;
 
+    async onSubmit(form: UserManagementFormValues) {
+        await this.props.actions.editPermission(form.id, form.displayName, form.name, form.description, form.isSystemAdminPermission);
+    };
+
     async componentDidMount() {
-        await this.props.actions.getPermissions();
+        this.props.actions.clearManagementInitialPermission();
+        await this.props.actions.loadManagementInitialPermission(this.props.match.params.permissionId);
     }
 
-    redirectToEditorCreate() {
-        this.props.actions.locationChange('/permissions/new');
-    }
-
-    redirectToEditorEdit(permissionId: number) {
-        this.props.actions.locationChange(`/permissions/${permissionId}/edit`);
+    navigateToPermissions() {
+        this.props.actions.locationChange('/permissions', null, null);
     }
 
     render() {
         return (
-            <PermissionManagement redirectToEditorCreate={this.redirectToEditorCreate.bind(this)} redirectToEditorEdit={this.redirectToEditorEdit.bind(this)} gridData={this.props.permissions.permissions} />
+            <div>
+                <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)} 
+                                            initialValues={this.props.initialPermission}
+                                            isError={this.props.isError}
+                                            errorMessage={this.props.errorMessage}
+                                            onSubmit={this.onSubmit.bind(this)} />
+            </div>
         );
     }
 }
 
 function mapStateToProps(state: State) {
+    const selector = formValueSelector('userManagementForm');
+    const permissionManagement = state.permissionManagement;
     return {
-        permissions: state.permissions
+        initialPermission: permissionManagement.initialPermission != null ? {
+            id: permissionManagement.initialPermission.id,
+            name: permissionManagement.initialPermission.name,
+            displayName: permissionManagement.initialPermission.displayName,
+            description: permissionManagement.initialPermission.description,
+            isSystemAdminPermission: permissionManagement.initialPermission.isSystemAdminPermission,
+            roles: permissionManagement.initialPermission.rolePermissions
+        } : null,
+        isError: permissionManagement.isError,
+        errorMessage: permissionManagement.errorMessage,
+        authSession: state.authSession,
+        selectedOrganization: selector(state, 'selectedOrganization')
     };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getPermissions, locationChange}, dispatch)
+        actions: bindActionCreators({editPermission, locationChange, loadManagementInitialPermission, clearManagementInitialPermission}, dispatch)
     };
 }
 
-export default connect(mapStateToProps, mapActionToProps)(PermissionManagementContainer);
+export default connect(mapStateToProps, mapActionToProps)(PermissionManagementFormContainer);

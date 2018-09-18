@@ -10,7 +10,8 @@ export const permissionsActionTypes = {
     PERMISSIONS_SAVE_PENDING: "PERMISSIONS_SAVE_PENDING",
     PERMISSIONS_SAVE_SUCCESS: "PERMISSIONS_SAVE_SUCCESS",
     PERMISSIONS_SAVE_ERROR: "PERMISSIONS_SAVE_ERROR",
-    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION"
+    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION",
+    PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION: "PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -62,14 +63,28 @@ export const loadManagementInitialPermission = (permissionId: string) => async (
     dispatch(reset("permissionManagement"))
 };
 
-export const editPermission = (id: string, displayName: string, name: string, description: string, isSystemAdminPermission:boolean) => async (dispatch: Dispatch<any>) => {
+export const removePermissionFromRole = (index: any) => (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: permissionsActionTypes.PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION,
+        payload: { index }
+    });
+}
+
+export const editPermission = (id: string, displayName: string, name: string, description: string, isSystemAdminPermission:boolean, rolePermissions: any[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
     });
 
+    const rp = rolePermissions.map((rolePermission: any) => {
+        return {
+            roleId: rolePermission.roleId,
+            permissionId: rolePermission.permissionId
+        }
+    });
+
     try {
-        await permissionService.editPermission(id, {description, displayName, isSystemAdminPermission, name});
-        
+        await permissionService.editPermission(id, {description, displayName, isSystemAdminPermission, name, rolePermissions: rp});
+
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_SAVE_SUCCESS
 

@@ -36,6 +36,20 @@ export function permissionManagementReducer(state = initialState.permissionManag
                 initialPermission: state.initialPermission
             };
         }
+        case permissionsActionTypes.PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION: {
+            const {index} = action.payload;
+            const newList = state.initialPermission.rolePermissions.filter((x:any, i: number) => {
+                return i != index;
+            });
+            return {
+                isPending: true,
+                isError: false,
+                initialPermission: Object.assign({}, state.initialPermission, {
+                    rolePermissions: newList
+                }),
+                errorMessage: null
+            };
+        }
         default: {
             return state;
         }

@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { loadManagementInitialPermission, editPermission, clearManagementInitialPermission } from '../../actions/permissionsActions';
+import { loadManagementInitialPermission, editPermission, clearManagementInitialPermission, removePermissionFromRole } from '../../actions/permissionsActions';
 import { locationChange } from '../../actions/navActions';
 import PermissionManagementForm from '../../components/permissions/permissionManagementForm';
 import { formValueSelector, change } from 'redux-form';
@@ -13,13 +13,14 @@ class UserManagementFormValues {
     description: string;
     isSystemAdminPermission: boolean;
     name: string;
+    roles: any[];
 }
 
 class PermissionManagementFormContainer extends React.Component {
     props: any;
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editPermission(form.id, form.displayName, form.name, form.description, form.isSystemAdminPermission);
+        await this.props.actions.editPermission(form.id, form.displayName, form.name, form.description, form.isSystemAdminPermission, form.roles);
     };
 
     async componentDidMount() {
@@ -31,6 +32,10 @@ class PermissionManagementFormContainer extends React.Component {
         this.props.actions.locationChange('/permissions', null, null);
     }
 
+    removePermissionFromRole(index: number){
+        this.props.actions.removePermissionFromRole(index);
+    }
+
     render() {
         return (
             <div>
@@ -38,6 +43,7 @@ class PermissionManagementFormContainer extends React.Component {
                                             initialValues={this.props.initialPermission}
                                             isError={this.props.isError}
                                             errorMessage={this.props.errorMessage}
+                                            removePermissionFromRole={this.removePermissionFromRole.bind(this)}
                                             onSubmit={this.onSubmit.bind(this)} />
             </div>
         );
@@ -65,7 +71,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editPermission, locationChange, loadManagementInitialPermission, clearManagementInitialPermission}, dispatch)
+        actions: bindActionCreators({editPermission, locationChange, loadManagementInitialPermission, clearManagementInitialPermission, removePermissionFromRole}, dispatch)
     };
 }
 

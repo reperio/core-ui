@@ -89,7 +89,7 @@ const UserManagementForm = (props: any) => (
                                                 options={
                                                     props.organizations
                                                         .filter((organization:any) => {
-                                                            return !props.initialValues.adminOrganizations.map((x:any)=> x.value).includes(organization.id)
+                                                            return !props.initialValues.selectedOrganizations.map((x:any)=> x.value).includes(organization.id)
                                                         })
                                                         .map((organization:any, index: number) => { 
                                                             return {
@@ -111,7 +111,7 @@ const UserManagementForm = (props: any) => (
                                     <div className="col-md-12">
                                         <FieldArray name="organizations"
                                                     rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.adminOrganizations}
+                                                    initialValues={props.initialValues.selectedOrganizations}
                                                     removeOrganization={props.removeOrganization}
                                                     component={organizationsFieldArray}/>
                                     </div>

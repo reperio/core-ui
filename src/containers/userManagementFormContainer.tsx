@@ -5,27 +5,26 @@ import { State } from '../store/initialState';
 import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser } from '../actions/usersActions';
 import { locationChange } from '../actions/navActions';
 import UserManagementForm from '../components/userManagementForm';
-import { formValueSelector, change } from 'redux-form';
-import { Redirect } from 'react-router';
+import { formValueSelector } from 'redux-form';
 
 class UserManagementFormValues {
     id: number;
     primaryEmail: string;
     firstName: string;
     lastName: string;
-    adminOrganizations: any[];
+    selectedOrganizations: any[];
 }
 
 class UserManagementFormContainer extends React.Component {
     props: any;
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editUser(form.id, form.primaryEmail, form.firstName, form.lastName, form.adminOrganizations.map((organization:any) => {return organization.value}));
+        await this.props.actions.editUser(form.id, form.primaryEmail, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}));
     };
 
     async componentDidMount() {
         this.props.actions.clearManagementInitialUser();
-        await this.props.actions.loadManagementInitialUser(this.props.match.params.userId, this.props.authSession.user.userOrganizations);
+        await this.props.actions.loadManagementInitialUser(this.props.match.params.userId);
     }
 
     navigateToUsers() {
@@ -51,7 +50,7 @@ class UserManagementFormContainer extends React.Component {
                                     initialValues={this.props.initialUser}
                                     onSubmit={this.onSubmit.bind(this)}
                                     selectedOrganization={this.props.selectedOrganization}
-                                    organizations={this.props.authSession.user.userOrganizations.map((x:any) => {return x.organization})}
+                                    organizations={this.props.organizations}
                                     selectOrganization={this.selectOrganization.bind(this)} 
                                     addOrganization={this.addOrganization.bind(this)}
                                     removeOrganization={this.removeOrganization.bind(this)} />
@@ -69,8 +68,9 @@ function mapStateToProps(state: State) {
             firstName: initialUser.firstName,
             lastName: initialUser.lastName,
             primaryEmail: initialUser.primaryEmail,
-            adminOrganizations: initialUser.adminOrganizations
+            selectedOrganizations: initialUser.selectedOrganizations
         } : null,
+        organizations: state.userManagement.organizations,
         authSession: state.authSession,
         selectedOrganization: selector(state, 'selectedOrganization')
     };

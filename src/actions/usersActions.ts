@@ -104,7 +104,15 @@ export const clearManagementInitialUser = () => (dispatch: Dispatch<any>) => {
 
 export const loadManagementInitialUser = (userId: string) => async (dispatch: Dispatch<any>) => {
     let user = userId != null ? await userService.getUserById(userId) : null;
-    user.data.selectedOrganizations = user.data.userOrganizations.map((userOrganization:any) => {return {value: userOrganization.organization.id, label: userOrganization.organization.name}});
+    user.data.selectedOrganizations = user.data.userOrganizations
+        .map((userOrganization:any) => {
+            return {
+                value: userOrganization.organization.id, 
+                label: (userOrganization.organization.personal ? 'Personal - ' : '') + userOrganization.organization.name
+            }
+        })
+        .sort((a: any, b: any) => a.label.localeCompare(b.label));
+
     const organizations = await organizationService.getOrganizations();
 
     dispatch({

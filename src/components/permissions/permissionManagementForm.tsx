@@ -102,7 +102,7 @@ const PermissionManagementForm = (props: any) => (
                                     <div className="col-md-12">
                                         <FieldArray name="roles"
                                                     rerenderOnEveryChange={true}
-                                                    initialValues={[].concat(...props.initialValues.roles.map((x:any) => x.roles))}
+                                                    initialValues={[].concat(...props.initialValues.roles.map((x:any) => x.roles)).sort((a: any, b: any) => a.label.localeCompare(b.name))}
                                                     removePermissionFromRole={props.removePermissionFromRole}
                                                     component={rolesArray}/>
                                     </div>

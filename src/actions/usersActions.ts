@@ -1,7 +1,8 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
-import { change, arrayPush, arrayRemove, reset } from "redux-form";
+import { organizationService } from "../services/organizationService";
+import { change, reset } from "redux-form";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -97,37 +98,18 @@ export const createUser = (primaryEmail: string, firstName: string, lastName: st
 export const clearManagementInitialUser = () => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER,
-        payload: { user: {data: null as any }}
+        payload: { user: {data: null as any }, organizations: {data: null as any }}
     });
 };
 
-export const loadManagementInitialUser = (userId: string, adminUserOrganizations: any) => async (dispatch: Dispatch<any>) => {
+export const loadManagementInitialUser = (userId: string) => async (dispatch: Dispatch<any>) => {
     let user = userId != null ? await userService.getUserById(userId) : null;
-    user.data.organizations = user.data.userOrganizations.map((userOrganization:any) => {return {id: userOrganization.organization.id, name: userOrganization.organization.name}});
-    const userOrganizations = user.data.userOrganizations
-        .map((userOrganization:any) => {
-            return {value: userOrganization.organization.id, label: userOrganization.organization.name
-            }
-        });
-
-    const adminOrganizations = adminUserOrganizations
-    .map((userOrganization:any) => { 
-        return {
-            label: userOrganization.organization.name, value: userOrganization.organization.id
-        }
-    });
-
-    const adminOrganizationIds = adminOrganizations.map((organization:any) => organization.value);
-    const organizations = userOrganizations
-        .filter((userOrganization:any) => {
-            return adminOrganizationIds.includes(userOrganization.value)
-        });
-
-    user.data.adminOrganizations = organizations;
+    user.data.selectedOrganizations = user.data.userOrganizations.map((userOrganization:any) => {return {value: userOrganization.organization.id, label: userOrganization.organization.name}});
+    const organizations = await organizationService.getOrganizations();
 
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER,
-        payload: { user }
+        payload: { user, organizations }
     });
     dispatch(reset("userManagement"))
 };

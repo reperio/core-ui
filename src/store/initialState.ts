@@ -4,6 +4,8 @@ export class State {
     userManagement: StateUserManagement;
     permissions: StatePermissions;
     permissionManagement: StatePermissionManagement;
+    roles: StateRoles;
+    roleManagement: StateRoleManagement;
 }
 
 export class StateAuthSession {
@@ -42,6 +44,21 @@ export class StatePermissionManagement {
     initialPermission: any;
 }
 
+export class StateRoles {
+    isPending: boolean;
+    isError: boolean;
+    errorMessage: string;
+    roles: any[];
+}
+
+export class StateRoleManagement {
+    isPending: boolean;
+    isError: boolean;
+    errorMessage: string;
+    initialRole: any;
+    permissions: any[];
+}
+
 export const initialState: State = {
     authSession: {
         isPending: false,
@@ -74,5 +91,18 @@ export const initialState: State = {
         isError: false,
         errorMessage: null,
         initialPermission: null
+    },
+    roles: {
+        isPending: false,
+        isError: false,
+        errorMessage: null,
+        roles: []
+    },
+    roleManagement: {
+        isPending: false,
+        isError: false,
+        errorMessage: null,
+        initialRole: null,
+        permissions: []
     }
 };

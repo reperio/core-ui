@@ -27,22 +27,28 @@ const NavMenu = (props: any) => (
                     </NavItem>
                 </LinkContainer> : null,
             props.authSession.isAuthenticated ?
-                <LinkContainer key="3" exact to="/permissions">
+            <LinkContainer key="3" exact to="/roles">
+                <NavItem>
+                    Roles
+                </NavItem>
+            </LinkContainer> : null,
+            props.authSession.isAuthenticated ?
+                <LinkContainer key="4" exact to="/permissions">
                     <NavItem>
                         Permissions
                     </NavItem>
                 </LinkContainer> : null,
             !props.authSession.isAuthenticated ?
-                <LinkContainer key="4" exact to="/signup">
+                <LinkContainer key="5" exact to="/signup">
                     <NavItem>
                         Signup
                     </NavItem> 
                 </LinkContainer> : null,
             props.authSession.isAuthenticated ?
-            <LinkContainer key="5" exact to="">
+            <LinkContainer key="6" exact to="">
                 <NavMenuLogOutLinkContainer/>
             </LinkContainer> : 
-            <LinkContainer key="6" exact to="">
+            <LinkContainer key="7" exact to="">
                 <NavMenuLoginLink/>
             </LinkContainer>,
         ]}

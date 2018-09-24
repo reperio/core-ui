@@ -59,4 +59,4 @@ const UserCreateForm = (props: any) => (
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things
-export default reduxForm({ form: 'userCreate' })(UserCreateForm) as any; 
+export default reduxForm({ form: 'userCreateForm' })(UserCreateForm) as any; 

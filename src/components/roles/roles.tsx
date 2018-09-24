@@ -1,5 +1,5 @@
 import React from 'react'
-import {Grid, Wrapper} from '@reperio/ui-components';
+import {Grid, Wrapper, ButtonElement} from '@reperio/ui-components';
 
 const Roles = (props: any) => {
     const gridColumns = [
@@ -18,6 +18,7 @@ const Roles = (props: any) => {
                         <div className="row">
                             <h2>Roles</h2>
                             <hr />
+                            <ButtonElement text="Create new role" color="neutral" onClick={() => props.navigateToCreate()} />
                         </div>
                         <div className="row">
                             <Grid

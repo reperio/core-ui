@@ -134,58 +134,33 @@ label {
   color: $primary-color;
 }
 
-.user-management-submission-controls-container {
+.management-submission-controls-container {
   padding:15px;
 }
 
-.user-management-submission-controls {
+.management-submission-controls {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.user-management-container {
+.management-container {
   display: flex;
 }
 
-.user-management-left {
+.management-left {
   flex: 3 0 392px;
 }
 
-.user-management-right {
+.management-right {
   flex: initial;
   max-width: 100%;
   width: 500px;
   padding-left: 15px;
 }
 
-.user-management-organizations {
+.management-organizations {
   word-break: break-all;
-}
-
-.permission-management-submission-controls-container {
-  padding:15px;
-}
-
-.permission-management-submission-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.permission-management-container {
-  display: flex;
-}
-
-.permission-management-left {
-  flex: 3 0 392px;
-}
-
-.permission-management-right {
-  flex: initial;
-  max-width: 100%;
-  width: 500px;
-  padding-left: 15px;
 }
 
 form {
@@ -193,19 +168,38 @@ form {
 }
 
 @media all and (min-width: 991px) {
-  .user-management-right{display:block;}
-  .user-management-top{display:none;}
-  .user-management-controls-bottom{display:none;}
-  .permission-management-right{display:block;}
-  .permission-management-top{display:none;}
-  .permission-management-controls-bottom{display:none;}
+  .management-right{display:block;}
+  .management-top{display:none;}
+  .management-controls-bottom{display:none;}
 }
 
 @media all and (max-width: 992px) {
-  .user-management-right{display:none;}
-  .user-management-top{display:block;}
-  .user-management-controls-bottom{display:block;}
-  .permission-management-right{display:none;}
-  .permission-management-top{display:block;}
-  .permission-management-controls-bottom{display:block;}
+  .management-right{display:none;}
+  .management-top{display:block;}
+  .management-controls-bottom{display:block;}
+}
+
+.roles-permissions-detail-container {
+  padding-left:30px;
+}
+
+.roles-permissions-detail-header {
+  color: $primary-color;
+}
+
+.roles-permissions-detail-permission-name {
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.roles-permissions-detail-permission-description {
+  padding-left:40px;
+}
+
+.roles-permissions-row {
+  cursor: pointer;
+}
+
+.roles-permissions-row-arrow {
+  padding-right: 5px;
 }

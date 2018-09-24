@@ -76,7 +76,7 @@ export const submitAuth = (primaryEmail: string, password: string) => async (dis
 
     try {
         await authService.login(primaryEmail, password);
-        history.push('/home');
+        history.push('/');
     } catch (e) {
         dispatch({
             type: authActionTypes.AUTH_LOGIN_ERROR,
@@ -95,7 +95,7 @@ export const signup = (primaryEmail: string, firstName: string, lastName: string
 
     try {
         await authService.signup(primaryEmail, firstName, lastName, password, confirmPassword);
-        history.push('/home');
+        history.push('/');
     } catch (e) {
         dispatch({
             type: authActionTypes.SIGNUP_ERROR,

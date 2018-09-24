@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { editRole, loadManagementInitialRole, clearManagementInitialRole, removePermissionFromRole, selectPermission, addPermission } from '../../actions/rolesActions';
+import { editRole, loadManagementInitialRole, clearManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole} from '../../actions/rolesActions';
 import { locationChange } from '../../actions/navActions';
 import RoleManagementForm from '../../components/roles/roleManagementForm';
 import { formValueSelector, change } from 'redux-form';
@@ -29,7 +29,7 @@ class RoleManagementFormContainer extends React.Component {
         this.props.actions.locationChange('/roles', null, null);
     }
 
-    removePermissionFromRole(index: number){
+    removePermission(index: number){
         this.props.actions.removePermissionFromRole(index);
     }
 
@@ -41,6 +41,10 @@ class RoleManagementFormContainer extends React.Component {
         this.props.actions.addPermission(permission);
     }
 
+    deleteRole(roleId: any) {
+        this.props.actions.deleteRole(roleId);
+    }
+
     render() {
         return (
             <div>
@@ -48,7 +52,8 @@ class RoleManagementFormContainer extends React.Component {
                                     initialValues={this.props.initialRole}
                                     isError={this.props.isError}
                                     errorMessage={this.props.errorMessage}
-                                    removePermissionFromRole={this.removePermissionFromRole.bind(this)}
+                                    removePermission={this.removePermission.bind(this)}
+                                    deleteRole={this.deleteRole.bind(this)}
                                     selectedPermission={this.props.selectedPermission}
                                     addPermission={this.addPermission.bind(this)}
                                     selectPermission={this.selectPermission.bind(this)}
@@ -66,6 +71,7 @@ function mapStateToProps(state: State) {
         initialRole: roleManagement.initialRole != null ? {
             id: roleManagement.initialRole.id,
             name: roleManagement.initialRole.name,
+            organization: roleManagement.initialRole.organization,
             selectedPermissions: roleManagement.initialRole.selectedPermissions
         } : null,
         isError: roleManagement.isError,
@@ -78,7 +84,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({locationChange, editRole, loadManagementInitialRole, clearManagementInitialRole, removePermissionFromRole, selectPermission, addPermission}, dispatch)
+        actions: bindActionCreators({locationChange, editRole, loadManagementInitialRole, clearManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole}, dispatch)
     };
 }
 

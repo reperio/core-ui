@@ -16,7 +16,10 @@ export const usersActionTypes = {
     USERS_EDIT_ERROR: "USERS_EDIT_ERROR",
     USERS_MANAGEMENT_LOAD_INITIAL_USER: "USERS_MANAGEMENT_LOAD_INITIAL_USER",
     USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER",
-    USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER"
+    USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER",
+    USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL: "USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL",
+    USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER: "USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER",
+    USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -51,13 +54,13 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const editUser = (userId: string, primaryEmail: string, firstName: string, lastName: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const editUser = (userId: string, primaryEmail: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        const user = await userService.editUser(userId, primaryEmail, firstName, lastName, organizationIds);
+        const user = await userService.editUser(userId, primaryEmail, firstName, lastName, organizationIds, roleIds);
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS,
             payload: user.data
@@ -113,17 +116,28 @@ export const loadManagementInitialUser = (userId: string) => async (dispatch: Di
         })
         .sort((a: any, b: any) => a.label.localeCompare(b.label));
 
-    const organizations = await organizationService.getOrganizations();
+    user.data.selectedRoles = user.data.userRoles.map((userRole: any) => {
+        return {
+            value: userRole.role.id, 
+            label: userRole.role.name,
+            role: userRole.role,
+            organizationId: userRole.role.organizationId
+        }
+    });
 
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER,
-        payload: { user, organizations }
+        payload: { user }
     });
     dispatch(reset("userManagement"))
 };
 
 export const selectOrganization = (organization: any) => (dispatch: Dispatch<any>) => {
     dispatch(change('userManagementForm', 'selectedOrganization', organization.value ? {name: organization.label, id: organization.value} : ""));
+}
+
+export const selectRole = (role: any) => (dispatch: Dispatch<any>) => {
+    dispatch(change('userManagementForm', 'selectedOrganization', role.value ? {name: role.label, id: role.value} : ""));
 }
 
 export const addOrganization = (organization: any) => (dispatch: Dispatch<any>) => {
@@ -158,4 +172,36 @@ export const populateUserOrganizations = (userOrganizations: any, adminUserOrgan
             return adminOrganizationIds.includes(userOrganization.id)
         })
     dispatch(change('userManagementForm', 'organizations', visibleOrganizations));
+}
+
+export const toggleRoleDetails = (index: number) => (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL,
+        payload: { index }
+    });
+}
+
+export const addRole = (role: any, roles: any[]) => (dispatch: Dispatch<any>) => {
+
+    if (role != null) {
+        const matchedRole = roles.filter((x: any) => x.id == role.value)[0];
+        const payload = {
+            label: role.label,
+            value: role.value,
+            role: matchedRole,
+            organizationId: matchedRole.organizationId
+        }
+        dispatch({
+            type: usersActionTypes.USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER,
+            payload: { payload }
+        });
+        dispatch(change('userManagementForm', 'selectedRole', null));
+    }
+}
+
+export const removeRole = (index: any) => (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER,
+        payload: { index }
+    });
 }

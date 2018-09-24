@@ -68,7 +68,6 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 permissions: state.permissions
             };
         }
-        
         default: {
             return state;
         }

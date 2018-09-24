@@ -27,6 +27,30 @@ export function rolesReducer(state = initialState.roles, action: {type: string, 
                 roles: []
             };
         }
+        case rolesActionTypes.ROLES_CREATE_PENDING: {
+            return {
+                isPending: true,
+                isError: false,
+                errorMessage: null,
+                roles: state.roles
+            };
+        }
+        case rolesActionTypes.ROLES_CREATE_SUCCESS: {
+            return {
+                isPending: false,
+                isError: false,
+                errorMessage: null,
+                roles: []
+            };
+        }
+        case rolesActionTypes.ROLES_CREATE_ERROR: {
+            return {
+                isPending: false,
+                isError: true,
+                errorMessage: action.payload.message,
+                roles: state.roles
+            };
+        }
         default: {
             return state;
         }

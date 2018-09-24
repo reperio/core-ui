@@ -7,6 +7,8 @@ import { permissionsReducer } from "./permissionsReducer"
 import { permissionManagementReducer } from "./permissionManagementReducer";
 import { rolesReducer } from "./rolesReducer"
 import { roleManagementReducer } from "./roleManagementReducer";
+import { organizationsReducer } from "./organizationsReducer";
+import { applicationsReducer } from "./applicationsReducer";
 
 export const rootReducer = combineReducers({
     form: formReducer,
@@ -16,5 +18,7 @@ export const rootReducer = combineReducers({
     permissions: permissionsReducer,
     permissionManagement: permissionManagementReducer,
     roles: rolesReducer,
-    roleManagement: roleManagementReducer
+    roleManagement: roleManagementReducer,
+    organizations: organizationsReducer,
+    applications: applicationsReducer
 });

@@ -32,7 +32,7 @@ class PermissionManagementFormContainer extends React.Component {
         this.props.actions.locationChange('/permissions', null, null);
     }
 
-    removePermissionFromRole(index: number){
+    removePermission(index: number){
         this.props.actions.removePermissionFromRole(index);
     }
 
@@ -43,7 +43,7 @@ class PermissionManagementFormContainer extends React.Component {
                                             initialValues={this.props.initialPermission}
                                             isError={this.props.isError}
                                             errorMessage={this.props.errorMessage}
-                                            removePermissionFromRole={this.removePermissionFromRole.bind(this)}
+                                            removePermission={this.removePermission.bind(this)}
                                             onSubmit={this.onSubmit.bind(this)} />
             </div>
         );

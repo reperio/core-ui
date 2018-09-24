@@ -1,6 +1,5 @@
 import React from 'react'
 import {Field, reduxForm, FieldArray } from 'redux-form'
-import {FormGroup} from "react-bootstrap";
 import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
 
 const organizationsFieldArray = (props: any) => (
@@ -9,7 +8,7 @@ const organizationsFieldArray = (props: any) => (
         {props.initialValues.map((member:any, index:number) =>
             <div key={index}>
                 <div className="row">
-                    <div className="col-xs-8 user-management-organizations">
+                    <div className="col-xs-8 management-organizations">
                         {props.initialValues[index].label}
                     </div>
                     <div className="col-xs-4">
@@ -24,12 +23,49 @@ const organizationsFieldArray = (props: any) => (
     </div>
 );
 
+const rolesAndPermissions = (props: any) => (
+    <div>
+        <hr />
+        {props.initialValues.map((member:any, index:number) =>
+            <div key={index}>
+                <div className="row">
+                    <div className="col-xs-8 roles-permissions-row" onClick={() => props.toggle ? props.toggleRoleDetails(index) :  null}>
+                        <div className={`fa ${props.initialValues[index].role.visible ? 'fa-caret-down' : 'fa-caret-right'} fa-lg roles-permissions-row-arrow`}></div>
+                        {props.organizations.filter((x:any) => x.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].label}
+                    </div>
+                    <div className="col-xs-4">
+                        <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeRole(index)} />
+                    </div>
+                </div>
+                <hr />
+                {props.toggle && props.initialValues[index].role.visible ? 
+                    <div className="row roles-permissions-detail-container">
+                        <div className="roles-permissions-detail-header">Permissions</div>
+                        {props.initialValues[index].role.rolePermissions.map((rolePermission: any, index: number) => {
+                            return (
+                                <div key={index}>
+                                    <div className="roles-permissions-detail-permission-name">
+                                        {rolePermission.permission.name}
+                                    </div>
+                                    <div className="roles-permissions-detail-permission-description">
+                                        {rolePermission.permission.description}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                : null }
+            </div>
+        )}
+    </div>
+);
+
 const UserManagementForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.initialValues ? 
-            <div className="user-management-container">
-                <div className="user-management-left">
-                    <div className="row user-management-top">
+            <div className="management-container">
+                <div className="management-left">
+                    <div className="row management-top">
                         <Wrapper>
                             <div className="col-xs-6">
                                 <div className="profile-circle">
@@ -119,20 +155,67 @@ const UserManagementForm = (props: any) => (
                             </div>
                         </Wrapper>
                     </div>
-                    <div className="row user-management-controls-bottom">
+                    <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12 user-management-submission-controls-container">
-                                <div className="col-xs-6 user-management-submission-controls">
+                            <div className="col-xs-12">
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <h2>Roles and Permissions</h2>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-xs-8">
+                                        <Field  name="selectedRole"
+                                                options={
+                                                    props.roles
+                                                        .filter((role:any) => {
+                                                            return !props.initialValues.selectedRoles.map((x:any)=> x.value).includes(role.id)
+                                                        })
+                                                        .map((role:any, index: number) => { 
+                                                            return {
+                                                                value: role.id,
+                                                                label:role.name
+                                                            }
+                                                        })
+                                                }
+                                                pickerValue={props.selectedRole ? props.selectedRole: ""}
+                                                placeholder="Roles" 
+                                                component={PickerElement} 
+                                                onChange={props.selectRole} />
+                                    </div>
+                                    <div className="col-xs-4">
+                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addRole(props.selectedRole)}} />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <FieldArray name="roles"
+                                                    rerenderOnEveryChange={true}
+                                                    initialValues={props.initialValues.selectedRoles}
+                                                    organizations={props.organizations}
+                                                    toggleRoleDetails={props.toggleRoleDetails}
+                                                    removeRole={props.removeRole}
+                                                    toggle={true}
+                                                    component={rolesAndPermissions}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </Wrapper>
+                    </div>
+                    <div className="row management-controls-bottom">
+                        <Wrapper>
+                            <div className="col-xs-12 management-submission-controls-container">
+                                <div className="col-xs-6 management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
                                 </div>
-                                <div className="col-xs-6 user-management-submission-controls">
+                                <div className="col-xs-6 management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>
                         </Wrapper>
                     </div>
                 </div>
-                <div className="user-management-right">
+                <div className="management-right">
                     <div className="row">
                         <Wrapper>
                             <div className="col-xs-6">
@@ -154,11 +237,11 @@ const UserManagementForm = (props: any) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12 user-management-submission-controls-container">
-                                <div className="col-xs-6 user-management-submission-controls">
+                            <div className="col-xs-12 management-submission-controls-container">
+                                <div className="col-xs-6 management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
                                 </div>
-                                <div className="col-xs-6 user-management-submission-controls">
+                                <div className="col-xs-6 management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>

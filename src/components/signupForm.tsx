@@ -43,4 +43,4 @@ const SignupForm = (props: any) => (
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things
-export default reduxForm({ form: 'signup' })(SignupForm) as any;
+export default reduxForm({ form: 'signupForm' })(SignupForm) as any;

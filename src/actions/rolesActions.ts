@@ -11,9 +11,16 @@ export const rolesActionTypes = {
     ROLES_SAVE_PENDING: "ROLES_SAVE_PENDING",
     ROLES_SAVE_SUCCESS: "ROLES_SAVE_SUCCESS",
     ROLES_SAVE_ERROR: "ROLES_SAVE_ERROR",
+    ROLES_DELETE_PENDING: "ROLES_DELETE_PENDING",
+    ROLES_DELETE_SUCCESS: "ROLES_DELETE_SUCCESS",
+    ROLES_DELETE_ERROR: "ROLES_DELETE_ERROR",
     ROLES_MANAGEMENT_LOAD_INITIAL_ROLE: "ROLES_MANAGEMENT_LOAD_INITIAL_ROLE",
     ROLE_MANAGEMENT_REMOVE_ROLE_INITIAL_ROLE: "ROLE_MANAGEMENT_REMOVE_ROLE_INITIAL_ROLE",
-    ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE: "ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE"
+    ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE: "ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE",
+    ROLES_CREATE_PENDING: "ROLES_CREATE_PENDING",
+    ROLES_CREATE_SUCCESS: "ROLES_CREATE_SUCCESS",
+    ROLES_CREATE_ERROR: "ROLES_CREATE_ERROR",
+    ROLES_MANAGEMENT_SHOW_INITIAL_ROLE_PERMISSION_DETAIL: "ROLES_MANAGEMENT_SHOW_INITIAL_ROLE_PERMISSION_DETAIL" 
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -61,8 +68,8 @@ export const loadManagementInitialRole = (roleId: string) => async (dispatch: Di
     role.data.selectedPermissions = role.data.rolePermissions
         .map((rolePermission:any) => {
             return {
-                value: rolePermission.permissions.id, 
-                label: rolePermission.permissions.name
+                value: rolePermission.permission.id, 
+                label: rolePermission.permission.name
             }
         })
         .sort((a: any, b: any) => a.label.localeCompare(b.label));
@@ -112,6 +119,52 @@ export const editRole = (id: string, name: string, permissionIds: any[]) => asyn
     } catch (e) {
         dispatch({
             type: rolesActionTypes.ROLES_SAVE_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const createRole = (name: string, application: any, organization:any, permissions: any[]) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: rolesActionTypes.ROLES_CREATE_PENDING
+    });
+
+    try {
+        await roleService.createRole({name, applicationId: application ? application.value : null, organizationId: organization.value, permissionIds: permissions ? permissions.map((x:any) => x.value) : []});
+
+        dispatch({
+            type: rolesActionTypes.ROLES_CREATE_SUCCESS
+
+        });
+        history.push('/roles');
+    } catch (e) {
+        dispatch({
+            type: rolesActionTypes.ROLES_CREATE_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const deleteRole = (id: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: rolesActionTypes.ROLES_DELETE_PENDING
+    });
+
+    try {
+        await roleService.deleteRole(id);
+
+        dispatch({
+            type: rolesActionTypes.ROLES_DELETE_SUCCESS
+
+        });
+        history.push('/roles');
+    } catch (e) {
+        dispatch({
+            type: rolesActionTypes.ROLES_DELETE_ERROR,
             payload: {
                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }

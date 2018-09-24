@@ -1,35 +1,15 @@
 import React from 'react'
 import {Field, FieldArray, reduxForm} from 'redux-form'
 import {TextboxElement, TextareaElement, ButtonElement, Wrapper, PickerElement, CheckboxElement} from '@reperio/ui-components';
-
-const permissionsArray = (props: any) => (
-    <div>
-        <hr />
-        {props.initialValues.map((member:any, index:number) =>
-            <div key={index}>
-                <div className="row">
-                    <div className="col-xs-9">
-                        {props.initialValues[index].label}
-                    </div>
-                    <div className="col-xs-3">
-                        <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removePermissionFromRole(index)} />
-                    </div>
-                </div>
-                <div className="row">
-                    <hr />
-                </div>
-            </div>
-        )}
-    </div>
-);
+import PermissionsArray from '../permissions/permissionsArray';
 
 const RoleManagementForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.isError ? <p className="alert alert-danger">{props.errorMessage}</p> : ""}
         {props.initialValues ? 
-            <div className="permission-management-container">
-                <div className="permission-management-left">
-                    <div className="row permission-management-top">
+            <div className="management-container">
+                <div className="management-left">
+                    <div className="row management-top">
                         <Wrapper>
                             <div className="col-xs-12">
                                 <div className="row">
@@ -94,27 +74,31 @@ const RoleManagementForm = (props: any) => (
                                         <FieldArray name="permissions"
                                                     rerenderOnEveryChange={true}
                                                     initialValues={props.initialValues.selectedPermissions}
-                                                    removePermissionFromRole={props.removePermissionFromRole}
-                                                    component={permissionsArray}/>
+                                                    toggle={false}
+                                                    removePermission={props.removePermission}
+                                                    component={PermissionsArray}/>
                                     </div>
                                 </div>
                             </div>
                         </Wrapper>
                     </div>
-                    <div className="row permission-management-controls-bottom">
+                    <div className="row management-controls-bottom">
                         <Wrapper>
-                            <div className="col-xs-12 permission-management-submission-controls-container">
-                                <div className="col-xs-6 permission-management-submission-controls">
+                            <div className="col-xs-12 management-submission-controls-container">
+                                <div className="col-xs-4 management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
                                 </div>
-                                <div className="col-xs-6 permission-management-submission-controls">
+                                <div className="col-xs-4 management-submission-controls">
+                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
+                                </div>
+                                <div className="col-xs-4 management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>
                         </Wrapper>
                     </div>
                 </div>
-                <div className="permission-management-right">
+                <div className="management-right">
                     <div className="row">
                         <Wrapper>
                             <div className="col-xs-12">
@@ -128,11 +112,14 @@ const RoleManagementForm = (props: any) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12 permission-management-submission-controls-container">
-                                <div className="col-xs-6 permission-management-submission-controls">
+                            <div className="col-xs-12 management-submission-controls-container">
+                                <div className="col-xs-4 management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
                                 </div>
-                                <div className="col-xs-6 permission-management-submission-controls">
+                                <div className="col-xs-4 management-submission-controls">
+                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
+                                </div>
+                                <div className="col-xs-4 management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>

@@ -19,6 +19,10 @@ class AuthService {
     async recaptcha(response: string) {
         return await axios.post(`/auth/recaptcha`, {response});
     }
+
+    async emailVerification(token: string) {
+        return await axios.post(`/auth/emailVerification`, {token});
+    }
 }
 
 export const authService = new AuthService();

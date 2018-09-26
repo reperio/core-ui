@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {emailVerification} from "../actions/authActions";
 import {bindActionCreators} from "redux";
 import { formValueSelector } from 'redux-form';
+import EmailVerification from '../components/emailVerification';
 
 class EmailVerificationContainer extends React.Component {
     props: any;
@@ -14,8 +15,7 @@ class EmailVerificationContainer extends React.Component {
     render() {
         return (
             <div>
-                {this.props.response == true ? 'Email verified' : null}
-                {this.props.response == false ? 'Expired' : null}
+                <EmailVerification response={this.props.response} />
             </div>
         );
     }

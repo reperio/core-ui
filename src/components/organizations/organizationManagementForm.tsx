@@ -1,9 +1,9 @@
 import React from 'react'
 import {Field, FieldArray, reduxForm} from 'redux-form'
-import {TextboxElement, TextareaElement, ButtonElement, Wrapper, PickerElement, CheckboxElement} from '@reperio/ui-components';
-import PermissionsArray from '../permissions/permissionsArray';
+import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
+import OrganizationManagementUsers from './organizationManagementUsers';
 
-const RoleManagementForm = (props: any) => (
+const OrganizationManagementForm = (props: any) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.isError ? <p className="alert alert-danger">{props.errorMessage}</p> : ""}
         {props.initialValues ? 
@@ -42,41 +42,42 @@ const RoleManagementForm = (props: any) => (
                             <div className="col-xs-12">
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <h2>Permissions</h2>
+                                        <h2>Users</h2>
+                                        <hr />
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-xs-8">
-                                        <Field  name="selectedPermission"
+                                        <Field  name="selectedUser"
                                                 options={
-                                                    props.permissions
-                                                        .filter((permission:any) => {
-                                                            return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.id)
+                                                    props.users
+                                                        .filter((user:any) => {
+                                                            return !props.initialValues.selectedUsers.map((x:any)=> x.value).includes(user.id)
                                                         })
-                                                        .map((permission:any, index: number) => { 
+                                                        .map((user:any, index: number) => { 
                                                             return {
-                                                                value: permission.id,
-                                                                label:permission.name
+                                                                value: user.id,
+                                                                label: `${user.firstName} ${user.lastName} - ${user.primaryEmail}`
                                                             }
                                                         })
                                                 }
-                                                pickerValue={props.selectedPermission ? props.selectedPermission: ""}
-                                                placeholder="Permissions" 
+                                                pickerValue={props.selectedUser ? props.selectedUser: ""}
+                                                placeholder="Users" 
                                                 component={PickerElement} 
-                                                onChange={props.selectPermission} />
+                                                onChange={props.selectUser} />
                                     </div>
                                     <div className="col-xs-4">
-                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addPermission(props.selectedPermission)}} />
+                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addUser(props.selectedUser)}} />
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-md-12">
-                                        <FieldArray name="permissions"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.selectedPermissions}
-                                                    toggle={false}
-                                                    removePermission={props.removePermission}
-                                                    component={PermissionsArray}/>
+                                        <OrganizationManagementUsers    gridData={                                            
+                                                                            props.users
+                                                                                .filter((user:any) => {
+                                                                                    return props.initialValues.selectedUsers.map((x:any)=> x.value).includes(user.id)
+                                                                                })}
+                                                                        removeUser={props.removeUser} />
                                     </div>
                                 </div>
                             </div>
@@ -86,10 +87,10 @@ const RoleManagementForm = (props: any) => (
                         <Wrapper>
                             <div className="col-xs-12 management-submission-controls-container">
                                 <div className="col-xs-4 management-submission-controls">
-                                    <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
+                                    <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToOrganizations()} />
                                 </div>
                                 <div className="col-xs-4 management-submission-controls">
-                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
+                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteOrganization(props.initialValues.id)} />
                                 </div>
                                 <div className="col-xs-4 management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
@@ -114,10 +115,10 @@ const RoleManagementForm = (props: any) => (
                         <Wrapper>
                             <div className="col-xs-12 management-submission-controls-container">
                                 <div className="col-xs-4 management-submission-controls">
-                                    <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
+                                    <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToOrganizations()} />
                                 </div>
                                 <div className="col-xs-4 management-submission-controls">
-                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
+                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteOrganization(props.initialValues.id)} />
                                 </div>
                                 <div className="col-xs-4 management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
@@ -133,4 +134,4 @@ const RoleManagementForm = (props: any) => (
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things
-export default reduxForm({ form: 'roleManagementForm', enableReinitialize: true })(RoleManagementForm) as any;
+export default reduxForm({ form: 'organizationManagementForm', enableReinitialize: true })(OrganizationManagementForm) as any;

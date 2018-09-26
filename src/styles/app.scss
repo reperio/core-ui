@@ -15,7 +15,7 @@
             flex-direction: row;
             width: 100%;
 
-            @media (max-width: 767px) {
+            @media (max-width: 932px) {
                 flex-direction: column;
             }
 
@@ -128,7 +128,7 @@ label {
   color: $primary-color;
 }
 
-.profile-name {
+.management-name {
   font-weight: 400;
   font-size: 35px;
   color: $primary-color;
@@ -167,13 +167,13 @@ form {
   padding: 15px;
 }
 
-@media all and (min-width: 991px) {
+@media all and (min-width: 1163px) {
   .management-right{display:block;}
   .management-top{display:none;}
   .management-controls-bottom{display:none;}
 }
 
-@media all and (max-width: 992px) {
+@media all and (max-width: 1164px) {
   .management-right{display:none;}
   .management-top{display:block;}
   .management-controls-bottom{display:block;}

@@ -14,7 +14,7 @@ const PermissionManagementForm = (props: any) => (
                         <Wrapper>
                             <div className="col-xs-12">
                                 <div className="row">
-                                    <div className="profile-name">
+                                    <div className="management-name">
                                         {props.initialValues.displayName}
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@ const PermissionManagementForm = (props: any) => (
                         <Wrapper>
                             <div className="col-xs-12">
                                 <div className="row">
-                                    <div className="profile-name">
+                                    <div className="management-name">
                                         {props.initialValues.displayName}
                                     </div>
                                 </div>

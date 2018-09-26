@@ -74,7 +74,7 @@ const UserManagementForm = (props: any) => (
                             </div>
                             <div className="col-xs-6">
                                 <div className="row">
-                                    <div className="profile-name">
+                                    <div className="management-name">
                                         {props.initialValues.firstName} {props.initialValues.lastName}
                                     </div>
                                     <div className="profile-primaryEmail">
@@ -225,7 +225,7 @@ const UserManagementForm = (props: any) => (
                             </div>
                             <div className="col-xs-6">
                                 <div className="row">
-                                    <div className="profile-name">
+                                    <div className="management-name">
                                         {props.initialValues.firstName} {props.initialValues.lastName}
                                     </div>
                                     <div className="profile-primaryEmail">

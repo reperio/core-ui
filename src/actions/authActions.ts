@@ -114,3 +114,15 @@ export const recaptcha = (recaptchaResponse: string) => async (dispatch: Dispatc
         dispatch(change('signupForm', 'recaptcha', false));
     }
 }
+
+export const emailVerification = (token: string) => async (dispatch: Dispatch<any>) => {
+    try {
+        const response = await authService.emailVerification(token);
+        setTimeout(()=>{
+            history.push('/');
+        }, 3000);
+        dispatch(change('emailVerification', 'response', response.data));
+    } catch (e) {
+        dispatch(change('emailVerification', 'response', false));
+    }
+}

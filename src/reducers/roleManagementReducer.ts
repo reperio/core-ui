@@ -40,7 +40,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 permissions: state.permissions
             };
         }
-        case rolesActionTypes.ROLE_MANAGEMENT_REMOVE_ROLE_INITIAL_ROLE: {
+        case rolesActionTypes.ROLE_MANAGEMENT_REMOVE_PERMISSION_INITIAL_ROLE: {
             const {index} = action.payload;
             const newList = state.initialRole.selectedPermissions.filter((x:any, i: number) => {
                 return i != index;

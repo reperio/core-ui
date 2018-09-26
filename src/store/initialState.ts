@@ -7,6 +7,7 @@ export class State {
     roles: StateRoles;
     roleManagement: StateRoleManagement;
     organizations: StateOrganizations;
+    organizationManagement: StateOrganizationManagement;
     applications: StateApplications;
 }
 
@@ -67,6 +68,14 @@ export class StateOrganizations {
     organizations: any[];
 }
 
+export class StateOrganizationManagement {
+    isPending: boolean;
+    isError: boolean;
+    errorMessage: string;
+    initialOrganization: any;
+    users: any[];
+}
+
 export class StateApplications {
     isPending: boolean;
     isError: boolean;
@@ -124,6 +133,13 @@ export const initialState: State = {
         isError: false,
         errorMessage: null,
         organizations: []
+    },
+    organizationManagement: {
+        isPending: false,
+        isError: false,
+        errorMessage: null,
+        initialOrganization: null,
+        users: []
     },
     applications: {
         isPending: false,

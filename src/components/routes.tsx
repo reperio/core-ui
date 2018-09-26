@@ -16,6 +16,9 @@ import roleManagementContainer from "../containers/roles/roleManagementContainer
 import rolesContainer from "../containers/roles/rolesContainer";
 import roleCreateFormContainer from "../containers/roles/roleCreateFormContainer";
 import emailVerificationContainer from "../containers/emailVerificationContainer";
+import organizationsContainer from "../containers/organizations/organizationsContainer";
+import organizationManagementContainer from "../containers/organizations/organizationManagementContainer";
+import organizationCreateFormContainer from "../containers/organizations/organizationCreateFormContainer";
 
 const Routes = () => (
     <div className="app-content">
@@ -31,6 +34,9 @@ const Routes = () => (
             <PrivateRouteContainer exact path="/roles/new" component={roleCreateFormContainer} />
             <PrivateRouteContainer exact path="/permissions" component={permissionsContainer} />
             <PrivateRouteContainer exact path="/permissions/:permissionId/edit" component={permissionManagementContainer} />
+            <PrivateRouteContainer exact path="/organizations" component={organizationsContainer} />
+            <PrivateRouteContainer exact path="/organizations/:organizationId/edit" component={organizationManagementContainer} />
+            <PrivateRouteContainer exact path="/organizations/new" component={organizationCreateFormContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />
             <PublicRouteContainer exact path="/signup" component={SignupFormContainer} />
             <PublicRouteContainer exact path="/emailVerification/:token" component={emailVerificationContainer} />

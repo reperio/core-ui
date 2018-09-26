@@ -8,6 +8,7 @@ import { permissionManagementReducer } from "./permissionManagementReducer";
 import { rolesReducer } from "./rolesReducer"
 import { roleManagementReducer } from "./roleManagementReducer";
 import { organizationsReducer } from "./organizationsReducer";
+import { organizationManagementReducer } from "./organizationManagementReducer";
 import { applicationsReducer } from "./applicationsReducer";
 
 export const rootReducer = combineReducers({
@@ -20,5 +21,6 @@ export const rootReducer = combineReducers({
     roles: rolesReducer,
     roleManagement: roleManagementReducer,
     organizations: organizationsReducer,
+    organizationManagement: organizationManagementReducer,
     applications: applicationsReducer
 });

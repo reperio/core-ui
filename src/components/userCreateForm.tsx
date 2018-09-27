@@ -25,7 +25,7 @@ const UserCreateForm = (props: any) => (
                     <div className="row">
                         <div className="col-xs-12">
                             <label>Primary Email</label>
-                            <Field name="primaryEmail" placeholder="Primary Email" type="email" component={TextboxElement} />
+                            <Field name="primaryEmailAddress" placeholder="Primary Email" type="email" component={TextboxElement} />
                         </div>
                     </div>
                     <div className="row">

@@ -21,7 +21,7 @@ const OrganizationManagementUsers = (props: any) => (
                                 },
                                 {
                                     Header: "Email",
-                                    accessor: "primaryEmail",
+                                    accessor: "primaryEmailAddress",
                                     Placeholder: "Email"
                                 },
                                 {

@@ -6,7 +6,7 @@ const MainDashboard = (props: any) => (
         <div className="row">
             <Wrapper>
                 <div className="col-xs-12">
-                    <p>Welcome, {props.authSession.user.primaryEmail}!</p>
+                    <p>Welcome, {props.authSession.user.primaryEmailAddress}!</p>
                 </div>
             </Wrapper>
         </div>

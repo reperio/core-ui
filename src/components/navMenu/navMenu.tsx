@@ -11,7 +11,7 @@ const NavMenu = (props: any) => (
             name: `${props.authSession.user.firstName} ${props.authSession.user.lastName}`,
             accountName: 'Reper.io',
             phone: '1234567890',
-            email:props.authSession.user.primaryEmail,
+            email:props.authSession.user.primaryEmailAddress,
             onLogout: props.logout} : null}
         linkContainers={[
             props.authSession.isAuthenticated ?

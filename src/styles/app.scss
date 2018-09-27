@@ -15,7 +15,7 @@
             flex-direction: row;
             width: 100%;
 
-            @media (max-width: 932px) {
+            @media (max-width: 767px) {
                 flex-direction: column;
             }
 
@@ -122,7 +122,7 @@ label {
   font-size: 4.15em;
 }
 
-.profile-primaryEmail {
+.profile-primaryEmailAddress {
   font-weight: 400;
   font-size: 20px;
   color: $primary-color;

@@ -69,7 +69,7 @@ export const loadManagementInitialOrganization = (organizationId: string) => asy
         .map((userOrganization:any) => {
             return {
                 value: userOrganization.user.id, 
-                label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmail}`
+                label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmailAddress}`
             }
         })
         .sort((a: any, b: any) => a.label.localeCompare(b.label));

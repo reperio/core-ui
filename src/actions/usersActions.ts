@@ -54,13 +54,13 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const editUser = (userId: string, primaryEmail: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        const user = await userService.editUser(userId, primaryEmail, firstName, lastName, organizationIds, roleIds);
+        const user = await userService.editUser(userId, firstName, lastName, organizationIds, roleIds);
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS,
             payload: user.data
@@ -76,13 +76,13 @@ export const editUser = (userId: string, primaryEmail: string, firstName: string
     }
 };
 
-export const createUser = (primaryEmail: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const createUser = (primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_CREATE_PENDING
     });
 
     try {
-        const user = await userService.createUser(primaryEmail, firstName, lastName, password, confirmPassword, organizationIds);
+        const user = await userService.createUser(primaryEmailAddress, firstName, lastName, password, confirmPassword, organizationIds);
         dispatch({
             type: usersActionTypes.USERS_CREATE_SUCCESS,
             payload: user.data

@@ -27,7 +27,7 @@ const OrganizationCreateForm = (props: any) => (
                                             .map((user:any, index: number) => { 
                                                 return {
                                                     value: user.id,
-                                                    label: `${user.firstName} ${user.lastName} - ${user.primaryEmail}`
+                                                    label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`
                                                 }
                                             })
                                     }

@@ -7,7 +7,7 @@ import { createUser } from '../actions/usersActions';
 import { locationChange } from '../actions/navActions';
 
 class UserCreateFormValues {
-    primaryEmail: string;
+    primaryEmailAddress: string;
     firstName: string;
     lastName: string;
     password: string;
@@ -19,7 +19,7 @@ class UserCreateFormContainer extends React.Component {
     props: any;
 
     async onSubmit(values: UserCreateFormValues) {
-        await this.props.actions.createUser(values.primaryEmail, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations == ("" || null) ? [] : values.organizations.map((organization:any) => {return organization.value}));
+        await this.props.actions.createUser(values.primaryEmailAddress, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations == ("" || null) ? [] : values.organizations.map((organization:any) => {return organization.value}));
     };
 
     async navigateToUsers() {

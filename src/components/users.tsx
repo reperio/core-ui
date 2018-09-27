@@ -14,7 +14,7 @@ const gridColumns = [
     },
     {
         Header: "Email",
-        accessor: "primaryEmail",
+        accessor: "primaryEmailAddress",
         Placeholder: "Email"
     }
 ]

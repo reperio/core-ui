@@ -77,8 +77,8 @@ const UserManagementForm = (props: any) => (
                                     <div className="management-name">
                                         {props.initialValues.firstName} {props.initialValues.lastName}
                                     </div>
-                                    <div className="profile-primaryEmail">
-                                        {props.initialValues.primaryEmail}
+                                    <div className="profile-primaryEmailAddress">
+                                        {props.initialValues.primaryEmailAddress}
                                     </div>
                                 </div>
                             </div>
@@ -100,12 +100,6 @@ const UserManagementForm = (props: any) => (
                                     <div className="col-xs-6">
                                         <label>Last Name</label>
                                         <Field name="lastName" placeholder="Last Name" type="text" component={TextboxElement} />
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <label>Primary Email Address</label>
-                                        <Field name="primaryEmail" placeholder="Primary Email" type="email" component={TextboxElement} />
                                     </div>
                                 </div>
                             </div>
@@ -228,8 +222,8 @@ const UserManagementForm = (props: any) => (
                                     <div className="management-name">
                                         {props.initialValues.firstName} {props.initialValues.lastName}
                                     </div>
-                                    <div className="profile-primaryEmail">
-                                        {props.initialValues.primaryEmail}
+                                    <div className="profile-primaryEmailAddress">
+                                        {props.initialValues.primaryEmailAddress}
                                     </div>
                                 </div>
                             </div>

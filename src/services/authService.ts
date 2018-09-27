@@ -1,8 +1,8 @@
 import { axios } from "./axiosService";
 
 class AuthService {
-    async login(primaryEmail: string, password: string) {
-        return await axios.post(`/auth/login`, {primaryEmail, password});
+    async login(primaryEmailAddress: string, password: string) {
+        return await axios.post(`/auth/login`, {primaryEmailAddress, password});
     }
 
     parseJwt(token: string): any {
@@ -12,8 +12,8 @@ class AuthService {
         return JSON.parse(window.atob(base64));
     }
 
-    async signup(primaryEmail: string, firstName: string, lastName: string, password: string, confirmPassword: string) {
-        return await axios.post(`/auth/signup`, {primaryEmail, firstName, lastName, password, confirmPassword});
+    async signup(primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string) {
+        return await axios.post(`/auth/signup`, {primaryEmailAddress, firstName, lastName, password, confirmPassword});
     }
 
     async recaptcha(response: string) {

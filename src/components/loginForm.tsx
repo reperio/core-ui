@@ -15,7 +15,7 @@ const LoginForm = (props: any) => (
                     </div>
                     <div className="row">
                         <FormGroup>
-                            <Field name="primaryEmail" placeholder="Email" type="text" component={TextboxElement} />
+                            <Field name="primaryEmailAddress" placeholder="Email" type="text" component={TextboxElement} />
                         </FormGroup>
                         <FormGroup>
                             <Field name="password" placeholder="Password" type="password" component={TextboxElement} />

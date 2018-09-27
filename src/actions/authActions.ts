@@ -68,14 +68,14 @@ export const setAuth = (user: any) => async (dispatch: Dispatch<any>) => {
     });
 };
 
-export const submitAuth = (primaryEmail: string, password: string) => async (dispatch: Dispatch<any>) => {
+export const submitAuth = (primaryEmailAddress: string, password: string) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: authActionTypes.AUTH_LOGIN_PENDING,
         payload: {}
     });
 
     try {
-        await authService.login(primaryEmail, password);
+        await authService.login(primaryEmailAddress, password);
         history.push('/');
     } catch (e) {
         dispatch({
@@ -87,14 +87,14 @@ export const submitAuth = (primaryEmail: string, password: string) => async (dis
     }
 };
 
-export const signup = (primaryEmail: string, firstName: string, lastName: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
+export const signup = (primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: authActionTypes.SIGNUP_PENDING,
         payload: {}
     });
 
     try {
-        await authService.signup(primaryEmail, firstName, lastName, password, confirmPassword);
+        await authService.signup(primaryEmailAddress, firstName, lastName, password, confirmPassword);
         history.push('/');
     } catch (e) {
         dispatch({

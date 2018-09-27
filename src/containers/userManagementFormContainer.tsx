@@ -11,7 +11,6 @@ import { formValueSelector } from 'redux-form';
 
 class UserManagementFormValues {
     id: number;
-    primaryEmail: string;
     firstName: string;
     lastName: string;
     selectedOrganizations: any[];
@@ -22,7 +21,7 @@ class UserManagementFormContainer extends React.Component {
     props: any;
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editUser(form.id, form.primaryEmail, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}));
+        await this.props.actions.editUser(form.id, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}));
     };
 
     async componentDidMount() {
@@ -94,7 +93,7 @@ function mapStateToProps(state: State) {
             id: initialUser.id,
             firstName: initialUser.firstName,
             lastName: initialUser.lastName,
-            primaryEmail: initialUser.primaryEmail,
+            primaryEmailAddress: initialUser.primaryEmailAddress,
             selectedRoles: initialUser.selectedRoles,
             selectedOrganizations: initialUser.selectedOrganizations
         } : null,

@@ -13,7 +13,13 @@ export const authActionTypes = {
     AUTH_CLEAR_TOKEN: "AUTH_CLEAR_TOKEN",
     SIGNUP_PENDING: "SIGNUP_PENDING",
     SIGNUP_SUCCESSFUL: "SIGNUP_SUCCESSFUL",
-    SIGNUP_ERROR: "SIGNUP_ERROR"
+    SIGNUP_ERROR: "SIGNUP_ERROR",
+    AUTH_FORGOT_PASSWORD_PENDING: "AUTH_FORGOT_PASSWORD_PENDING",
+    AUTH_FORGOT_PASSWORD_SUCCESS: "AUTH_FORGOT_PASSWORD_SUCCESS",
+    AUTH_FORGOT_PASSWORD_ERROR: "AUTH_FORGOT_PASSWORD_ERROR",
+    AUTH_RESET_PASSWORD_PENDING: "AUTH_RESET_PASSWORD_PENDING",
+    AUTH_RESET_PASSWORD_SUCCESS: "AUTH_RESET_PASSWORD_SUCCESS",
+    AUTH_RESET_PASSWORD_ERROR: "AUTH_RESET_PASSWORD_ERROR"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -124,5 +130,65 @@ export const emailVerification = (token: string) => async (dispatch: Dispatch<an
         dispatch(change('emailVerification', 'response', response.data));
     } catch (e) {
         dispatch(change('emailVerification', 'response', false));
+    }
+}
+
+export const forgotPassword = (primaryEmailAddress: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: authActionTypes.AUTH_FORGOT_PASSWORD_PENDING
+    });
+
+    try {
+        await authService.forgotPassword(primaryEmailAddress);
+
+        dispatch({
+            type: authActionTypes.AUTH_FORGOT_PASSWORD_SUCCESS
+        });
+
+        history.push('/');
+    } catch (e) {
+        dispatch({
+            type: authActionTypes.AUTH_FORGOT_PASSWORD_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const verifyResetPassword = (token: string) => async (dispatch: Dispatch<any>) => {
+    try {
+        const response = await authService.verifyResetPassword(token);
+        if (response.data == false) {
+            setTimeout(()=>{
+                history.push('/');
+            }, 3000);
+        }
+        dispatch(change('resetPasswordVerified', 'response', response.data));
+    } catch (e) {
+        dispatch(change('resetPasswordVerified', 'response', false));
+    }
+}
+
+export const resetPassword = (token: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: authActionTypes.AUTH_RESET_PASSWORD_PENDING
+    });
+
+    try {
+        await authService.resetPassword(token, password, confirmPassword);
+
+        dispatch({
+            type: authActionTypes.AUTH_RESET_PASSWORD_SUCCESS
+        });
+
+        history.push('/');
+    } catch (e) {
+        dispatch({
+            type: authActionTypes.AUTH_RESET_PASSWORD_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
     }
 }

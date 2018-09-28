@@ -2,44 +2,48 @@ import React from 'react'
 
 import { Route, Switch } from "react-router-dom";
 import {Redirect} from "react-router";
-import LoginFormContainer from "../containers/loginFormContainer";
+import LoginFormContainer from "../containers/auth/loginFormContainer";
 import PrivateRouteContainer from "../containers/privateRouteContainer";
 import PublicRouteContainer from "../containers/publicRouteContainer";
 import MainDashboardContainer from "../containers/mainDashboardContainer";
-import SignupFormContainer from '../containers/signupFormContainer';
-import usersContainer from '../containers/usersContainer';
-import userCreateFormContainer from '../containers/userCreateFormContainer';
-import userManagementFormContainer from '../containers/userManagementFormContainer';
-import permissionManagementContainer from "../containers/permissions/permissionManagementContainer";
-import permissionsContainer from "../containers/permissions/permissionsContainer";
-import roleManagementContainer from "../containers/roles/roleManagementContainer";
-import rolesContainer from "../containers/roles/rolesContainer";
-import roleCreateFormContainer from "../containers/roles/roleCreateFormContainer";
-import emailVerificationContainer from "../containers/emailVerificationContainer";
-import organizationsContainer from "../containers/organizations/organizationsContainer";
-import organizationManagementContainer from "../containers/organizations/organizationManagementContainer";
-import organizationCreateFormContainer from "../containers/organizations/organizationCreateFormContainer";
+import SignupFormContainer from '../containers/auth/signupFormContainer';
+import UsersContainer from '../containers/users/usersContainer';
+import UserCreateFormContainer from '../containers/users/userCreateFormContainer';
+import UserManagementFormContainer from '../containers/users/userManagementFormContainer';
+import PermissionManagementContainer from "../containers/permissions/permissionManagementContainer";
+import PermissionsContainer from "../containers/permissions/permissionsContainer";
+import RoleManagementContainer from "../containers/roles/roleManagementContainer";
+import RolesContainer from "../containers/roles/rolesContainer";
+import RoleCreateFormContainer from "../containers/roles/roleCreateFormContainer";
+import EmailVerificationContainer from "../containers/auth/emailVerificationContainer";
+import OrganizationsContainer from "../containers/organizations/organizationsContainer";
+import OrganizationManagementContainer from "../containers/organizations/organizationManagementContainer";
+import OrganizationCreateFormContainer from "../containers/organizations/organizationCreateFormContainer";
+import ForgotPasswordFormContainer from "../containers/auth/forgotPasswordFormContainer";
+import ResetPasswordFormContainer from "../containers/auth/resetPasswordFormContainer";
 
 const Routes = () => (
     <div className="app-content">
         <Switch>
             <PrivateRouteContainer exact path="/home" component={MainDashboardContainer} />
-            <PrivateRouteContainer exact path="/users" component={usersContainer} />
-            <PrivateRouteContainer exact path="/users/new" component={userCreateFormContainer} />
-            <PrivateRouteContainer exact path="/users/:userId/edit" component={userManagementFormContainer} />
-            <PrivateRouteContainer exact path="/userCreate" component={userCreateFormContainer} />
-            <PrivateRouteContainer exact path="/userManagement" component={userManagementFormContainer} />
-            <PrivateRouteContainer exact path="/roles" component={rolesContainer} />
-            <PrivateRouteContainer exact path="/roles/:roleId/edit" component={roleManagementContainer} />
-            <PrivateRouteContainer exact path="/roles/new" component={roleCreateFormContainer} />
-            <PrivateRouteContainer exact path="/permissions" component={permissionsContainer} />
-            <PrivateRouteContainer exact path="/permissions/:permissionId/edit" component={permissionManagementContainer} />
-            <PrivateRouteContainer exact path="/organizations" component={organizationsContainer} />
-            <PrivateRouteContainer exact path="/organizations/:organizationId/edit" component={organizationManagementContainer} />
-            <PrivateRouteContainer exact path="/organizations/new" component={organizationCreateFormContainer} />
+            <PrivateRouteContainer exact path="/users" component={UsersContainer} />
+            <PrivateRouteContainer exact path="/users/new" component={UserCreateFormContainer} />
+            <PrivateRouteContainer exact path="/users/:userId/edit" component={UserManagementFormContainer} />
+            <PrivateRouteContainer exact path="/userCreate" component={UserCreateFormContainer} />
+            <PrivateRouteContainer exact path="/userManagement" component={UserManagementFormContainer} />
+            <PrivateRouteContainer exact path="/roles" component={RolesContainer} />
+            <PrivateRouteContainer exact path="/roles/:roleId/edit" component={RoleManagementContainer} />
+            <PrivateRouteContainer exact path="/roles/new" component={RoleCreateFormContainer} />
+            <PrivateRouteContainer exact path="/permissions" component={PermissionsContainer} />
+            <PrivateRouteContainer exact path="/permissions/:permissionId/edit" component={PermissionManagementContainer} />
+            <PrivateRouteContainer exact path="/organizations" component={OrganizationsContainer} />
+            <PrivateRouteContainer exact path="/organizations/:organizationId/edit" component={OrganizationManagementContainer} />
+            <PrivateRouteContainer exact path="/organizations/new" component={OrganizationCreateFormContainer} />
             <PublicRouteContainer exact path="/login" component={LoginFormContainer} />
             <PublicRouteContainer exact path="/signup" component={SignupFormContainer} />
-            <PublicRouteContainer exact path="/emailVerification/:token" component={emailVerificationContainer} />
+            <PublicRouteContainer exact path="/emailVerification/:token" component={EmailVerificationContainer} />
+            <PublicRouteContainer exact path="/forgotPassword" component={ForgotPasswordFormContainer} />
+            <PublicRouteContainer exact path="/resetPassword/:token" component={ResetPasswordFormContainer} />
             <Route>
                 <Redirect to="/home"/>
             </Route>

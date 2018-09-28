@@ -23,6 +23,18 @@ class AuthService {
     async emailVerification(token: string) {
         return await axios.post(`/auth/emailVerification`, {token});
     }
+
+    async forgotPassword(primaryEmailAddress: string) {
+        return await axios.post(`/auth/forgotPassword`, {primaryEmailAddress});
+    }
+
+    async resetPassword(token: string, password: string, confirmPassword: string) {
+        return await axios.post(`/auth/resetPassword`, {token, password, confirmPassword});
+    }
+
+    async verifyResetPassword(token: string) {
+        return await axios.get(`/auth/resetPassword/${token}`);
+    }
 }
 
 export const authService = new AuthService();

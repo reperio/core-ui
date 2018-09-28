@@ -1,10 +1,10 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import UserCreateForm from '../components/userCreateForm';
-import { State } from '../store/initialState';
-import { createUser } from '../actions/usersActions';
-import { locationChange } from '../actions/navActions';
+import UserCreateForm from '../../components/users/userCreateForm';
+import { State } from '../../store/initialState';
+import { createUser } from '../../actions/usersActions';
+import { locationChange } from '../../actions/navActions';
 
 class UserCreateFormValues {
     primaryEmailAddress: string;

@@ -1,10 +1,10 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import Users from "../components/users";
-import { getUsers, populateUserOrganizations } from '../actions/usersActions';
-import { locationChange } from '../actions/navActions';
-import { State } from '../store/initialState';
+import Users from "../../components/users/users";
+import { getUsers, populateUserOrganizations } from '../../actions/usersActions';
+import { locationChange } from '../../actions/navActions';
+import { State } from '../../store/initialState';
 
 class UsersContainer extends React.Component {
     props: any;

@@ -1,9 +1,9 @@
 import React from 'react'
 import {connect} from "react-redux";
-import {emailVerification} from "../actions/authActions";
+import {emailVerification} from "../../actions/authActions";
 import {bindActionCreators} from "redux";
 import { formValueSelector } from 'redux-form';
-import EmailVerification from '../components/emailVerification';
+import EmailVerification from '../../components/auth/emailVerification';
 
 class EmailVerificationContainer extends React.Component {
     props: any;

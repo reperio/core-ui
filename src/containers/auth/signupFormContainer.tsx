@@ -1,9 +1,9 @@
 import React from 'react'
 import {connect} from "react-redux";
-import {signup, recaptcha} from "../actions/authActions";
+import {signup, recaptcha} from "../../actions/authActions";
 import {bindActionCreators} from "redux";
-import SignupForm from '../components/signupForm';
-import { State } from '../store/initialState';
+import SignupForm from '../../components/auth/signupForm';
+import { State } from '../../store/initialState';
 import { formValueSelector } from 'redux-form';
 var ReCAPTCHA = require("react-google-recaptcha").default;
 

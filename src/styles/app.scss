@@ -111,9 +111,7 @@ label {
 
 .profile-circle {
   border-radius: 50%;
-  height: 120px;
   max-height: 120px;
-  width: 120px;
   max-width: 120px;
   text-align: center;
   line-height: 120px;
@@ -126,6 +124,7 @@ label {
   font-weight: 400;
   font-size: 20px;
   color: $primary-color;
+  word-break: break-all;
 }
 
 .management-name {
@@ -149,7 +148,11 @@ label {
 }
 
 .management-left {
-  flex: 3 0 392px;
+  flex: 3 0 0px;
+}
+
+.management-top {
+  word-break: break-all;
 }
 
 .management-right {

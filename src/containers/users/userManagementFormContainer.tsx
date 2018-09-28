@@ -1,12 +1,12 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import { State } from '../store/initialState';
-import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, addRole, removeRole, selectRole} from '../actions/usersActions';
-import { getOrganizations } from '../actions/organizationsActions';
-import { getRoles } from '../actions/rolesActions';
-import { locationChange } from '../actions/navActions';
-import UserManagementForm from '../components/userManagementForm';
+import { State } from '../../store/initialState';
+import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, addRole, removeRole, selectRole} from '../../actions/usersActions';
+import { getOrganizations } from '../../actions/organizationsActions';
+import { getRoles } from '../../actions/rolesActions';
+import { locationChange } from '../../actions/navActions';
+import UserManagementForm from '../../components/users/userManagementForm';
 import { formValueSelector } from 'redux-form';
 
 class UserManagementFormValues {

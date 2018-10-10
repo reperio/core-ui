@@ -2,7 +2,8 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
 import { organizationService } from "../services/organizationService";
-import { change, reset } from "redux-form";
+import { change, reset, formValueSelector } from "redux-form";
+import { store } from "../store/store";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -19,7 +20,10 @@ export const usersActionTypes = {
     USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER",
     USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL: "USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL",
     USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER: "USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER",
-    USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER"
+    USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER",
+    USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER",
+    USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER",
+    USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -54,13 +58,13 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: any[], primaryEmailAddress: any[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        const user = await userService.editUser(userId, firstName, lastName, organizationIds, roleIds);
+        const user = await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails.map((x: any) => { return {id: x.id, email: x.email}}), primaryEmailAddress.length > 0 ? primaryEmailAddress[0].email : null);
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS,
             payload: user.data
@@ -203,5 +207,31 @@ export const removeRole = (index: any) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER,
         payload: { index }
+    });
+}
+
+export const removeEmailAddress = (index: any) => (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER,
+        payload: { index }
+    });
+}
+
+export const setPrimaryEmailAddress = (index: any) => (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER,
+        payload: { index }
+    });
+}
+
+export const addEmailAddress = () => (dispatch: Dispatch<any>) => {
+    const state = store.getState();
+
+    const selector = formValueSelector('userManagementForm');
+
+    const email = selector(state, 'email');
+    dispatch({
+        type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER,
+        payload: { email }
     });
 }

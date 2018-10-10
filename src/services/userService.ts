@@ -13,8 +13,8 @@ class UserService {
         return await axios.post(`/users`, {primaryEmailAddress, firstName, lastName, password, confirmPassword, organizationIds});
     }
 
-    async editUser(userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[]) {
-        return await axios.put(`/users/${userId}`, { firstName, lastName, organizationIds, roleIds});
+    async editUser(userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: any[], primaryEmailAddress: string) {
+        return await axios.put(`/users/${userId}`, { firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress});
     }
 }
 

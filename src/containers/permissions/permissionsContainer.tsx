@@ -3,9 +3,8 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Permissions from "../../components/permissions/permissions";
 import { getPermissions } from '../../actions/permissionsActions';
-import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
-import {Redirect} from "react-router";
+import { history } from '../../store/history';
 
 class PermissionsContainer extends React.Component {
     props: any;
@@ -15,11 +14,11 @@ class PermissionsContainer extends React.Component {
     }
 
     navigateToCreate() {
-        this.props.actions.locationChange('/permissions/new');
+        history.push('/permissions/new');
     }
 
-    navigateToManagement(permissionId: number) {
-        this.props.actions.locationChange(`/permissions/${permissionId}/edit`);
+    navigateToManagement(permissionId: string) {
+        history.push(`/permissions/${permissionId}/edit`);
     }
 
     render() {
@@ -37,7 +36,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getPermissions, locationChange}, dispatch)
+        actions: bindActionCreators({getPermissions}, dispatch)
     };
 }
 

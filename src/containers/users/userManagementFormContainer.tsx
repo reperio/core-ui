@@ -5,10 +5,15 @@ import { State } from '../../store/initialState';
 import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress} from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
+<<<<<<< HEAD
 import { sendVerificationEmail } from '../../actions/authActions';
 import { locationChange } from '../../actions/navActions';
+=======
+>>>>>>> Added error page.
 import UserManagementForm from '../../components/users/userManagementForm';
 import { formValueSelector } from 'redux-form';
+import { RouteComponentProps, Redirect } from 'react-router';
+import { history } from '../../store/history';
 
 class UserManagementFormValues {
     id: string;
@@ -19,22 +24,40 @@ class UserManagementFormValues {
     userEmails: any[];
 }
 
-class UserManagementFormContainer extends React.Component {
-    props: any;
+interface OwnProps {}
 
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class UserManagementFormContainer extends React.Component<RouteComponentProps<any> & OwnProps & StateProps & DispatchProps> {
     async onSubmit(form: UserManagementFormValues) {
+<<<<<<< HEAD
         await this.props.actions.editUser(form.id, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}), form.userEmails, form.userEmails.filter((x: any)=> x.primary));
+=======
+        const selectedRoles = form.selectedRoles
+            .map((role:any) => {
+                return role.value
+            });
+
+        const selectedOrganizations = form.selectedOrganizations
+            .map((organization:any) => {
+                return organization.value
+            });
+
+        await this.props.actions.editUser(form.id, form.firstName, form.lastName, selectedOrganizations, selectedRoles);
+>>>>>>> Added error page.
     };
 
-    async componentDidMount() {
+     async componentDidMount() {
         this.props.actions.clearManagementInitialUser();
         await this.props.actions.getOrganizations();
         await this.props.actions.getRoles();
         await this.props.actions.loadManagementInitialUser(this.props.match.params.userId);
-    }
+     }
 
     navigateToUsers() {
-        this.props.actions.locationChange('/users', null, null);
+        history.push('/users');
     }
 
     selectOrganization(organization: any) {
@@ -84,6 +107,9 @@ class UserManagementFormContainer extends React.Component {
     render() {
         return (
             <div>
+                {this.props.redirectToErrorPage ?
+                    <Redirect to="/error" /> 
+                : null }
                 <UserManagementForm navigateToUsers={this.navigateToUsers.bind(this)} 
                                     initialValues={this.props.initialUser}
                                     onSubmit={this.onSubmit.bind(this)}
@@ -110,6 +136,7 @@ class UserManagementFormContainer extends React.Component {
 function mapStateToProps(state: State) {
     const selector = formValueSelector('userManagementForm');
     const initialUser = state.userManagement.initialUser;
+
     return {
         initialUser: initialUser != null ? {
             id: initialUser.id,
@@ -124,12 +151,14 @@ function mapStateToProps(state: State) {
         roles: state.roles.roles,
         authSession: state.authSession,
         selectedOrganization: selector(state, 'selectedOrganization'),
-        selectedRole: selector(state, 'selectedRole')
+        selectedRole: selector(state, 'selectedRole'),
+        redirectToErrorPage: state.organizations.isError || state.roles.isError || state.userManagement.isError
     };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
+<<<<<<< HEAD
         actions: bindActionCreators(
             {
                 editUser, 
@@ -150,6 +179,9 @@ function mapActionToProps(dispatch: any) {
                 addEmailAddress, 
                 sendVerificationEmail
             }, dispatch)
+=======
+        actions: bindActionCreators({editUser, clearManagementInitialUser, selectOrganization, addOrganization, removeOrganization, loadManagementInitialUser, toggleRoleDetails, getOrganizations, addRole, removeRole, getRoles, selectRole}, dispatch)
+>>>>>>> Added error page.
     };
 }
 

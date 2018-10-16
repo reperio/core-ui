@@ -2,10 +2,10 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { loadManagementInitialOrganization, editOrganization, clearManagementInitialOrganization, removeUserFromOrganization, deleteOrganization, selectUser, addUser } from '../../actions/organizationsActions';
-import { locationChange } from '../../actions/navActions';
+import { loadManagementInitialOrganization, editOrganization, removeUserFromOrganization, deleteOrganization, selectUser, addUser } from '../../actions/organizationsActions';
 import OrganizationManagementForm from '../../components/organizations/organizationManagementForm';
-import { formValueSelector, change } from 'redux-form';
+import { formValueSelector } from 'redux-form';
+import { history } from '../../store/history';
 
 class UserManagementFormValues {
     id: number;
@@ -21,12 +21,11 @@ class OrganizationManagementFormContainer extends React.Component {
     };
 
     async componentDidMount() {
-        this.props.actions.clearManagementInitialOrganization();
         await this.props.actions.loadManagementInitialOrganization(this.props.match.params.organizationId);
     }
 
     navigateToOrganizations() {
-        this.props.actions.locationChange('/organizations', null, null);
+        history.push('/organizations');
     }
 
     removeUser(index: number){
@@ -83,7 +82,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editOrganization, locationChange, loadManagementInitialOrganization, clearManagementInitialOrganization, removeUserFromOrganization, deleteOrganization, addUser, selectUser}, dispatch)
+        actions: bindActionCreators({editOrganization, loadManagementInitialOrganization, removeUserFromOrganization, deleteOrganization, addUser, selectUser}, dispatch)
     };
 }
 

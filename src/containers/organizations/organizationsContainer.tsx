@@ -3,8 +3,8 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Organizations from "../../components/organizations/organizations";
 import { getOrganizations } from '../../actions/organizationsActions';
-import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
+import { history } from '../../store/history';
 
 class OrganizationsContainer extends React.Component {
     props: any;
@@ -14,11 +14,11 @@ class OrganizationsContainer extends React.Component {
     }
 
     navigateToCreate() {
-        this.props.actions.locationChange('/organizations/new');
+        history.push('/organizations/new');
     }
 
-    navigateToManagement(organizationId: number) {
-        this.props.actions.locationChange(`/organizations/${organizationId}/edit`);
+    navigateToManagement(organizationId: string) {
+        history.push(`/organizations/${organizationId}/edit`);
     }
 
     render() {
@@ -36,7 +36,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getOrganizations, locationChange}, dispatch)
+        actions: bindActionCreators({getOrganizations}, dispatch)
     };
 }
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {submitAuth} from "../../actions/authActions";
-import {locationChange} from "../../actions/navActions";
 import {bindActionCreators} from "redux";
 import LoginForm from "../../components/auth/loginForm";
+import { history } from '../../store/history';
 
 class LoginFormValues {
     primaryEmailAddress: string;
@@ -18,7 +18,7 @@ class LoginFormContainer extends React.Component {
     };
 
     async navigateToForgotPassword() {
-        await this.props.actions.locationChange('/forgotPassword');
+        history.push('/forgotPassword');
     };
 
     render() {
@@ -38,7 +38,7 @@ function mapStateToProps(state: any) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({submitAuth, locationChange}, dispatch)
+        actions: bindActionCreators({submitAuth}, dispatch)
     };
 }
 

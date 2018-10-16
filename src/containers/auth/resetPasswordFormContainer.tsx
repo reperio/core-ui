@@ -1,10 +1,10 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {resetPassword, verifyResetPassword} from "../../actions/authActions";
-import {locationChange} from "../../actions/navActions";
 import {bindActionCreators} from "redux";
 import ResetPasswordForm from "../../components/auth/resetPasswordForm";
 import { formValueSelector } from 'redux-form';
+import { history } from '../../store/history';
 
 class ResetPasswordFormValues {
     password: string;
@@ -23,7 +23,7 @@ class ResetPasswordFormContainer extends React.Component {
     };
 
     navigateToLogin() {
-        this.props.actions.locationChange('/login');
+        history.push('/login');
     }
 
     render() {
@@ -49,7 +49,7 @@ function mapStateToProps(state: any) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({resetPassword, verifyResetPassword, locationChange}, dispatch)
+        actions: bindActionCreators({resetPassword, verifyResetPassword}, dispatch)
     };
 }
 

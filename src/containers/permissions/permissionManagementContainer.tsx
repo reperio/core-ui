@@ -2,13 +2,13 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { loadManagementInitialPermission, editPermission, clearManagementInitialPermission, removePermissionFromRole } from '../../actions/permissionsActions';
-import { locationChange } from '../../actions/navActions';
+import { loadManagementInitialPermission, editPermission, removePermissionFromRole } from '../../actions/permissionsActions';
 import PermissionManagementForm from '../../components/permissions/permissionManagementForm';
 import { formValueSelector, change } from 'redux-form';
+import { history } from '../../store/history';
 
 class UserManagementFormValues {
-    id: number;
+    id: string;
     displayName: string;
     description: string;
     isSystemAdminPermission: boolean;
@@ -29,7 +29,7 @@ class PermissionManagementFormContainer extends React.Component {
     }
 
     navigateToPermissions() {
-        this.props.actions.locationChange('/permissions', null, null);
+        history.push('/permissions');
     }
 
     removePermission(index: number){
@@ -71,7 +71,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editPermission, locationChange, loadManagementInitialPermission, clearManagementInitialPermission, removePermissionFromRole}, dispatch)
+        actions: bindActionCreators({editPermission, loadManagementInitialPermission, removePermissionFromRole}, dispatch)
     };
 }
 

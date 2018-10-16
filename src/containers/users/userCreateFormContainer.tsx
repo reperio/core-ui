@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import UserCreateForm from '../../components/users/userCreateForm';
 import { State } from '../../store/initialState';
 import { createUser } from '../../actions/usersActions';
-import { locationChange } from '../../actions/navActions';
+import { history } from '../../store/history';
 
 class UserCreateFormValues {
     primaryEmailAddress: string;
@@ -22,14 +22,21 @@ class UserCreateFormContainer extends React.Component {
         await this.props.actions.createUser(values.primaryEmailAddress, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations == ("" || null) ? [] : values.organizations.map((organization:any) => {return organization.value}));
     };
 
-    async navigateToUsers() {
-        this.props.actions.locationChange('/users', null, null);
+    navigateToUsers() {
+        history.push('/users');
     }
 
     render() {
         return (
             <div>
-                <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} onSubmit={this.onSubmit.bind(this)} organizations={this.props.authSession.user.userOrganizations.map((userOrganization:any) => { return userOrganization.organization})} />
+                <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} 
+                                onSubmit={this.onSubmit.bind(this)} 
+                                organizations={
+                                    this.props.authSession.user.userOrganizations
+                                        .map((userOrganization:any) => { 
+                                            return userOrganization.organization
+                                        })
+                                } />
             </div>
         );
     }
@@ -43,7 +50,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({createUser, locationChange}, dispatch)
+        actions: bindActionCreators({createUser}, dispatch)
     };
 }
 

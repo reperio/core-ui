@@ -3,14 +3,32 @@ import { organizationsActionTypes } from "../actions/organizationsActions";
 
 export function organizationManagementReducer(state = initialState.organizationManagement, action: {type: string, payload: any}): StateOrganizationManagement {
     switch (action.type) {
-        case organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION: {
+        case organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS: {
             const {organization, users} = action.payload;
             return {
-                isPending: true,
+                isPending: false,
                 isError: false,
                 initialOrganization: organization.data,
                 errorMessage: null,
                 users: users.data
+            };
+        }
+        case organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING: {
+            return {
+                isPending: true,
+                isError: false,
+                initialOrganization: null,
+                errorMessage: null,
+                users: null
+            };
+        }
+        case organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR: {
+            return {
+                isPending: false,
+                isError: true,
+                initialOrganization: null,
+                errorMessage: action.payload.message,
+                users: null
             };
         }
         case organizationsActionTypes.ORGANIZATIONS_SAVE_PENDING: {
@@ -66,6 +84,15 @@ export function organizationManagementReducer(state = initialState.organizationM
                 }),
                 errorMessage: null,
                 users: state.users
+            };
+        }
+        case organizationsActionTypes.CLEAR_ORGANIZATION_MANAGEMENT: {
+            return {
+                isPending: false,
+                isError: false,
+                initialOrganization: null,
+                errorMessage: null,
+                users: null
             };
         }
         default: {

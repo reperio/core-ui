@@ -3,9 +3,8 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Roles from "../../components/roles/roles";
 import { getRoles } from '../../actions/rolesActions';
-import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
-import {Redirect} from "react-router";
+import { history } from '../../store/history';
 
 class RolesContainer extends React.Component {
     props: any;
@@ -15,11 +14,11 @@ class RolesContainer extends React.Component {
     }
 
     navigateToCreate() {
-        this.props.actions.locationChange('/roles/new');
+        history.push('/roles/new');
     }
 
-    navigateToManagement(roleId: number) {
-        this.props.actions.locationChange(`/roles/${roleId}/edit`);
+    navigateToManagement(roleId: string) {
+        history.push(`/roles/${roleId}/edit`);
     }
 
     render() {
@@ -37,7 +36,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getRoles, locationChange}, dispatch)
+        actions: bindActionCreators({getRoles}, dispatch)
     };
 }
 

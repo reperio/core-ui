@@ -3,8 +3,8 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Users from "../../components/users/users";
 import { getUsers, populateUserOrganizations } from '../../actions/usersActions';
-import { locationChange } from '../../actions/navActions';
 import { State } from '../../store/initialState';
+import { history } from '../../store/history';
 
 class UsersContainer extends React.Component {
     props: any;
@@ -14,11 +14,11 @@ class UsersContainer extends React.Component {
     }
 
     navigateToUserCreate() {
-        this.props.actions.locationChange('/users/new', null, null);
+        history.push('/users/new');
     }
 
     navigateToManagement(userId: any) {
-        this.props.actions.locationChange(`users/${userId}/edit`);
+        history.push(`users/${userId}/edit`);
     }
 
     render() {
@@ -41,7 +41,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getUsers, locationChange, populateUserOrganizations}, dispatch)
+        actions: bindActionCreators({getUsers, populateUserOrganizations}, dispatch)
     };
 }
 

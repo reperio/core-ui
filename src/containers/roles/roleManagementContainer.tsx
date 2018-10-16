@@ -2,10 +2,10 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { editRole, loadManagementInitialRole, clearManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole} from '../../actions/rolesActions';
-import { locationChange } from '../../actions/navActions';
+import { editRole, loadManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole} from '../../actions/rolesActions';
 import RoleManagementForm from '../../components/roles/roleManagementForm';
-import { formValueSelector, change } from 'redux-form';
+import { formValueSelector } from 'redux-form';
+import { history } from '../../store/history';
 
 class RoleManagementFormValues {
     id: number;
@@ -21,12 +21,11 @@ class RoleManagementFormContainer extends React.Component {
     };
 
     async componentDidMount() {
-        this.props.actions.clearManagementInitialRole();
         await this.props.actions.loadManagementInitialRole(this.props.match.params.roleId);
     }
 
     navigateToRoles() {
-        this.props.actions.locationChange('/roles', null, null);
+        history.push('/roles');
     }
 
     removePermission(index: number){
@@ -84,7 +83,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({locationChange, editRole, loadManagementInitialRole, clearManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole}, dispatch)
+        actions: bindActionCreators({editRole, loadManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole}, dispatch)
     };
 }
 

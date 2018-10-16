@@ -14,13 +14,17 @@ export const rolesActionTypes = {
     ROLES_DELETE_PENDING: "ROLES_DELETE_PENDING",
     ROLES_DELETE_SUCCESS: "ROLES_DELETE_SUCCESS",
     ROLES_DELETE_ERROR: "ROLES_DELETE_ERROR",
-    ROLES_MANAGEMENT_LOAD_INITIAL_ROLE: "ROLES_MANAGEMENT_LOAD_INITIAL_ROLE",
+    ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS: "ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS",
+    ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING: "ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING",
+    ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_ERROR: "ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_ERROR",
     ROLE_MANAGEMENT_REMOVE_PERMISSION_INITIAL_ROLE: "ROLE_MANAGEMENT_REMOVE_PERMISSION_INITIAL_ROLE",
     ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE: "ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE",
     ROLES_CREATE_PENDING: "ROLES_CREATE_PENDING",
     ROLES_CREATE_SUCCESS: "ROLES_CREATE_SUCCESS",
     ROLES_CREATE_ERROR: "ROLES_CREATE_ERROR",
-    ROLES_MANAGEMENT_SHOW_INITIAL_ROLE_PERMISSION_DETAIL: "ROLES_MANAGEMENT_SHOW_INITIAL_ROLE_PERMISSION_DETAIL" 
+    ROLES_MANAGEMENT_SHOW_INITIAL_ROLE_PERMISSION_DETAIL: "ROLES_MANAGEMENT_SHOW_INITIAL_ROLE_PERMISSION_DETAIL",
+    CLEAR_ROLES: "CLEAR_ROLES",
+    CLEAR_ROLE_MANAGEMENT: "CLEAR_ROLE_MANAGEMENT"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -56,30 +60,42 @@ export const getRoles = () => async (dispatch: Dispatch<any>) => {
 
 export const clearManagementInitialRole = () => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE,
-        payload: { role: {data: null as any }, permissions: {data: null as any}}
+        type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING
     });
 };
 
 export const loadManagementInitialRole = (roleId: string) => async (dispatch: Dispatch<any>) => {
-    const role = roleId != null ? await roleService.getRoleById(roleId) : null;
-    const permissions = await permissionService.getPermissions();
+    try {
+        dispatch({
+            type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING
+        });
 
-    role.data.selectedPermissions = role.data.rolePermissions
-        .map((rolePermission:any) => {
-            return {
-                value: rolePermission.permission.id, 
-                label: rolePermission.permission.name
+        const role = roleId != null ? await roleService.getRoleById(roleId) : null;
+        const permissions = await permissionService.getPermissions();
+    
+        role.data.selectedPermissions = role.data.rolePermissions
+            .map((rolePermission:any) => {
+                return {
+                    value: rolePermission.permission.id, 
+                    label: rolePermission.permission.name
+                }
+            })
+            .sort((a: any, b: any) => a.label.localeCompare(b.label));
+    
+        dispatch({
+            type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS,
+            payload: { role, permissions }
+        });
+    
+        dispatch(reset("roleManagement"))
+    } catch (e) {
+        dispatch({
+            type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }
-        })
-        .sort((a: any, b: any) => a.label.localeCompare(b.label));
-
-    dispatch({
-        type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE,
-        payload: { role, permissions }
-    });
-
-    dispatch(reset("roleManagement"))
+        });
+    }
 };
 
 export const removePermissionFromRole = (index: any) => (dispatch: Dispatch<any>) => {

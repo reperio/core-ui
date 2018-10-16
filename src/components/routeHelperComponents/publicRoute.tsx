@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
-const excludedRoutePaths = ["/emailVerification/:token", "/resetPassword/:token",];
+const excludedRoutePaths = ["/emailVerification/:token", "/resetPassword/:token", "/error"];
 
 const PublicRoute = (props: any) => {
     if (props.isAuthenticated && !excludedRoutePaths.includes(props.path)) {

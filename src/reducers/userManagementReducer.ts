@@ -3,7 +3,7 @@ import { usersActionTypes } from "../actions/usersActions";
 
 export function userManagementReducer(state = initialState.userManagement, action: {type: string, payload: any}): StateUserManagement {
     switch (action.type) {
-        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER: {
+        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS: {
             const {user} = action.payload;
 
             if (user.data) {
@@ -14,9 +14,25 @@ export function userManagementReducer(state = initialState.userManagement, actio
             }
 
             return {
-                isPending: true,
+                isPending: false,
                 isError: false,
                 initialUser: user.data,
+                errorMessage: null
+            };
+        }
+        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING: {
+            return {
+                isPending: true,
+                isError: false,
+                initialUser: null,
+                errorMessage: null
+            };
+        }
+        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR: {
+            return {
+                isPending: false,
+                isError: true,
+                initialUser: null,
                 errorMessage: null
             };
         }
@@ -129,6 +145,14 @@ export function userManagementReducer(state = initialState.userManagement, actio
                 initialUser: Object.assign({}, state.initialUser, {
                     userEmails: newList
                 }),
+                errorMessage: null
+            };
+        }
+        case usersActionTypes.CLEAR_USER_MANAGEMENT: {
+            return {
+                isPending: false,
+                isError: false,
+                initialUser: null,
                 errorMessage: null
             };
         }

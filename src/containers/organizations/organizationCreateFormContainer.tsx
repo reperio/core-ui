@@ -5,7 +5,7 @@ import OrganizationCreateForm from '../../components/organizations/organizationC
 import { State } from '../../store/initialState';
 import { createOrganization } from '../../actions/organizationsActions';
 import { getUsers } from '../../actions/usersActions';
-import { locationChange } from '../../actions/navActions';
+import { history } from '../../store/history';
 
 class OrganizationCreateFormValues {
     name: string;
@@ -24,7 +24,7 @@ class OrganizationCreateFormContainer extends React.Component {
     }
 
     async navigateToOrganizations() {
-        this.props.actions.locationChange('/organizations', null, null);
+        history.push('/organizations');
     }
 
     render() {
@@ -47,7 +47,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({createOrganization, locationChange, getUsers}, dispatch)
+        actions: bindActionCreators({createOrganization, getUsers}, dispatch)
     };
 }
 

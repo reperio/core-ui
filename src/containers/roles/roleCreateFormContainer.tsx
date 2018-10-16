@@ -7,7 +7,7 @@ import { createRole } from '../../actions/rolesActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getApplications } from '../../actions/applicationsActions';
 import { getPermissions } from '../../actions/permissionsActions';
-import { locationChange } from '../../actions/navActions';
+import { history } from '../../store/history';
 
 class RoleCreateFormValues {
     name: string;
@@ -30,7 +30,7 @@ class RoleCreateFormContainer extends React.Component {
     }
 
     async navigateToRoles() {
-        this.props.actions.locationChange('/roles', null, null);
+        history.push('/roles');
     }
 
     render() {
@@ -57,7 +57,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({createRole, locationChange, getOrganizations, getApplications, getPermissions}, dispatch)
+        actions: bindActionCreators({createRole, getOrganizations, getApplications, getPermissions}, dispatch)
     };
 }
 

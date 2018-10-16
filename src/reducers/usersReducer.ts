@@ -27,6 +27,14 @@ export function usersReducer(state = initialState.users, action: {type: string, 
                 users: []
             };
         }
+        case usersActionTypes.CLEAR_USERS: {
+            return {
+                isPending: false,
+                isError: false,
+                errorMessage: null,
+                users: []
+            };
+        }
         default: {
             return state;
         }

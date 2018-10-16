@@ -1,7 +1,6 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { userService } from "../services/userService";
-import { organizationService } from "../services/organizationService";
 import { change, reset, formValueSelector } from "redux-form";
 import { store } from "../store/store";
 
@@ -15,7 +14,9 @@ export const usersActionTypes = {
     USERS_EDIT_PENDING: "USERS_EDIT_PENDING",
     USERS_EDIT_SUCCESS: "USERS_EDIT_SUCCESS",
     USERS_EDIT_ERROR: "USERS_EDIT_ERROR",
-    USERS_MANAGEMENT_LOAD_INITIAL_USER: "USERS_MANAGEMENT_LOAD_INITIAL_USER",
+    USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS: "USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS",
+    USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING: "USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING",
+    USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR: "USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR",
     USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER",
     USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER",
     USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL: "USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL",
@@ -23,7 +24,9 @@ export const usersActionTypes = {
     USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER",
     USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER",
     USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER",
-    USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER"
+    USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER",
+    CLEAR_USERS: "CLEAR_USERS",
+    CLEAR_USER_MANAGEMENT: "CLEAR_USER_MANAGEMENT"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -102,38 +105,52 @@ export const createUser = (primaryEmailAddress: string, firstName: string, lastN
     }
 };
 
-export const clearManagementInitialUser = () => (dispatch: Dispatch<any>) => {
+export const clearManagementInitialUser = () => async (dispatch: Dispatch<any>) => {
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER,
-        payload: { user: {data: null as any }, organizations: {data: null as any }}
+        type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING,
+        payload: { user: {data: null as any }, organizations: {data: null as any}}
     });
 };
 
 export const loadManagementInitialUser = (userId: string) => async (dispatch: Dispatch<any>) => {
-    let user = userId != null ? await userService.getUserById(userId) : null;
-    user.data.selectedOrganizations = user.data.userOrganizations
-        .map((userOrganization:any) => {
+    try {
+        dispatch({
+            type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING
+        });
+
+        let user = userId != null ? await userService.getUserById(userId) : null;
+        user.data.selectedOrganizations = user.data.userOrganizations
+            .map((userOrganization:any) => {
+                return {
+                    value: userOrganization.organization.id, 
+                    label: (userOrganization.organization.personal ? 'Personal - ' : '') + userOrganization.organization.name
+                }
+            })
+            .sort((a: any, b: any) => a.label.localeCompare(b.label));
+    
+        user.data.selectedRoles = user.data.userRoles.map((userRole: any) => {
             return {
-                value: userOrganization.organization.id, 
-                label: (userOrganization.organization.personal ? 'Personal - ' : '') + userOrganization.organization.name
+                value: userRole.role.id, 
+                label: userRole.role.name,
+                role: userRole.role,
+                organizationId: userRole.role.organizationId
             }
-        })
-        .sort((a: any, b: any) => a.label.localeCompare(b.label));
-
-    user.data.selectedRoles = user.data.userRoles.map((userRole: any) => {
-        return {
-            value: userRole.role.id, 
-            label: userRole.role.name,
-            role: userRole.role,
-            organizationId: userRole.role.organizationId
-        }
-    });
-
-    dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER,
-        payload: { user }
-    });
-    dispatch(reset("userManagement"))
+        });
+    
+        dispatch({
+            type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS,
+            payload: { user }
+        });
+        dispatch(reset("userManagement"));
+    }
+    catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
 };
 
 export const selectOrganization = (organization: any) => (dispatch: Dispatch<any>) => {

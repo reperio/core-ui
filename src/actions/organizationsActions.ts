@@ -14,13 +14,17 @@ export const organizationsActionTypes = {
     ORGANIZATIONS_DELETE_PENDING: "ORGANIZATIONS_DELETE_PENDING",
     ORGANIZATIONS_DELETE_SUCCESS: "ORGANIZATIONS_DELETE_SUCCESS",
     ORGANIZATIONS_DELETE_ERROR: "ORGANIZATIONS_DELETE_ERROR",
-    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION",
+    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS",
+    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR",
+    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING",
     ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION: "ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION",
     ORGANIZATIONS_MANAGEMENT_ADD_USER_INITIAL_ORGANIZATION: "ORGANIZATIONS_MANAGEMENT_ADD_USER_INITIAL_ORGANIZATION",
     ORGANIZATIONS_CREATE_PENDING: "ORGANIZATIONS_CREATE_PENDING",
     ORGANIZATIONS_CREATE_SUCCESS: "ORGANIZATIONS_CREATE_SUCCESS",
     ORGANIZATIONS_CREATE_ERROR: "ORGANIZATIONS_CREATE_ERROR",
-    ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL: "ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL" 
+    ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL: "ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL",
+    CLEAR_ORGANIZATIONS: "CLEAR_ORGANIZATIONS",
+    CLEAR_ORGANIZATION_MANAGEMENT: "CLEAR_ORGANIZATION_MANAGEMENT"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -54,32 +58,39 @@ export const getOrganizations = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const clearManagementInitialOrganization = () => (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION,
-        payload: { organization: {data: null as any }, users: {data: null as any}}
-    });
-};
-
 export const loadManagementInitialOrganization = (organizationId: string) => async (dispatch: Dispatch<any>) => {
-    const organization = organizationId != null ? await organizationService.getOrganizationById(organizationId) : null;
-    const users = await userService.getUsers();
+    try {
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING
+        });
 
-    organization.data.selectedUsers = organization.data.userOrganizations
-        .map((userOrganization:any) => {
-            return {
-                value: userOrganization.user.id, 
-                label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmailAddress}`
+        const organization = organizationId != null ? await organizationService.getOrganizationById(organizationId) : null;
+        const users = await userService.getUsers();
+    
+        organization.data.selectedUsers = organization.data.userOrganizations
+            .map((userOrganization:any) => {
+                return {
+                    value: userOrganization.user.id, 
+                    label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmailAddress}`
+                }
+            })
+            .sort((a: any, b: any) => a.label.localeCompare(b.label));
+    
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS,
+            payload: { organization, users }
+        });
+    
+        dispatch(reset("organizationManagement"))
+    } 
+    catch(e) {
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }
-        })
-        .sort((a: any, b: any) => a.label.localeCompare(b.label));
-
-    dispatch({
-        type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION,
-        payload: { organization, users }
-    });
-
-    dispatch(reset("organizationManagement"))
+        });
+    }
 };
 
 export const removeUserFromOrganization = (index: any) => (dispatch: Dispatch<any>) => {

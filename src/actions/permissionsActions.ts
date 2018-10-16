@@ -10,9 +10,13 @@ export const permissionsActionTypes = {
     PERMISSIONS_SAVE_PENDING: "PERMISSIONS_SAVE_PENDING",
     PERMISSIONS_SAVE_SUCCESS: "PERMISSIONS_SAVE_SUCCESS",
     PERMISSIONS_SAVE_ERROR: "PERMISSIONS_SAVE_ERROR",
-    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION",
+    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS",
+    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_ERROR: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_ERROR",
+    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING",
     PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION: "PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION",
-    PERMISSIONS_UPDATE_ROLE: "PERMISSIONS_UPDATE_ROLE"
+    PERMISSIONS_UPDATE_ROLE: "PERMISSIONS_UPDATE_ROLE",
+    CLEAR_PERMISSIONS: "CLEAR_PERMISSIONS",
+    CLEAR_PERMISSION_MANAGEMENT: "CLEAR_PERMISSION_MANAGEMENT"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -46,22 +50,29 @@ export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const clearManagementInitialPermission = () => (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION,
-        payload: { permission: {data: null as any }}
-    });
-};
-
 export const loadManagementInitialPermission = (permissionId: string) => async (dispatch: Dispatch<any>) => {
-    const permission = permissionId != null ? await permissionService.getPermissionById(permissionId) : null;
+    try {
+        dispatch({
+            type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING
+        });
 
-    dispatch({
-        type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION,
-        payload: { permission }
-    });
+        const permission = permissionId != null ? await permissionService.getPermissionById(permissionId) : null;
 
-    dispatch(reset("permissionManagement"))
+        dispatch({
+            type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS,
+            payload: { permission }
+        });
+    
+        dispatch(reset("permissionManagement"))
+    }
+    catch (e) {
+        dispatch({
+            type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
 };
 
 export const removePermissionFromRole = (index: any) => (dispatch: Dispatch<any>) => {

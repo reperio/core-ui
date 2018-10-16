@@ -1,6 +1,6 @@
 import React from 'react'
 import {Field, reduxForm, FieldArray } from 'redux-form'
-import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
+import { TextboxElement, ButtonElement, PickerElement, Wrapper, CheckboxElement } from '@reperio/ui-components';
 
 const organizationsFieldArray = (props: any) => (
     <div>
@@ -17,6 +17,48 @@ const organizationsFieldArray = (props: any) => (
                 </div>
                 <div className="row">
                     <hr />
+                </div>
+            </div>
+        )}
+    </div>
+);
+
+const userEmailFieldArray = (props: any) => (
+    <div>
+        {props.fields.map((member:string, index:number) =>
+            <div key={index}>
+                <div className="row">
+                    <div className="col-xs-8 management-organizations">
+                        <Field  disabled={true} 
+                                name={`${member}.email`} 
+                                placeholder="Email Address" 
+                                type="email" 
+                                component={TextboxElement} />
+                    </div>
+                    <div className="col-xs-4">
+                        <ButtonElement  type="button"
+                                        title="Remove Email"
+                                        color="danger" 
+                                        children={
+                                            <i className="fa fa-trash"></i>
+                                        }
+                                        onClick={() => props.removeEmailAddress(index)}/>
+                        <ButtonElement  type="button"
+                                        title="Send Verification Email"
+                                        color="neutral" 
+                                        disabled={props.initialValues.userEmails[index] && props.initialValues.userEmails[index].emailVerified == true || !props.initialValues.userEmails[index].id}
+                                        children={
+                                            <i className="fa fa-paper-plane"></i>
+                                        } 
+                                        onClick={() => props.sendVerificationEmail(index)}/>
+                        <Field  checked={props.initialValues.userEmails[index].primary == null || !props.initialValues.primaryEmailAddress ? false : props.initialValues.userEmails[index].primary}
+                                id={`${index}`}
+                                title="Set As Primary Email Address"
+                                name={`${member}.primary`} 
+                                label="Primary" 
+                                onChange={() => props.setPrimaryEmailAddress(index)}
+                                component={CheckboxElement} />
+                    </div>
                 </div>
             </div>
         )}
@@ -110,7 +152,37 @@ const UserManagementForm = (props: any) => (
                             <div className="col-xs-12">
                                 <div className="row">
                                     <div className="col-md-12">
+                                        <h2>Emails</h2>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-xs-8">
+                                        <Field  name="email"
+                                                placeholder="Email Address"
+                                                component={TextboxElement} />
+                                    </div>
+                                    <div className="col-xs-4">
+                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addEmailAddress()}} />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <FieldArray name="userEmails"
+                                                initialValues={{userEmails: props.initialValues.userEmails, primaryEmailAddress: props.initialValues.primaryEmailAddress}}
+                                                setPrimaryEmailAddress={props.setPrimaryEmailAddress}
+                                                sendVerificationEmail={props.sendVerificationEmail}
+                                                removeEmailAddress={props.removeEmailAddress}
+                                                component={userEmailFieldArray}/>
+                                </div>
+                            </div>
+                        </Wrapper>
+                    </div>
+                    <div className="row">
+                        <Wrapper>
+                            <div className="col-xs-12">
+                                <div className="row">
+                                    <div className="col-md-12">
                                         <h2>Organizations</h2>
+                                        {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
                                     </div>
                                 </div>
                                 <div className="row">
@@ -138,13 +210,11 @@ const UserManagementForm = (props: any) => (
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-md-12">
-                                        <FieldArray name="organizations"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.selectedOrganizations}
-                                                    removeOrganization={props.removeOrganization}
-                                                    component={organizationsFieldArray}/>
-                                    </div>
+                                    <FieldArray name="organizations"
+                                                rerenderOnEveryChange={true}
+                                                initialValues={props.initialValues.selectedOrganizations}
+                                                removeOrganization={props.removeOrganization}
+                                                component={organizationsFieldArray}/>
                                 </div>
                             </div>
                         </Wrapper>
@@ -182,16 +252,14 @@ const UserManagementForm = (props: any) => (
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-md-12">
-                                        <FieldArray name="roles"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.selectedRoles}
-                                                    organizations={props.organizations}
-                                                    toggleRoleDetails={props.toggleRoleDetails}
-                                                    removeRole={props.removeRole}
-                                                    toggle={true}
-                                                    component={rolesAndPermissions}/>
-                                    </div>
+                                    <FieldArray name="roles"
+                                                rerenderOnEveryChange={true}
+                                                initialValues={props.initialValues.selectedRoles}
+                                                organizations={props.organizations}
+                                                toggleRoleDetails={props.toggleRoleDetails}
+                                                removeRole={props.removeRole}
+                                                toggle={true}
+                                                component={rolesAndPermissions}/>
                                 </div>
                             </div>
                         </Wrapper>

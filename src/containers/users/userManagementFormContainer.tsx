@@ -2,26 +2,28 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, addRole, removeRole, selectRole} from '../../actions/usersActions';
+import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress} from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
+import { sendVerificationEmail } from '../../actions/authActions';
 import { locationChange } from '../../actions/navActions';
 import UserManagementForm from '../../components/users/userManagementForm';
 import { formValueSelector } from 'redux-form';
 
 class UserManagementFormValues {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     selectedOrganizations: any[];
     selectedRoles: any[];
+    userEmails: any[];
 }
 
 class UserManagementFormContainer extends React.Component {
     props: any;
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editUser(form.id, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}));
+        await this.props.actions.editUser(form.id, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}), form.userEmails, form.userEmails.filter((x: any)=> x.primary));
     };
 
     async componentDidMount() {
@@ -43,8 +45,8 @@ class UserManagementFormContainer extends React.Component {
         this.props.actions.selectRole(role);
     }
 
-    removeOrganization(organization: any) {
-        this.props.actions.removeOrganization(organization);
+    removeOrganization(index: number) {
+        this.props.actions.removeOrganization(index);
     }
 
     addOrganization(organization: any) {
@@ -55,12 +57,28 @@ class UserManagementFormContainer extends React.Component {
         this.props.actions.toggleRoleDetails(index);
     }
 
-    removeRole(role: any) {
-        this.props.actions.removeRole(role);
+    removeRole(index: number) {
+        this.props.actions.removeRole(index);
     }
 
     addRole(role: any) {
         this.props.actions.addRole(role, this.props.roles);
+    }
+
+    setPrimaryEmailAddress(index: number) {
+        this.props.actions.setPrimaryEmailAddress(index);
+    }
+
+    removeEmailAddress(index: number) {
+        this.props.actions.removeEmailAddress(index);
+    }
+
+    addEmailAddress() {
+        this.props.actions.addEmailAddress();
+    }
+
+    sendVerificationEmail(index: number) {
+        this.props.actions.sendVerificationEmail(this.props.initialUser.id, this.props.initialUser.userEmails[index].email);
     }
 
     render() {
@@ -79,6 +97,10 @@ class UserManagementFormContainer extends React.Component {
                                     addRole={this.addRole.bind(this)}
                                     toggleRoleDetails={this.toggleRoleDetails.bind(this)}
                                     removeRole={this.removeRole.bind(this)}
+                                    setPrimaryEmailAddress={this.setPrimaryEmailAddress.bind(this)}
+                                    removeEmailAddress={this.removeEmailAddress.bind(this)}
+                                    addEmailAddress={this.addEmailAddress.bind(this)}
+                                    sendVerificationEmail={this.sendVerificationEmail.bind(this)}
                                     removeOrganization={this.removeOrganization.bind(this)} />
             </div>
         );
@@ -95,7 +117,8 @@ function mapStateToProps(state: State) {
             lastName: initialUser.lastName,
             primaryEmailAddress: initialUser.primaryEmailAddress,
             selectedRoles: initialUser.selectedRoles,
-            selectedOrganizations: initialUser.selectedOrganizations
+            selectedOrganizations: initialUser.selectedOrganizations,
+            userEmails: initialUser.userEmails
         } : null,
         organizations: state.organizations.organizations,
         roles: state.roles.roles,
@@ -107,7 +130,26 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editUser, locationChange, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, getOrganizations, addRole, removeRole, getRoles, selectRole}, dispatch)
+        actions: bindActionCreators(
+            {
+                editUser, 
+                locationChange, 
+                selectOrganization, 
+                addOrganization, 
+                removeOrganization, 
+                clearManagementInitialUser, 
+                loadManagementInitialUser, 
+                toggleRoleDetails, 
+                getOrganizations, 
+                addRole, 
+                removeRole, 
+                getRoles, 
+                selectRole, 
+                removeEmailAddress, 
+                setPrimaryEmailAddress, 
+                addEmailAddress, 
+                sendVerificationEmail
+            }, dispatch)
     };
 }
 

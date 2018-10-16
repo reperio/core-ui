@@ -19,7 +19,10 @@ export const authActionTypes = {
     AUTH_FORGOT_PASSWORD_ERROR: "AUTH_FORGOT_PASSWORD_ERROR",
     AUTH_RESET_PASSWORD_PENDING: "AUTH_RESET_PASSWORD_PENDING",
     AUTH_RESET_PASSWORD_SUCCESS: "AUTH_RESET_PASSWORD_SUCCESS",
-    AUTH_RESET_PASSWORD_ERROR: "AUTH_RESET_PASSWORD_ERROR"
+    AUTH_RESET_PASSWORD_ERROR: "AUTH_RESET_PASSWORD_ERROR",
+    AUTH_SEND_VERIFICATION_EMAIL_PENDING: "AUTH_SEND_VERIFICATION_EMAIL_PENDING",
+    AUTH_SEND_VERIFICATION_EMAIL_SUCCESS: "AUTH_SEND_VERIFICATION_EMAIL_SUCCESS",
+    AUTH_SEND_VERIFICATION_EMAIL_ERROR: "AUTH_SEND_VERIFICATION_EMAIL_ERROR"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -192,3 +195,25 @@ export const resetPassword = (token: string, password: string, confirmPassword: 
         });
     }
 }
+
+export const sendVerificationEmail = (userId: string, email: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: authActionTypes.AUTH_SEND_VERIFICATION_EMAIL_PENDING
+    });
+
+    try {
+        await authService.sendVerificationEmail(userId, email);
+
+        dispatch({
+            type: authActionTypes.AUTH_SEND_VERIFICATION_EMAIL_SUCCESS
+        });
+
+    } catch (e) {
+        dispatch({
+            type: authActionTypes.AUTH_SEND_VERIFICATION_EMAIL_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};

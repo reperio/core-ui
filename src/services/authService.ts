@@ -35,6 +35,10 @@ class AuthService {
     async verifyResetPassword(token: string) {
         return await axios.get(`/auth/resetPassword/${token}`);
     }
+
+    async sendVerificationEmail(userId: string, email: string) {
+        return await axios.post(`/auth/sendVerificationEmail`, {userId, email});
+    }
 }
 
 export const authService = new AuthService();

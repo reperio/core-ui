@@ -8,16 +8,21 @@ import { getOrganizations } from '../../actions/organizationsActions';
 import { getApplications } from '../../actions/applicationsActions';
 import { getPermissions } from '../../actions/permissionsActions';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
+import Dropdown from '../../models/dropdown';
 
 class RoleCreateFormValues {
     name: string;
-    selectedApplication: string;
-    selectedOrganization: any;
-    selectedPermissions: any;
+    selectedApplication: Dropdown;
+    selectedOrganization: Dropdown;
+    selectedPermissions: Dropdown[];
 }
 
-class RoleCreateFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class RoleCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: RoleCreateFormValues) {
         await this.props.actions.createRole(form.name, form.selectedApplication, form.selectedOrganization, form.selectedPermissions);

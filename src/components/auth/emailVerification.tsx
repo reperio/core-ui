@@ -1,7 +1,11 @@
 import React from 'react'
 import { Wrapper } from '@reperio/ui-components';
 
-const EmailVerification = (props: any) => (
+interface EmailVerificationProps {
+    response: boolean;
+}
+
+const EmailVerification = (props: EmailVerificationProps) => (
     <form>
         <div className="row">
             <Wrapper>

@@ -1,8 +1,17 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
+import {Field, reduxForm, InjectedFormProps} from 'redux-form'
 import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
+import User from '../../models/user';
 
-const OrganizationCreateForm = (props: any) => (
+interface OrganizationCreateProps {
+    navigateToOrganizations(): void;
+    onSubmit(): void;
+    users: User[];
+}
+
+type Form = OrganizationCreateProps & InjectedFormProps<any>;
+
+const OrganizationCreateForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>
@@ -24,7 +33,7 @@ const OrganizationCreateForm = (props: any) => (
                                     placeholder="Users"
                                     options={
                                         props.users
-                                            .map((user:any, index: number) => { 
+                                            .map((user: User, index: number) => { 
                                                 return {
                                                     value: user.id,
                                                     label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`

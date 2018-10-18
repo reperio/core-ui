@@ -1,9 +1,18 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, InjectedFormProps } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
 import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
+import { StateAuthSession } from '../../store/initialState';
 
-const LoginForm = (props: any) => (
+interface LoginProps {
+    navigateToForgotPassword(): void;
+    onSubmit(): void;
+    authSession: StateAuthSession;
+}
+
+type Form = LoginProps & InjectedFormProps<any>;
+
+const LoginForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>

@@ -1,15 +1,21 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, InjectedFormProps } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
 import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
 
-const ForgotPasswordForm = (props: any) => (
+interface ForgotPasswordProps {
+    navigateToLogin(): void;
+    onSubmit(): void;
+}
+
+type Form = ForgotPasswordProps & InjectedFormProps<any>;
+
+const ForgotPasswordForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>
                 <div className="col-xs-12 col-md-8">
                     <div className="row">
-                        {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
                         <h2>Forgot password</h2>
                         <hr />
                     </div>

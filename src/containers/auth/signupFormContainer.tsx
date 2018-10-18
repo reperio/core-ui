@@ -5,6 +5,7 @@ import {bindActionCreators} from "redux";
 import SignupForm from '../../components/auth/signupForm';
 import { State } from '../../store/initialState';
 import { formValueSelector } from 'redux-form';
+import { RouteComponentProps } from 'react-router';
 var ReCAPTCHA = require("react-google-recaptcha").default;
 
 class SignupFormValues {
@@ -15,8 +16,11 @@ class SignupFormValues {
     confirmPassword: string;
 }
 
-class SignupFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class SignupFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(values: SignupFormValues) {
         await this.props.actions.signup(values.email, values.firstName, values.lastName, values.password, values.confirmPassword);
@@ -29,7 +33,9 @@ class SignupFormContainer extends React.Component {
     render() {
         return (
             <div>
-                <SignupForm onSubmit={this.onSubmit.bind(this)} authSession={this.props.authSession} recaptcha={this.props.recaptcha}>
+                <SignupForm onSubmit={this.onSubmit.bind(this)} 
+                            authSession={this.props.authSession} 
+                            recaptcha={this.props.recaptcha}>
                     <ReCAPTCHA
                         ref="recaptcha"
                         sitekey="6LfjumIUAAAAAMbk65jFCXIkLsGiby092A6d2_Vv"

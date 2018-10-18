@@ -1,7 +1,15 @@
 import {ButtonElement} from '@reperio/ui-components';
-import React from 'react'
+import React from 'react';
+import Dropdown from '../../models/dropdown';
 
-const PermissionsArray = (props: any) => {
+interface PermissionsArrayProps {
+    togglePermissionDetails(index: number): void;
+    removePermission(index: number): void;
+    initialValues: Dropdown[];
+    toggle: boolean;
+}
+
+const PermissionsArray: React.SFC<PermissionsArrayProps> = (props: PermissionsArrayProps) => {
     return (
         <div>
             <hr />
@@ -18,11 +26,6 @@ const PermissionsArray = (props: any) => {
                     <div className="row">
                         <hr />
                     </div>
-                    {props.toggle && props.initialValues[index].visible ? 
-                        <div className="row">
-                            {props.initialValues[index].label}
-                        </div>
-                    : null }
                 </div>
             )}
         </div>

@@ -1,9 +1,21 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray} from 'redux-form'
+import {Field, reduxForm, InjectedFormProps} from 'redux-form'
 import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
-import PermissionsArray from '../permissions/permissionsArray';
+import Application from '../../models/application';
+import Organization from '../../models/organization';
+import Permission from '../../models/permission';
 
-const RoleCreateForm = (props: any) => (
+interface OrganizationCreateProps {
+    navigateToRoles(): void;
+    onSubmit(): void;
+    applications: Application[];
+    organizations: Organization[];
+    permissions: Permission[];
+}
+
+type Form = OrganizationCreateProps & InjectedFormProps<any>;
+
+const RoleCreateForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>
@@ -23,7 +35,7 @@ const RoleCreateForm = (props: any) => (
                                     placeholder="Application"
                                     options={
                                         props.applications
-                                            .map((application:any, index: number) => { 
+                                            .map((application: Application, index: number) => { 
                                                 return {
                                                     value: application.id,
                                                     label: application.name
@@ -40,7 +52,7 @@ const RoleCreateForm = (props: any) => (
                                     placeholder="Organization"
                                     options={
                                         props.organizations
-                                            .map((organization:any, index: number) => { 
+                                            .map((organization: Organization, index: number) => { 
                                                 return {
                                                     value: organization.id,
                                                     label: organization.name
@@ -58,7 +70,7 @@ const RoleCreateForm = (props: any) => (
                                     placeholder="Permissions"
                                     options={
                                         props.permissions
-                                            .map((permission:any, index: number) => { 
+                                            .map((permission: Permission, index: number) => { 
                                                 return {
                                                     value: permission.id,
                                                     label: permission.name

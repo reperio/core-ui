@@ -1,7 +1,13 @@
 import React from 'react'
 import {Grid, Wrapper} from '@reperio/ui-components';
+import Permission from '../../models/permission';
 
-const Permissions = (props: any) => {
+interface PermissionsProps {
+    navigateToManagement(permissionId: string): void;
+    gridData: Permission[];
+}
+
+const Permissions = (props: PermissionsProps) => {
     const gridColumns = [
         {
             Header: "Name",

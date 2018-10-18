@@ -1,10 +1,25 @@
 import React from 'react'
-import {Field, FieldArray, reduxForm} from 'redux-form'
-import {TextboxElement, TextareaElement, ButtonElement, Wrapper, PickerElement, CheckboxElement} from '@reperio/ui-components';
+import {Field, FieldArray, reduxForm, InjectedFormProps} from 'redux-form'
+import {TextboxElement, TextareaElement, ButtonElement, Wrapper, CheckboxElement} from '@reperio/ui-components';
 import moment from 'moment';
 import PermissionsArray from '../permissions/permissionsArray';
+import Dropdown from '../../models/dropdown';
+import RolePermission from '../../models/rolePermission';
+import Role from '../../models/role';
+import Permission from '../../models/permission';
 
-const PermissionManagementForm = (props: any) => (
+interface PermissionManagementProps {
+    navigateToPermissions(): void;
+    onSubmit(): void;
+    removePermission(): void;
+    errorMessage: string;
+    initialValues: Permission;
+    isError: boolean;
+}
+
+type Form = PermissionManagementProps & InjectedFormProps<any>;
+
+const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.isError ? <p className="alert alert-danger">{props.errorMessage}</p> : ""}
         {props.initialValues ? 
@@ -25,10 +40,10 @@ const PermissionManagementForm = (props: any) => (
                                 </div>
                                 <div className="row">
                                     <div className="profile-lastModified">
-                                        last modified: {moment(props.initialValues.lastModified).format('MMMM D, YYYY')}
+                                        Last modified: {moment(props.initialValues.lastModified).format('MMMM D, YYYY')}
                                     </div>
                                     <div className="profile-createdDate">
-                                        created date: {moment(props.initialValues.createdDate).format('MMMM D, YYYY')}
+                                        Created date: {moment(props.initialValues.createdDate).format('MMMM D, YYYY')}
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +97,17 @@ const PermissionManagementForm = (props: any) => (
                                     <div className="col-md-12">
                                         <FieldArray name="roles"
                                                     rerenderOnEveryChange={true}
-                                                    initialValues={[].concat(...props.initialValues.roles.map((x:any) => x.roles)).map((y)=> {return {label: y.name, value: y.id}}).sort((a: any, b: any) => a.label.localeCompare(b.label))}
+                                                    initialValues={
+                                                        [].concat(...props.initialValues.rolePermissions
+                                                            .map((x: RolePermission) => x.role)
+                                                        )
+                                                        .map((y:Role)=> { 
+                                                            return {
+                                                                label: y.name, value: y.id 
+                                                            }
+                                                        })
+                                                        .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label))
+                                                    }
                                                     removePermission={props.removePermission}
                                                     component={PermissionsArray}/>
                                     </div>
@@ -119,10 +144,10 @@ const PermissionManagementForm = (props: any) => (
                                 </div>
                                 <div className="row">
                                     <div className="profile-lastModified">
-                                        last modified: {moment(props.initialValues.lastModified).format('MMMM D, YYYY')}
+                                        Last modified: {moment(props.initialValues.lastModified).format('MMMM D, YYYY')}
                                     </div>
                                     <div className="profile-createdDate">
-                                        created date: {moment(props.initialValues.createdDate).format('MMMM D, YYYY')}
+                                        Created date: {moment(props.initialValues.createdDate).format('MMMM D, YYYY')}
                                     </div>
                                 </div>
                             </div>

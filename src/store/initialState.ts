@@ -1,3 +1,9 @@
+import Role from "../models/role";
+import Organization from "../models/organization";
+import User from "../models/user";
+import Permission from "../models/permission";
+import Application from "../models/application";
+
 export class State {
     authSession: StateAuthSession;
     users: StateUsers;
@@ -16,71 +22,71 @@ export class StateAuthSession {
     isAuthenticated: boolean;
     isError: boolean;
     errorMessage: string;
-    user: any;
+    user: User;
 }
 
 export class StateUsers {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    users: any[];
+    users: User[];
 }
 
 export class StateUserManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialUser: any;
+    initialUser: User;
 }
 export class StatePermissions {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    permissions: any[];
+    permissions: Permission[];
 }
 
 export class StatePermissionManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialPermission: any;
+    initialPermission: Permission;
 }
 
 export class StateRoles {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    roles: any[];
+    roles: Role[];
 }
 
 export class StateRoleManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialRole: any;
-    permissions: any[];
+    initialRole: Role;
+    permissions: Permission[];
 }
 
 export class StateOrganizations {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    organizations: any[];
+    organizations: Organization[];
 }
 
 export class StateOrganizationManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialOrganization: any;
-    users: any[];
+    initialOrganization: Organization;
+    users: User[];
 }
 
 export class StateApplications {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    applications: any[];
+    applications: Application[];
 }
 
 export const initialState: State = {

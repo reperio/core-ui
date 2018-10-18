@@ -1,7 +1,12 @@
 import React from 'react'
 import {Wrapper} from '@reperio/ui-components';
+import { StateAuthSession } from '../store/initialState';
 
-const MainDashboard = (props: any) => (
+interface MainDashboardProps {
+    authSession: StateAuthSession;
+}
+
+const MainDashboard = (props: MainDashboardProps) => (
     <form>
         <div className="row">
             <Wrapper>

@@ -6,14 +6,19 @@ import { State } from '../../store/initialState';
 import { createOrganization } from '../../actions/organizationsActions';
 import { getUsers } from '../../actions/usersActions';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
+import Dropdown from '../../models/dropdown';
 
 class OrganizationCreateFormValues {
     name: string;
-    selectedUsers: any;
+    selectedUsers: Dropdown[];
 }
 
-class OrganizationCreateFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class OrganizationCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: OrganizationCreateFormValues) {
         await this.props.actions.createOrganization(form.name, form.selectedUsers);
@@ -40,7 +45,6 @@ class OrganizationCreateFormContainer extends React.Component {
 
 function mapStateToProps(state: State) {
     return {
-        authSession: state.authSession,
         users: state.users.users
     };
 }

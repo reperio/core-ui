@@ -4,14 +4,19 @@ import {submitAuth} from "../../actions/authActions";
 import {bindActionCreators} from "redux";
 import LoginForm from "../../components/auth/loginForm";
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
+import { State } from '../../store/initialState';
 
 class LoginFormValues {
     primaryEmailAddress: string;
     password: string;
 }
 
-class LoginFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class LoginFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(values: LoginFormValues) {
         await this.props.actions.submitAuth(values.primaryEmailAddress, values.password);
@@ -24,13 +29,15 @@ class LoginFormContainer extends React.Component {
     render() {
         return (
             <div>
-                <LoginForm onSubmit={this.onSubmit.bind(this)} navigateToForgotPassword={this.navigateToForgotPassword.bind(this)} authSession={this.props.authSession} />
+                <LoginForm  onSubmit={this.onSubmit.bind(this)} 
+                            navigateToForgotPassword={this.navigateToForgotPassword.bind(this)} 
+                            authSession={this.props.authSession} />
             </div>
         );
     }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
     return {
         authSession: state.authSession
     };

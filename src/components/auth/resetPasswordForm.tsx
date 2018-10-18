@@ -1,8 +1,15 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, InjectedFormProps } from 'redux-form'
 import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
 
-const ResetPasswordForm = (props: any) => (
+interface ResetPasswordProps {
+    navigateToLogin(): void;
+    onSubmit(): void;
+}
+
+type Form = ResetPasswordProps & InjectedFormProps<any>;
+
+const ResetPasswordForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>

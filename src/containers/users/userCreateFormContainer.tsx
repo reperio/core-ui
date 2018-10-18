@@ -4,6 +4,7 @@ import {bindActionCreators} from "redux";
 import UserCreateForm from '../../components/users/userCreateForm';
 import { State } from '../../store/initialState';
 import { createUser } from '../../actions/usersActions';
+import { RouteComponentProps } from 'react-router';
 import { history } from '../../store/history';
 
 class UserCreateFormValues {
@@ -12,14 +13,24 @@ class UserCreateFormValues {
     lastName: string;
     password: string;
     confirmPassword: string;
-    organizations: any;
+    organizations: any[];
 }
 
-class UserCreateFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class UserCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(values: UserCreateFormValues) {
-        await this.props.actions.createUser(values.primaryEmailAddress, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations == ("" || null) ? [] : values.organizations.map((organization:any) => {return organization.value}));
+        const organizations = values.organizations == ("" || null) 
+            ? [] 
+            : values.organizations
+                .map((organization:any) => {
+                    return organization.value
+                });
+
+        await this.props.actions.createUser(values.primaryEmailAddress, values.firstName, values.lastName, values.password, values.confirmPassword, organizations);
     };
 
     navigateToUsers() {

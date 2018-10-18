@@ -1,9 +1,17 @@
 import React from 'react'
-import {Field, reduxForm } from 'redux-form'
-import {FormGroup} from "react-bootstrap";
+import {Field, reduxForm, InjectedFormProps } from 'redux-form'
 import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
+import Organization from '../../models/organization';
 
-const UserCreateForm = (props: any) => (
+interface UserCreateProps {
+    onSubmit(): void;
+    navigateToUsers(): void;
+    organizations: Organization[];
+}
+
+type Form = UserCreateProps & InjectedFormProps<any>;
+
+const UserCreateForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>

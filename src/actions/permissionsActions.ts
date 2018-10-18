@@ -2,6 +2,8 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { permissionService } from "../services/permissionService";
 import {reset} from "redux-form";
+import RolePermission from "../models/rolePermission";
+import Permission from "../models/permission";
 
 export const permissionsActionTypes = {
     PERMISSIONS_GET_PENDING: "PERMISSIONS_GET_PENDING",
@@ -35,10 +37,10 @@ export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const permissions = await permissionService.getPermissions();
+        const permissions: Permission[] = (await permissionService.getPermissions()).data;
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_GET_SUCCESS,
-            payload: permissions.data
+            payload: permissions
         });
     } catch (e) {
         dispatch({
@@ -56,7 +58,7 @@ export const loadManagementInitialPermission = (permissionId: string) => async (
             type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING
         });
 
-        const permission = permissionId != null ? await permissionService.getPermissionById(permissionId) : null;
+        const permission: Permission = permissionId != null ? (await permissionService.getPermissionById(permissionId)).data : null;
 
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS,
@@ -82,24 +84,24 @@ export const removePermissionFromRole = (index: any) => (dispatch: Dispatch<any>
     });
 }
 
-export const editPermission = (id: string, displayName: string, name: string, description: string, isSystemAdminPermission:boolean, rolePermissions: any[]) => async (dispatch: Dispatch<any>) => {
+export const editPermission = (permissionId: string, displayName: string, name: string, description: string, isSystemAdminPermission:boolean, rolePermissions: RolePermission[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
     });
 
-    const rp = rolePermissions.map((rolePermission: any) => {
-        return {
-            roleId: rolePermission.roleId,
-            permissionId: rolePermission.permissionId
-        }
-    });
+    const rp = rolePermissions
+        .map((rolePermission: RolePermission) => {
+            return {
+                roleId: rolePermission.roleId,
+                permissionId: rolePermission.permissionId
+            }
+        });
 
     try {
-        await permissionService.editPermission(id, {description, displayName, isSystemAdminPermission, name, rolePermissions: rp});
+        await permissionService.editPermission(permissionId, {description, displayName, isSystemAdminPermission, name, rolePermissions: rp});
 
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_SAVE_SUCCESS
-
         });
         history.push('/permissions');
     } catch (e) {
@@ -110,4 +112,10 @@ export const editPermission = (id: string, displayName: string, name: string, de
             }
         });
     }
+};
+
+export const clearManagementInitialPermission = () => (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING
+    });
 };

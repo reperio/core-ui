@@ -8,7 +8,7 @@ export function permissionManagementReducer(state = initialState.permissionManag
             return {
                 isPending: false,
                 isError: false,
-                initialPermission: permission.data,
+                initialPermission: permission,
                 errorMessage: null
             };
         }

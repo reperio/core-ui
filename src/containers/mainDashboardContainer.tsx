@@ -1,11 +1,15 @@
 import React from 'react'
 import {connect} from "react-redux";
-
 import MainDashboard from "../components/mainDashboard";
+import { RouteComponentProps } from 'react-router';
+import { State } from '../store/initialState';
+import { bindActionCreators } from '../../node_modules/redux';
 
-class MainDashboardContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
 
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class MainDashboardContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
     render() {
         return (
             <div>
@@ -15,10 +19,16 @@ class MainDashboardContainer extends React.Component {
     }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
     return {
         authSession: state.authSession
     };
 }
 
-export default connect(mapStateToProps, null, null, {pure: false})(MainDashboardContainer);
+function mapActionToProps(dispatch: any) {
+    return {
+        actions: bindActionCreators({}, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapActionToProps)(MainDashboardContainer);

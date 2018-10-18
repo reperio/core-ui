@@ -1,7 +1,14 @@
 import React from 'react'
 import {Grid, Wrapper, ButtonElement} from '@reperio/ui-components';
+import Organization from '../../models/organization';
 
-const Organizations = (props: any) => {
+interface OrganizationsProps {
+    navigateToCreate(): void;
+    navigateToManagement(organizationId: string): void;
+    gridData: Organization[];
+}
+
+const Organizations = (props: OrganizationsProps) => {
     const gridColumns = [
         {
             Header: "Name",
@@ -11,7 +18,7 @@ const Organizations = (props: any) => {
         {
             Header: "Personal",
             id: "personal",
-            accessor: (d:any) => d.personal.toString()
+            accessor: (organization: Organization) => organization.personal.toString()
         }
     ];
 

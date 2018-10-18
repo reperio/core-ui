@@ -2,8 +2,14 @@ import React from 'react'
 import {Navbar, LinkContainer, NavItem, ApplicationMenuItem} from '@reperio/ui-components'
 import NavMenuLoginLink from './navMenuLoginLink';
 import { NavDropdown } from 'react-bootstrap';
+import { StateAuthSession } from '../../store/initialState';
 
-const NavMenu = (props: any) => (
+interface NavMenuProps {
+    authSession: StateAuthSession;
+    logout(): void;
+}
+
+const NavMenu = (props: NavMenuProps) => (
     <Navbar
         authenticated={props.authSession.isAuthenticated}
         profile={props.authSession.user != null ? {

@@ -16,7 +16,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
             return {
                 isPending: false,
                 isError: false,
-                initialUser: user.data,
+                initialUser: user,
                 errorMessage: null
             };
         }

@@ -1,9 +1,28 @@
 import React from 'react'
-import {Field, FieldArray, reduxForm} from 'redux-form'
+import {Field, FieldArray, reduxForm, InjectedFormProps} from 'redux-form'
 import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
 import OrganizationManagementUsers from './organizationManagementUsers';
+import Dropdown from '../../models/dropdown';
+import User from '../../models/user';
+import Organization from '../../models/organization';
 
-const OrganizationManagementForm = (props: any) => (
+interface OrganizationManagementProps {
+    addUser(s: Dropdown): void;
+    deleteOrganization(organizationId: string): void;
+    navigateToOrganizations(): void;
+    onSubmit(): void;
+    removeUser(): void;
+    selectUser(): void;
+    errorMessage: string;
+    initialValues: Organization;
+    isError: boolean;
+    selectedUser: Dropdown;
+    users: User[];
+}
+
+type Form = OrganizationManagementProps & InjectedFormProps<any>;
+
+const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.isError ? <p className="alert alert-danger">{props.errorMessage}</p> : ""}
         {props.initialValues ? 
@@ -51,10 +70,10 @@ const OrganizationManagementForm = (props: any) => (
                                         <Field  name="selectedUser"
                                                 options={
                                                     props.users
-                                                        .filter((user:any) => {
+                                                        .filter((user: User) => {
                                                             return !props.initialValues.selectedUsers.map((x:any)=> x.value).includes(user.id)
                                                         })
-                                                        .map((user:any, index: number) => { 
+                                                        .map((user: User, index: number) => { 
                                                             return {
                                                                 value: user.id,
                                                                 label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`
@@ -74,8 +93,8 @@ const OrganizationManagementForm = (props: any) => (
                                     <div className="col-md-12">
                                         <OrganizationManagementUsers    gridData={                                            
                                                                             props.users
-                                                                                .filter((user:any) => {
-                                                                                    return props.initialValues.selectedUsers.map((x:any)=> x.value).includes(user.id)
+                                                                                .filter((user: User) => {
+                                                                                    return props.initialValues.selectedUsers.map((x:Dropdown)=> x.value).includes(user.id)
                                                                                 })}
                                                                         removeUser={props.removeUser} />
                                     </div>
@@ -130,7 +149,6 @@ const OrganizationManagementForm = (props: any) => (
             </div>
         : null }
     </form>
-
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things

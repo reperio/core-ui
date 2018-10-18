@@ -1,5 +1,12 @@
 import React from 'react'
 import { Grid, ButtonElement, Wrapper } from '@reperio/ui-components';
+import User from '../../models/user';
+
+interface UsersProps {
+    navigateToManagement(permissionId: string): void;
+    navigateToUserCreate(): void;
+    gridData: User[];
+}
 
 const gridColumns = [
     {
@@ -19,7 +26,7 @@ const gridColumns = [
     }
 ]
 
-const Users = (props: any) => (
+const Users = (props: UsersProps) => (
     <form>
         <div className="row">
             <Wrapper>

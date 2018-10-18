@@ -8,9 +8,9 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
             return {
                 isPending: true,
                 isError: false,
-                initialRole: role.data,
+                initialRole: role,
                 errorMessage: null,
-                permissions: permissions.data
+                permissions: permissions
             };
         }
         case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_ERROR: {

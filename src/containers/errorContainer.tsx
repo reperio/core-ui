@@ -4,9 +4,14 @@ import Error from "../components/error";
 import {history} from '../store/history';
 import { clearState } from '../actions/errorActions';
 import { bindActionCreators } from '../../node_modules/redux';
+import { RouteComponentProps } from 'react-router';
+import { State } from '../store/initialState';
 
-class ErrorContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class ErrorContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     goHome() {
         history.push('/')
@@ -25,7 +30,7 @@ class ErrorContainer extends React.Component {
     }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: State) {
     return {};
 }
 

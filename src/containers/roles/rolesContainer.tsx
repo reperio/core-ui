@@ -5,9 +5,13 @@ import Roles from "../../components/roles/roles";
 import { getRoles } from '../../actions/rolesActions';
 import { State } from '../../store/initialState';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
-class RolesContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class RolesContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async componentDidMount() {
         await this.props.actions.getRoles();
@@ -23,7 +27,9 @@ class RolesContainer extends React.Component {
 
     render() {
         return (
-            <Roles navigateToManagement={this.navigateToManagement.bind(this)} navigateToCreate={this.navigateToCreate.bind(this)} gridData={this.props.roles.roles} />
+            <Roles  navigateToManagement={this.navigateToManagement.bind(this)} 
+                    navigateToCreate={this.navigateToCreate.bind(this)} 
+                    gridData={this.props.roles.roles} />
         );
     }
 }

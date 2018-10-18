@@ -6,15 +6,19 @@ import { loadManagementInitialOrganization, editOrganization, removeUserFromOrga
 import OrganizationManagementForm from '../../components/organizations/organizationManagementForm';
 import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
 class UserManagementFormValues {
-    id: number;
+    id: string;
     name: string;
     selectedUsers: any[];
 }
 
-class OrganizationManagementFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class OrganizationManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: UserManagementFormValues) {
         await this.props.actions.editOrganization(form.id, form.name, form.selectedUsers.map((selectedUser: any) => selectedUser.value));
@@ -67,11 +71,7 @@ function mapStateToProps(state: State) {
     const selector = formValueSelector('organizationManagementForm');
     const organizationManagement = state.organizationManagement;
     return {
-        initialOrganization: organizationManagement.initialOrganization != null ? {
-            id: organizationManagement.initialOrganization.id,
-            name: organizationManagement.initialOrganization.name,
-            selectedUsers: organizationManagement.initialOrganization.selectedUsers
-        } : null,
+        initialOrganization: organizationManagement.initialOrganization,
         isError: organizationManagement.isError,
         errorMessage: organizationManagement.errorMessage,
         authSession: state.authSession,

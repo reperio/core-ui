@@ -1,9 +1,20 @@
 import React from 'react'
-import {Field, reduxForm } from 'redux-form'
+import {Field, reduxForm, InjectedFormProps } from 'redux-form'
 import {FormGroup} from "react-bootstrap";
 import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
+import { StateAuthSession } from '../../store/initialState';
 
-const SignupForm = (props: any) => (
+interface SignupProps {
+    navigateToLogin(): void;
+    onSubmit(): void;
+    authSession: StateAuthSession;
+    recaptcha: boolean;
+    children: any;
+}
+
+type Form = SignupProps & InjectedFormProps<any>;
+
+const SignupForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <div className="row">
             <Wrapper>

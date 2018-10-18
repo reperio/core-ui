@@ -1,7 +1,11 @@
 import React from 'react'
 import {Wrapper, ButtonElement} from '@reperio/ui-components';
 
-const Error = (props: any) => {
+interface ErrorProps {
+    goHome(): void;
+}
+
+const Error = (props: ErrorProps) => {
     return (
         <form>
             <div className="row">

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, ButtonElement, Wrapper } from '@reperio/ui-components';
+import { Grid, ButtonElement } from '@reperio/ui-components';
 
 const OrganizationManagementUsers = (props: any) => (
     <div>
@@ -31,7 +31,7 @@ const OrganizationManagementUsers = (props: any) => (
                         maxWidth: 150,
                         sortable: false,
                         filterable: false,
-                        Cell: (row:any) => (
+                        Cell: (row: any) => (
                             <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeUser(row.index)} />
                         )
                     }]

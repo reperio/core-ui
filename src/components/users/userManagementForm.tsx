@@ -1,8 +1,20 @@
 import React from 'react'
-import {Field, reduxForm, FieldArray } from 'redux-form'
 import { TextboxElement, ButtonElement, PickerElement, Wrapper, CheckboxElement } from '@reperio/ui-components';
+import {Field, reduxForm, FieldArray, InjectedFormProps } from 'redux-form'
+import Organization from '../../models/organization';
+import Dropdown from '../../models/dropdown';
+import Role from '../../models/role';
+import RolePermission from '../../models/rolePermission';
+import User from '../../models/user';
+import SelectedRole from '../../models/selectedRole';
+import { StateAuthSession } from '../../store/initialState';
 
-const organizationsFieldArray = (props: any) => (
+interface OrganizationsFieldArrayProps {
+    removeOrganization(index: number): void;
+    initialValues: Dropdown[];
+}
+
+const organizationsFieldArray: React.SFC<OrganizationsFieldArrayProps> = (props: OrganizationsFieldArrayProps) => (
     <div>
         <hr />
         {props.initialValues.map((member:any, index:number) =>
@@ -65,7 +77,15 @@ const userEmailFieldArray = (props: any) => (
     </div>
 );
 
-const rolesAndPermissions = (props: any) => (
+interface RolesAndPermissionsFieldArrayProps {
+    toggleRoleDetails(index: number): void;
+    removeRole(index: number): void;
+    initialValues: SelectedRole[];
+    toggle: boolean;
+    organizations: Organization[];
+}
+
+const rolesAndPermissionsFieldArray: React.SFC<RolesAndPermissionsFieldArrayProps> = (props: RolesAndPermissionsFieldArrayProps) => (
     <div>
         <hr />
         {props.initialValues.map((member:any, index:number) =>
@@ -73,17 +93,16 @@ const rolesAndPermissions = (props: any) => (
                 <div className="row">
                     <div className="col-xs-8 roles-permissions-row" onClick={() => props.toggle ? props.toggleRoleDetails(index) :  null}>
                         <div className={`fa ${props.initialValues[index].role.visible ? 'fa-caret-down' : 'fa-caret-right'} fa-lg roles-permissions-row-arrow`}></div>
-                        {props.organizations.filter((x:any) => x.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].label}
+                        {props.organizations.filter((organization: Organization) => organization.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].label}
                     </div>
                     <div className="col-xs-4">
                         <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeRole(index)} />
                     </div>
                 </div>
-                <hr />
                 {props.toggle && props.initialValues[index].role.visible ? 
                     <div className="row roles-permissions-detail-container">
                         <div className="roles-permissions-detail-header">Permissions</div>
-                        {props.initialValues[index].role.rolePermissions.map((rolePermission: any, index: number) => {
+                        {props.initialValues[index].role.rolePermissions.map((rolePermission: RolePermission, index: number) => {
                             return (
                                 <div key={index}>
                                     <div className="roles-permissions-detail-permission-name">
@@ -97,12 +116,39 @@ const rolesAndPermissions = (props: any) => (
                         })}
                     </div>
                 : null }
+                <hr />
             </div>
         )}
     </div>
 );
 
-const UserManagementForm = (props: any) => (
+interface UserManagementProps {
+    addEmailAddress(): void;
+    addOrganization(selectedRole: Dropdown): void;
+    addRole(selectedRole: Dropdown): void;
+    navigateToUsers(): void;
+    onSubmit(): void;
+    removeEmailAddress(): void;
+    removeOrganization(organizationId: string): void;
+    removeRole(roleId: string): void;
+    selectOrganization(): void;
+    selectRole(): void;
+    sendVerificationEmail(): void;
+    setPrimaryEmailAddress(): void;
+    authSession: StateAuthSession;
+    errorMessage: string;
+    initialValues: User;
+    isError: boolean;
+    organizations: Organization[];
+    roles: Role[];
+    selectedOrganization: Dropdown;
+    selectedRole: Dropdown;
+    toggleRoleDetails: boolean;
+}
+
+type Form = UserManagementProps & InjectedFormProps<any>;
+
+const UserManagementForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.initialValues ? 
             <div className="management-container">
@@ -189,10 +235,10 @@ const UserManagementForm = (props: any) => (
                                         <Field  name="selectedOrganization"
                                                 options={
                                                     props.organizations
-                                                        .filter((organization:any) => {
-                                                            return !props.initialValues.selectedOrganizations.map((x:any)=> x.value).includes(organization.id)
+                                                        .filter((organization: Organization) => {
+                                                            return !props.initialValues.selectedOrganizations.map((x: Dropdown)=> x.value).includes(organization.id)
                                                         })
-                                                        .map((organization:any, index: number) => { 
+                                                        .map((organization: Organization, index: number) => { 
                                                             return {
                                                                 value: organization.id,
                                                                 label:organization.name
@@ -231,10 +277,10 @@ const UserManagementForm = (props: any) => (
                                         <Field  name="selectedRole"
                                                 options={
                                                     props.roles
-                                                        .filter((role:any) => {
-                                                            return !props.initialValues.selectedRoles.map((x:any)=> x.value).includes(role.id)
+                                                        .filter((role: Role) => {
+                                                            return !props.initialValues.selectedRoles.map((x: Dropdown)=> x.value).includes(role.id)
                                                         })
-                                                        .map((role:any, index: number) => { 
+                                                        .map((role: Role, index: number) => { 
                                                             return {
                                                                 value: role.id,
                                                                 label:role.name
@@ -251,14 +297,16 @@ const UserManagementForm = (props: any) => (
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <FieldArray name="roles"
-                                                rerenderOnEveryChange={true}
-                                                initialValues={props.initialValues.selectedRoles}
-                                                organizations={props.organizations}
-                                                toggleRoleDetails={props.toggleRoleDetails}
-                                                removeRole={props.removeRole}
-                                                toggle={true}
-                                                component={rolesAndPermissions}/>
+                                    <div className="col-md-12">
+                                        <FieldArray name="roles"
+                                                    rerenderOnEveryChange={true}
+                                                    initialValues={props.initialValues.selectedRoles}
+                                                    organizations={props.organizations}
+                                                    toggleRoleDetails={props.toggleRoleDetails}
+                                                    removeRole={props.removeRole}
+                                                    toggle={true}
+                                                    component={rolesAndPermissionsFieldArray}/>
+                                    </div>
                                 </div>
                             </div>
                         </Wrapper>

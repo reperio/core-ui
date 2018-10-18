@@ -8,9 +8,9 @@ export function organizationManagementReducer(state = initialState.organizationM
             return {
                 isPending: false,
                 isError: false,
-                initialOrganization: organization.data,
+                initialOrganization: organization,
                 errorMessage: null,
-                users: users.data
+                users: users
             };
         }
         case organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING: {

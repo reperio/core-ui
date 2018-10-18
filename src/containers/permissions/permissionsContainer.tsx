@@ -5,16 +5,16 @@ import Permissions from "../../components/permissions/permissions";
 import { getPermissions } from '../../actions/permissionsActions';
 import { State } from '../../store/initialState';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
-class PermissionsContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class PermissionsContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async componentDidMount() {
         await this.props.actions.getPermissions();
-    }
-
-    navigateToCreate() {
-        history.push('/permissions/new');
     }
 
     navigateToManagement(permissionId: string) {
@@ -23,7 +23,8 @@ class PermissionsContainer extends React.Component {
 
     render() {
         return (
-            <Permissions navigateToManagement={this.navigateToManagement.bind(this)} navigateToCreate={this.navigateToCreate.bind(this)} gridData={this.props.permissions.permissions} />
+            <Permissions    navigateToManagement={this.navigateToManagement.bind(this)}
+                            gridData={this.props.permissions.permissions} />
         );
     }
 }

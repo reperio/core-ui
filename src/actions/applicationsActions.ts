@@ -1,7 +1,6 @@
 import {Dispatch} from "react-redux";
-import { history } from '../store/history';
 import { applicationService } from "../services/applicationService";
-import {reset} from "redux-form";
+import Application from "../models/application";
 
 export const applicationsActionTypes = {
     APPLICATIONS_GET_PENDING: "APPLICATIONS_GET_PENDING",
@@ -25,10 +24,10 @@ export const getApplications = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const applications = await applicationService.getApplications();
+        const applications: Application[] = (await applicationService.getApplications()).data;
         dispatch({
             type: applicationsActionTypes.APPLICATIONS_GET_SUCCESS,
-            payload: applications.data
+            payload: applications
         });
     } catch (e) {
         dispatch({

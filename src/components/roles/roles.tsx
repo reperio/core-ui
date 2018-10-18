@@ -1,7 +1,14 @@
 import React from 'react'
 import {Grid, Wrapper, ButtonElement} from '@reperio/ui-components';
+import Role from '../../models/role';
 
-const Roles = (props: any) => {
+interface RolesProps {
+    navigateToCreate(): void;
+    navigateToManagement(permissionId: string): void;
+    gridData: Role[];
+}
+
+const Roles = (props: RolesProps) => {
     const gridColumns = [
         {
             Header: "Name",

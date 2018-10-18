@@ -2,12 +2,16 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Users from "../../components/users/users";
-import { getUsers, populateUserOrganizations } from '../../actions/usersActions';
+import { getUsers } from '../../actions/usersActions';
 import { State } from '../../store/initialState';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
-class UsersContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class UsersContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async componentDidMount() {
         await this.props.actions.getUsers();
@@ -17,7 +21,7 @@ class UsersContainer extends React.Component {
         history.push('/users/new');
     }
 
-    navigateToManagement(userId: any) {
+    navigateToManagement(userId: string) {
         history.push(`users/${userId}/edit`);
     }
 
@@ -34,14 +38,13 @@ class UsersContainer extends React.Component {
 
 function mapStateToProps(state: State) {
     return {
-        authSession: state.authSession,
         users: state.users
     };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getUsers, populateUserOrganizations}, dispatch)
+        actions: bindActionCreators({getUsers}, dispatch)
     };
 }
 

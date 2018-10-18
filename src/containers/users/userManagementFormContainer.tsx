@@ -14,14 +14,20 @@ import UserManagementForm from '../../components/users/userManagementForm';
 import { formValueSelector } from 'redux-form';
 import { RouteComponentProps, Redirect } from 'react-router';
 import { history } from '../../store/history';
+import Dropdown from '../../models/dropdown';
 
 class UserManagementFormValues {
     id: string;
     firstName: string;
     lastName: string;
+<<<<<<< HEAD
     selectedOrganizations: any[];
     selectedRoles: any[];
     userEmails: any[];
+=======
+    selectedOrganizations: Dropdown[];
+    selectedRoles: Dropdown[];
+>>>>>>> Refactored, added types to everything.
 }
 
 interface OwnProps {}
@@ -36,12 +42,12 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         await this.props.actions.editUser(form.id, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}), form.userEmails, form.userEmails.filter((x: any)=> x.primary));
 =======
         const selectedRoles = form.selectedRoles
-            .map((role:any) => {
+            .map((role: Dropdown) => {
                 return role.value
             });
 
         const selectedOrganizations = form.selectedOrganizations
-            .map((organization:any) => {
+            .map((organization: Dropdown) => {
                 return organization.value
             });
 
@@ -150,8 +156,8 @@ function mapStateToProps(state: State) {
         organizations: state.organizations.organizations,
         roles: state.roles.roles,
         authSession: state.authSession,
-        selectedOrganization: selector(state, 'selectedOrganization'),
-        selectedRole: selector(state, 'selectedRole'),
+        selectedOrganization: selector(state, 'selectedOrganization') as Dropdown,
+        selectedRole: selector(state, 'selectedRole') as Dropdown,
         redirectToErrorPage: state.organizations.isError || state.roles.isError || state.userManagement.isError
     };
 }

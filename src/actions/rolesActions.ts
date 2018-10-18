@@ -3,6 +3,10 @@ import { history } from '../store/history';
 import { roleService } from "../services/roleService";
 import {reset, change} from "redux-form";
 import { permissionService } from "../services/permissionService";
+import RolePermission from "../models/rolePermission";
+import Role from "../models/role";
+import Dropdown from "../models/dropdown";
+import Permission from "../models/permission";
 
 export const rolesActionTypes = {
     ROLES_GET_PENDING: "ROLES_GET_PENDING",
@@ -43,10 +47,10 @@ export const getRoles = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const roles = await roleService.getRoles();
+        const roles: Role[] = (await roleService.getRoles()).data;
         dispatch({
             type: rolesActionTypes.ROLES_GET_SUCCESS,
-            payload: roles.data
+            payload: roles
         });
     } catch (e) {
         dispatch({
@@ -70,17 +74,17 @@ export const loadManagementInitialRole = (roleId: string) => async (dispatch: Di
             type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING
         });
 
-        const role = roleId != null ? await roleService.getRoleById(roleId) : null;
-        const permissions = await permissionService.getPermissions();
+        const role: Role = roleId != null ? (await roleService.getRoleById(roleId)).data : null;
+        const permissions: Permission[] = (await permissionService.getPermissions()).data;
     
-        role.data.selectedPermissions = role.data.rolePermissions
-            .map((rolePermission:any) => {
+        role.selectedPermissions = role.rolePermissions
+            .map((rolePermission: RolePermission) => {
                 return {
                     value: rolePermission.permission.id, 
                     label: rolePermission.permission.name
                 }
             })
-            .sort((a: any, b: any) => a.label.localeCompare(b.label));
+            .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label));
     
         dispatch({
             type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS,
@@ -119,17 +123,16 @@ export const addPermission = (permission: any) => (dispatch: Dispatch<any>) => {
     }
 }
 
-export const editRole = (id: string, name: string, permissionIds: any[]) => async (dispatch: Dispatch<any>) => {
+export const editRole = (roleId: string, name: string, permissionIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: rolesActionTypes.ROLES_SAVE_PENDING
     });
 
     try {
-        await roleService.editRole(id, {name, permissionIds});
+        await roleService.editRole(roleId, {name, permissionIds});
 
         dispatch({
             type: rolesActionTypes.ROLES_SAVE_SUCCESS
-
         });
         history.push('/roles');
     } catch (e) {
@@ -142,18 +145,18 @@ export const editRole = (id: string, name: string, permissionIds: any[]) => asyn
     }
 };
 
-export const createRole = (name: string, application: any, organization:any, permissions: any[]) => async (dispatch: Dispatch<any>) => {
+export const createRole = (name: string, application: Dropdown, organization: Dropdown, permissions: Dropdown[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: rolesActionTypes.ROLES_CREATE_PENDING
     });
 
     try {
-        await roleService.createRole({name, applicationId: application ? application.value : null, organizationId: organization.value, permissionIds: permissions ? permissions.map((x:any) => x.value) : []});
+        await roleService.createRole({name, applicationId: application ? application.value : null, organizationId: organization.value, permissionIds: permissions ? permissions.map((x: Dropdown) => x.value) : []});
 
         dispatch({
             type: rolesActionTypes.ROLES_CREATE_SUCCESS
-
         });
+
         history.push('/roles');
     } catch (e) {
         dispatch({
@@ -165,17 +168,16 @@ export const createRole = (name: string, application: any, organization:any, per
     }
 };
 
-export const deleteRole = (id: string) => async (dispatch: Dispatch<any>) => {
+export const deleteRole = (roleId: string) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: rolesActionTypes.ROLES_DELETE_PENDING
     });
 
     try {
-        await roleService.deleteRole(id);
+        await roleService.deleteRole(roleId);
 
         dispatch({
             type: rolesActionTypes.ROLES_DELETE_SUCCESS
-
         });
         history.push('/roles');
     } catch (e) {

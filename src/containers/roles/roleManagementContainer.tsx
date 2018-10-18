@@ -6,18 +6,27 @@ import { editRole, loadManagementInitialRole, removePermissionFromRole, selectPe
 import RoleManagementForm from '../../components/roles/roleManagementForm';
 import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
 class RoleManagementFormValues {
-    id: number;
+    id: string;
     name: string;
     selectedPermissions: any[];
 }
 
-class RoleManagementFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class RoleManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: RoleManagementFormValues) {
-        await this.props.actions.editRole(form.id, form.name, form.selectedPermissions.map((permission:any) => {return permission.value}));
+        const permissions = form.selectedPermissions
+            .map((permission:any) => {
+                return permission.value
+            });
+
+        await this.props.actions.editRole(form.id, form.name, permissions);
     };
 
     async componentDidMount() {
@@ -75,7 +84,6 @@ function mapStateToProps(state: State) {
         } : null,
         isError: roleManagement.isError,
         errorMessage: roleManagement.errorMessage,
-        authSession: state.authSession,
         permissions: roleManagement.permissions,
         selectedPermission: selector(state, 'selectedPermission')
     };

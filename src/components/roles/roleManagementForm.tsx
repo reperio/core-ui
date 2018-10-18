@@ -1,9 +1,28 @@
 import React from 'react'
-import {Field, FieldArray, reduxForm} from 'redux-form'
-import {TextboxElement, TextareaElement, ButtonElement, Wrapper, PickerElement, CheckboxElement} from '@reperio/ui-components';
+import {Field, FieldArray, reduxForm, InjectedFormProps} from 'redux-form'
+import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
 import PermissionsArray from '../permissions/permissionsArray';
+import Permission from '../../models/permission';
+import Role from '../../models/role';
+import Dropdown from '../../models/dropdown';
 
-const RoleManagementForm = (props: any) => (
+interface RoleManagementProps {
+    addPermission(selectedPermission: Dropdown): void;
+    deleteRole(roleId: string): void;
+    navigateToRoles(): void;
+    onSubmit(): void;
+    removePermission(): void;
+    selectPermission(): void;
+    errorMessage: string;
+    initialValues: Role;
+    isError: boolean;
+    permissions: Permission[];
+    selectedPermission: Dropdown;
+}
+
+type Form = RoleManagementProps & InjectedFormProps<any>;
+
+const RoleManagementForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         {props.isError ? <p className="alert alert-danger">{props.errorMessage}</p> : ""}
         {props.initialValues ? 
@@ -50,10 +69,10 @@ const RoleManagementForm = (props: any) => (
                                         <Field  name="selectedPermission"
                                                 options={
                                                     props.permissions
-                                                        .filter((permission:any) => {
+                                                        .filter((permission: Permission) => {
                                                             return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.id)
                                                         })
-                                                        .map((permission:any, index: number) => { 
+                                                        .map((permission: Permission, index: number) => { 
                                                             return {
                                                                 value: permission.id,
                                                                 label:permission.name
@@ -129,7 +148,6 @@ const RoleManagementForm = (props: any) => (
             </div>
         : null }
     </form>
-
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things

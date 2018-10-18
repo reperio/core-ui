@@ -5,9 +5,13 @@ import Organizations from "../../components/organizations/organizations";
 import { getOrganizations } from '../../actions/organizationsActions';
 import { State } from '../../store/initialState';
 import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
-class OrganizationsContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class OrganizationsContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async componentDidMount() {
         await this.props.actions.getOrganizations();
@@ -23,7 +27,9 @@ class OrganizationsContainer extends React.Component {
 
     render() {
         return (
-            <Organizations navigateToManagement={this.navigateToManagement.bind(this)} navigateToCreate={this.navigateToCreate.bind(this)} gridData={this.props.organizations.organizations} />
+            <Organizations  navigateToManagement={this.navigateToManagement.bind(this)} 
+                            navigateToCreate={this.navigateToCreate.bind(this)} 
+                            gridData={this.props.organizations.organizations} />
         );
     }
 }

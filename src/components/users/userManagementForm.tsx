@@ -182,7 +182,6 @@ const UserManagementForm = (props: any) => (
                                 <div className="row">
                                     <div className="col-md-12">
                                         <h2>Organizations</h2>
-                                        {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
                                     </div>
                                 </div>
                                 <div className="row">

@@ -13,7 +13,14 @@ class AuthService {
     }
 
     async signup(primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string) {
-        return await axios.post(`/auth/signup`, {primaryEmailAddress, firstName, lastName, password, confirmPassword});
+        const payload = {
+            primaryEmailAddress,
+            firstName, 
+            lastName, 
+            password, 
+            confirmPassword
+        }
+        return await axios.post(`/auth/signup`, payload);
     }
 
     async recaptcha(response: string) {
@@ -21,15 +28,26 @@ class AuthService {
     }
 
     async emailVerification(token: string) {
-        return await axios.post(`/auth/emailVerification`, {token});
+        const payload = {
+            token
+        }
+        return await axios.post(`/auth/emailVerification`, payload);
     }
 
     async forgotPassword(primaryEmailAddress: string) {
-        return await axios.post(`/auth/forgotPassword`, {primaryEmailAddress});
+        const payload = {
+            primaryEmailAddress
+        }
+        return await axios.post(`/auth/forgotPassword`, payload);
     }
 
     async resetPassword(token: string, password: string, confirmPassword: string) {
-        return await axios.post(`/auth/resetPassword`, {token, password, confirmPassword});
+        const payload = {
+            token, 
+            password, 
+            confirmPassword
+        }
+        return await axios.post(`/auth/resetPassword`, payload);
     }
 
     async verifyResetPassword(token: string) {
@@ -37,7 +55,11 @@ class AuthService {
     }
 
     async sendVerificationEmail(userId: string, email: string) {
-        return await axios.post(`/auth/sendVerificationEmail`, {userId, email});
+        const payload = {
+            userId, 
+            email
+        }
+        return await axios.post(`/auth/sendVerificationEmail`, payload);
     }
 }
 

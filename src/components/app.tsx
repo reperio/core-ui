@@ -1,18 +1,12 @@
 import React from 'react'
 import NavMenuContainer from "../containers/navMenuContainer";
-import Routes from "./routes";
-
+import AppContainer from '../containers/appContainer';
 
 const App = () => (
     <div className="app-main">
         <NavMenuContainer/>
-        <Routes/>
+        <AppContainer />
     </div>
 );
 
 export default App;
-
-
-
-
-

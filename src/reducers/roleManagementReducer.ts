@@ -3,14 +3,32 @@ import { rolesActionTypes } from "../actions/rolesActions";
 
 export function roleManagementReducer(state = initialState.roleManagement, action: {type: string, payload: any}): StateRoleManagement {
     switch (action.type) {
-        case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE: {
+        case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS: {
             const {role, permissions} = action.payload;
             return {
                 isPending: true,
                 isError: false,
-                initialRole: role.data,
+                initialRole: role,
                 errorMessage: null,
-                permissions: permissions.data
+                permissions: permissions
+            };
+        }
+        case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_ERROR: {
+            return {
+                isPending: false,
+                isError: true,
+                initialRole: null,
+                errorMessage: action.payload.message,
+                permissions: null
+            };
+        }
+        case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING: {
+            return {
+                isPending: true,
+                isError: false,
+                initialRole: null,
+                errorMessage: null,
+                permissions: null
             };
         }
         case rolesActionTypes.ROLES_SAVE_PENDING: {
@@ -66,6 +84,15 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 }),
                 errorMessage: null,
                 permissions: state.permissions
+            };
+        }
+        case rolesActionTypes.CLEAR_ROLE_MANAGEMENT: {
+            return {
+                isPending: false,
+                isError: false,
+                initialRole: null,
+                errorMessage: null,
+                permissions: null
             };
         }
         default: {

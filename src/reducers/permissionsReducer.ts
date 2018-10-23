@@ -27,6 +27,14 @@ export function permissionsReducer(state = initialState.permissions, action: {ty
                 permissions: []
             };
         }
+        case permissionsActionTypes.CLEAR_PERMISSIONS: {
+            return {
+                isPending: false,
+                isError: false,
+                errorMessage: null,
+                permissions: []
+            };
+        }
         default: {
             return state;
         }

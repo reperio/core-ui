@@ -2,25 +2,29 @@ import React from 'react'
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
-import { loadManagementInitialPermission, editPermission, clearManagementInitialPermission, removePermissionFromRole } from '../../actions/permissionsActions';
-import { locationChange } from '../../actions/navActions';
+import { loadManagementInitialPermission, editPermission, removePermissionFromRole, clearManagementInitialPermission } from '../../actions/permissionsActions';
 import PermissionManagementForm from '../../components/permissions/permissionManagementForm';
-import { formValueSelector, change } from 'redux-form';
+import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
+import RolePermission from '../../models/rolePermission';
 
 class UserManagementFormValues {
-    id: number;
+    id: string;
     displayName: string;
     description: string;
     isSystemAdminPermission: boolean;
     name: string;
-    roles: any[];
+    rolePermissions: RolePermission[];
 }
 
-class PermissionManagementFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class PermissionManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editPermission(form.id, form.displayName, form.name, form.description, form.isSystemAdminPermission, form.roles);
+        await this.props.actions.editPermission(form.id, form.displayName, form.name, form.description, form.isSystemAdminPermission, form.rolePermissions);
     };
 
     async componentDidMount() {
@@ -29,7 +33,7 @@ class PermissionManagementFormContainer extends React.Component {
     }
 
     navigateToPermissions() {
-        this.props.actions.locationChange('/permissions', null, null);
+        history.push('/permissions');
     }
 
     removePermission(index: number){
@@ -38,20 +42,17 @@ class PermissionManagementFormContainer extends React.Component {
 
     render() {
         return (
-            <div>
-                <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)} 
-                                            initialValues={this.props.initialPermission}
-                                            isError={this.props.isError}
-                                            errorMessage={this.props.errorMessage}
-                                            removePermission={this.removePermission.bind(this)}
-                                            onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)} 
+                                        initialValues={this.props.initialPermission}
+                                        isError={this.props.isError}
+                                        errorMessage={this.props.errorMessage}
+                                        removePermission={this.removePermission.bind(this)}
+                                        onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }
 
 function mapStateToProps(state: State) {
-    const selector = formValueSelector('userManagementForm');
     const permissionManagement = state.permissionManagement;
     return {
         initialPermission: permissionManagement.initialPermission != null ? {
@@ -60,18 +61,16 @@ function mapStateToProps(state: State) {
             displayName: permissionManagement.initialPermission.displayName,
             description: permissionManagement.initialPermission.description,
             isSystemAdminPermission: permissionManagement.initialPermission.isSystemAdminPermission,
-            roles: permissionManagement.initialPermission.rolePermissions
+            rolePermissions: permissionManagement.initialPermission.rolePermissions
         } : null,
         isError: permissionManagement.isError,
-        errorMessage: permissionManagement.errorMessage,
-        authSession: state.authSession,
-        selectedOrganization: selector(state, 'selectedOrganization')
+        errorMessage: permissionManagement.errorMessage
     };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editPermission, locationChange, loadManagementInitialPermission, clearManagementInitialPermission, removePermissionFromRole}, dispatch)
+        actions: bindActionCreators({editPermission, loadManagementInitialPermission, removePermissionFromRole, clearManagementInitialPermission}, dispatch)
     };
 }
 

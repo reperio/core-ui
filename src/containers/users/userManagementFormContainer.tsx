@@ -1,47 +1,69 @@
 import React from 'react'
-import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { editUser, selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress} from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
 import { sendVerificationEmail } from '../../actions/authActions';
-import { locationChange } from '../../actions/navActions';
 import UserManagementForm from '../../components/users/userManagementForm';
 import { formValueSelector } from 'redux-form';
+import { RouteComponentProps } from 'react-router';
+import { history } from '../../store/history';
+import SelectedRole from '../../models/selectedRole';
+import UserEmail from '../../models/userEmail';
+import Dropdown from '../../models/dropdown';
+import { connect } from 'react-redux';
 
 class UserManagementFormValues {
     id: string;
     firstName: string;
     lastName: string;
-    selectedOrganizations: any[];
-    selectedRoles: any[];
-    userEmails: any[];
+    selectedOrganizations: Dropdown[];
+    selectedRoles: SelectedRole[];
+    userEmails: UserEmail[];
 }
 
-class UserManagementFormContainer extends React.Component {
-    props: any;
+interface OwnProps {}
 
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class UserManagementFormContainer extends React.Component<RouteComponentProps<any> & OwnProps & StateProps & DispatchProps> {
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editUser(form.id, form.firstName, form.lastName, form.selectedOrganizations.map((organization:any) => {return organization.value}), form.selectedRoles.map((role:any) => {return role.value}), form.userEmails, form.userEmails.filter((x: any)=> x.primary));
+        const selectedRoles = form.selectedRoles
+            .map((role: SelectedRole) => {
+                return role.value
+            });
+
+        const selectedOrganizations = form.selectedOrganizations
+            .map((organization: Dropdown) => {
+                return organization.value
+            });
+        
+        const primaryEmailAddress = form.userEmails
+            .filter((x: UserEmail)=> x.primary);
+
+        await this.props.actions.editUser(form.id, form.firstName, form.lastName, selectedOrganizations, selectedRoles, form.userEmails, primaryEmailAddress);
+
     };
 
-    async componentDidMount() {
+     async componentDidMount() {
         this.props.actions.clearManagementInitialUser();
         await this.props.actions.getOrganizations();
         await this.props.actions.getRoles();
         await this.props.actions.loadManagementInitialUser(this.props.match.params.userId);
-    }
+     }
 
     navigateToUsers() {
-        this.props.actions.locationChange('/users', null, null);
+        history.push('/users');
     }
 
-    selectOrganization(organization: any) {
+    selectOrganization(organization: Dropdown) {
         this.props.actions.selectOrganization(organization);
     }
 
-    selectRole(role: any) {
+    selectRole(role: SelectedRole) {
         this.props.actions.selectRole(role);
     }
 
@@ -61,7 +83,7 @@ class UserManagementFormContainer extends React.Component {
         this.props.actions.removeRole(index);
     }
 
-    addRole(role: any) {
+    addRole(role: Dropdown) {
         this.props.actions.addRole(role, this.props.roles);
     }
 
@@ -83,7 +105,6 @@ class UserManagementFormContainer extends React.Component {
 
     render() {
         return (
-            <div>
                 <UserManagementForm navigateToUsers={this.navigateToUsers.bind(this)} 
                                     initialValues={this.props.initialUser}
                                     onSubmit={this.onSubmit.bind(this)}
@@ -101,8 +122,8 @@ class UserManagementFormContainer extends React.Component {
                                     removeEmailAddress={this.removeEmailAddress.bind(this)}
                                     addEmailAddress={this.addEmailAddress.bind(this)}
                                     sendVerificationEmail={this.sendVerificationEmail.bind(this)}
-                                    removeOrganization={this.removeOrganization.bind(this)} />
-            </div>
+                                    removeOrganization={this.removeOrganization.bind(this)}
+                                    redirectToErrorPage={this.props.redirectToErrorPage} />
         );
     }
 }
@@ -110,6 +131,7 @@ class UserManagementFormContainer extends React.Component {
 function mapStateToProps(state: State) {
     const selector = formValueSelector('userManagementForm');
     const initialUser = state.userManagement.initialUser;
+
     return {
         initialUser: initialUser != null ? {
             id: initialUser.id,
@@ -123,8 +145,9 @@ function mapStateToProps(state: State) {
         organizations: state.organizations.organizations,
         roles: state.roles.roles,
         authSession: state.authSession,
-        selectedOrganization: selector(state, 'selectedOrganization'),
-        selectedRole: selector(state, 'selectedRole')
+        selectedOrganization: selector(state, 'selectedOrganization') as Dropdown,
+        selectedRole: selector(state, 'selectedRole') as SelectedRole,
+        redirectToErrorPage: state.organizations.isError || state.roles.isError || state.userManagement.isError
     };
 }
 
@@ -132,8 +155,7 @@ function mapActionToProps(dispatch: any) {
     return {
         actions: bindActionCreators(
             {
-                editUser, 
-                locationChange, 
+                editUser,
                 selectOrganization, 
                 addOrganization, 
                 removeOrganization, 
@@ -147,10 +169,11 @@ function mapActionToProps(dispatch: any) {
                 selectRole, 
                 removeEmailAddress, 
                 setPrimaryEmailAddress, 
-                addEmailAddress, 
+                addEmailAddress,
                 sendVerificationEmail
             }, dispatch)
-    };
-}
+        };
+    }
+        
 
 export default connect(mapStateToProps, mapActionToProps)(UserManagementFormContainer);

@@ -1,28 +1,48 @@
 import {initialState, StateUserManagement} from "../store/initialState";
 import { usersActionTypes } from "../actions/usersActions";
+import UserEmail from "../models/userEmail";
+import User from "../models/user";
+import SelectedRole from "../models/selectedRole";
+import Dropdown from "../models/dropdown";
 
 export function userManagementReducer(state = initialState.userManagement, action: {type: string, payload: any}): StateUserManagement {
     switch (action.type) {
-        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER: {
-            const {user} = action.payload;
+        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS: {
+            const user: User = action.payload.user;
 
-            if (user.data) {
-                user.data.userEmails.forEach((userEmail: any) => {
-                    userEmail.primary = userEmail.email === user.data.primaryEmailAddress ? true : false
+            if (user) {
+                user.userEmails.forEach((userEmail: UserEmail) => {
+                    userEmail.primary = userEmail.email === user.primaryEmailAddress ? true : false
                 });
-                user.data.userEmails = user.data.userEmails.filter((x:any) => !x.deleted);
+                user.userEmails = user.userEmails.filter((userEmail: UserEmail) => !userEmail.deleted);
             }
 
             return {
+                isPending: false,
+                isError: false,
+                initialUser: user,
+                errorMessage: null
+            };
+        }
+        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING: {
+            return {
                 isPending: true,
                 isError: false,
-                initialUser: user.data,
+                initialUser: null,
+                errorMessage: null
+            };
+        }
+        case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR: {
+            return {
+                isPending: false,
+                isError: true,
+                initialUser: null,
                 errorMessage: null
             };
         }
         case usersActionTypes.USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER: {
             const {index} = action.payload;
-            const newList = state.initialUser.selectedOrganizations.filter((x:any, i: number) => {
+            const newList = state.initialUser.selectedOrganizations.filter((selectedOrganization: Dropdown, i: number) => {
                 return i != index;
             });
             return {
@@ -63,7 +83,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER: {
             const {index} = action.payload;
-            const newList = state.initialUser.selectedRoles.filter((x:any, i: number) => {
+            const newList = state.initialUser.selectedRoles.filter((selectedRole: SelectedRole, i: number) => {
                 return i != index;
             });
             return {
@@ -89,7 +109,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER: {
             const {index} = action.payload;
-            const newList = state.initialUser.userEmails.filter((x:any, i: number) => {
+            const newList = state.initialUser.userEmails.filter((userEmail: UserEmail, i: number) => {
                 return i != index;
             });
             return {
@@ -103,7 +123,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER: {
             const {email} = action.payload;
-            const newList = state.initialUser.userEmails.concat([{email, emailVerified: false}]);
+            const newList = state.initialUser.userEmails.concat([{email, emailVerified: false, deleted: false, id: null, userId: null, user: null, primary: false}]);
             return {
                 isPending: true,
                 isError: false,
@@ -117,8 +137,8 @@ export function userManagementReducer(state = initialState.userManagement, actio
             const {index} = action.payload;
             const newList = state.initialUser.userEmails;
 
-            newList.forEach((element: any) => {
-                element.primary = false;
+            newList.forEach((userEmail: UserEmail) => {
+                userEmail.primary = false;
             });
 
             newList[index].primary = true;
@@ -129,6 +149,14 @@ export function userManagementReducer(state = initialState.userManagement, actio
                 initialUser: Object.assign({}, state.initialUser, {
                     userEmails: newList
                 }),
+                errorMessage: null
+            };
+        }
+        case usersActionTypes.CLEAR_USER_MANAGEMENT: {
+            return {
+                isPending: false,
+                isError: false,
+                initialUser: null,
                 errorMessage: null
             };
         }

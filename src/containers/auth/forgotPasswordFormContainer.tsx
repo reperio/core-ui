@@ -1,43 +1,45 @@
 import React from 'react'
 import {connect} from "react-redux";
 import {forgotPassword} from "../../actions/authActions";
-import {locationChange} from "../../actions/navActions";
 import {bindActionCreators} from "redux";
 import ForgotPasswordForm from "../../components/auth/forgotPasswordForm";
+import { history } from '../../store/history';
+import { State } from '../../store/initialState';
+import { RouteComponentProps } from 'react-router';
 
-class LoginFormValues {
+class ForgotPasswordFormValues {
     primaryEmailAddress: string;
 }
 
-class ForgotPasswordFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
 
-    async onSubmit(values: LoginFormValues) {
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class ForgotPasswordFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
+
+    async onSubmit(values: ForgotPasswordFormValues) {
         await this.props.actions.forgotPassword(values.primaryEmailAddress);
     };
 
     navigateToLogin() {
-        this.props.actions.locationChange('/login');
+        history.push('/login');
     }
 
     render() {
         return (
-            <div>
-                <ForgotPasswordForm onSubmit={this.onSubmit.bind(this)} navigateToLogin={this.navigateToLogin.bind(this)} authSession={this.props.authSession} />
-            </div>
+            <ForgotPasswordForm onSubmit={this.onSubmit.bind(this)} 
+                                navigateToLogin={this.navigateToLogin.bind(this)} />
         );
     }
 }
 
-function mapStateToProps(state: any) {
-    return {
-        authSession: state.authSession
-    };
+function mapStateToProps(state: State) {
+    return { };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({forgotPassword, locationChange}, dispatch)
+        actions: bindActionCreators({forgotPassword}, dispatch)
     };
 }
 

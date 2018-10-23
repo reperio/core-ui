@@ -4,7 +4,11 @@ import {bindActionCreators} from "redux";
 import UserCreateForm from '../../components/users/userCreateForm';
 import { State } from '../../store/initialState';
 import { createUser } from '../../actions/usersActions';
-import { locationChange } from '../../actions/navActions';
+import { RouteComponentProps } from 'react-router';
+import { history } from '../../store/history';
+import Dropdown from '../../models/dropdown';
+import UserOrganization from '../../models/userOrganization';
+
 
 class UserCreateFormValues {
     primaryEmailAddress: string;
@@ -12,25 +16,40 @@ class UserCreateFormValues {
     lastName: string;
     password: string;
     confirmPassword: string;
-    organizations: any;
+    organizations: Dropdown[];
 }
 
-class UserCreateFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
 
-    async onSubmit(values: UserCreateFormValues) {
-        await this.props.actions.createUser(values.primaryEmailAddress, values.firstName, values.lastName, values.password, values.confirmPassword, values.organizations == ("" || null) ? [] : values.organizations.map((organization:any) => {return organization.value}));
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class UserCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
+
+    async onSubmit(form: UserCreateFormValues) {
+        const organizations = form.organizations == ("" || null) 
+            ? [] 
+            : form.organizations
+                .map((organization: Dropdown) => {
+                    return organization.value
+                });
+
+        await this.props.actions.createUser(form.primaryEmailAddress, form.firstName, form.lastName, form.password, form.confirmPassword, organizations);
     };
 
-    async navigateToUsers() {
-        this.props.actions.locationChange('/users', null, null);
+    navigateToUsers() {
+        history.push('/users');
     }
 
     render() {
         return (
-            <div>
-                <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} onSubmit={this.onSubmit.bind(this)} organizations={this.props.authSession.user.userOrganizations.map((userOrganization:any) => { return userOrganization.organization})} />
-            </div>
+            <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} 
+                            onSubmit={this.onSubmit.bind(this)} 
+                            organizations={
+                                this.props.authSession.user.userOrganizations
+                                    .map((userOrganization: UserOrganization) => { 
+                                        return userOrganization.organization
+                                    })
+                            } />
         );
     }
 }
@@ -43,7 +62,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({createUser, locationChange}, dispatch)
+        actions: bindActionCreators({createUser}, dispatch)
     };
 }
 

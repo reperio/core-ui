@@ -3,27 +3,33 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Organizations from "../../components/organizations/organizations";
 import { getOrganizations } from '../../actions/organizationsActions';
-import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
+import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
-class OrganizationsContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class OrganizationsContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async componentDidMount() {
         await this.props.actions.getOrganizations();
     }
 
     navigateToCreate() {
-        this.props.actions.locationChange('/organizations/new');
+        history.push('/organizations/new');
     }
 
-    navigateToManagement(organizationId: number) {
-        this.props.actions.locationChange(`/organizations/${organizationId}/edit`);
+    navigateToManagement(organizationId: string) {
+        history.push(`/organizations/${organizationId}/edit`);
     }
 
     render() {
         return (
-            <Organizations navigateToManagement={this.navigateToManagement.bind(this)} navigateToCreate={this.navigateToCreate.bind(this)} gridData={this.props.organizations.organizations} />
+            <Organizations  navigateToManagement={this.navigateToManagement.bind(this)} 
+                            navigateToCreate={this.navigateToCreate.bind(this)} 
+                            gridData={this.props.organizations.organizations} />
         );
     }
 }
@@ -36,7 +42,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getOrganizations, locationChange}, dispatch)
+        actions: bindActionCreators({getOrganizations}, dispatch)
     };
 }
 

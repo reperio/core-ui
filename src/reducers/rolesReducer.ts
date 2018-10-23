@@ -51,6 +51,14 @@ export function rolesReducer(state = initialState.roles, action: {type: string, 
                 roles: state.roles
             };
         }
+        case rolesActionTypes.CLEAR_ROLES: {
+            return {
+                isPending: false,
+                isError: false,
+                errorMessage: null,
+                roles: null
+            };
+        }
         default: {
             return state;
         }

@@ -1,4 +1,5 @@
 import { axios } from "./axiosService";
+import Dropdown from "../models/dropdown";
 
 class RoleService {
     async getRoleById(roleId: string) {
@@ -9,12 +10,22 @@ class RoleService {
         return await axios.get(`/roles`);
     }
 
-    async createRole(role: any) {
-        return await axios.post(`/roles`, role);
+    async createRole(name: string, application: Dropdown, organization: Dropdown, permissions: Dropdown[]) {
+        const payload = {
+            name, 
+            applicationId: application ? application.value : null, 
+            organizationId: organization.value, 
+            permissionIds: permissions ? permissions.map((x: Dropdown) => x.value) : []
+        }
+        return await axios.post(`/roles`, payload);
     }
 
-    async editRole(roleId: string, role: any) {
-        return await axios.put(`/roles/${roleId}`, role);
+    async editRole(roleId: string, name: string, permissionIds: string[]) {
+        const payload = {
+            name, 
+            permissionIds
+        }
+        return await axios.put(`/roles/${roleId}`, payload);
     }
 
     async deleteRole(roleId: string) {

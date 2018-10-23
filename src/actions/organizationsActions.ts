@@ -3,6 +3,10 @@ import { history } from '../store/history';
 import { organizationService } from "../services/organizationService";
 import { reset, change } from "redux-form";
 import { userService } from "../services/userService";
+import Organization from "../models/organization";
+import UserOrganization from "../models/userOrganization";
+import User from "../models/user";
+import Dropdown from "../models/dropdown";
 
 export const organizationsActionTypes = {
     ORGANIZATIONS_GET_PENDING: "ORGANIZATIONS_GET_PENDING",
@@ -14,13 +18,17 @@ export const organizationsActionTypes = {
     ORGANIZATIONS_DELETE_PENDING: "ORGANIZATIONS_DELETE_PENDING",
     ORGANIZATIONS_DELETE_SUCCESS: "ORGANIZATIONS_DELETE_SUCCESS",
     ORGANIZATIONS_DELETE_ERROR: "ORGANIZATIONS_DELETE_ERROR",
-    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION",
+    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS",
+    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR",
+    ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING: "ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING",
     ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION: "ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION",
     ORGANIZATIONS_MANAGEMENT_ADD_USER_INITIAL_ORGANIZATION: "ORGANIZATIONS_MANAGEMENT_ADD_USER_INITIAL_ORGANIZATION",
     ORGANIZATIONS_CREATE_PENDING: "ORGANIZATIONS_CREATE_PENDING",
     ORGANIZATIONS_CREATE_SUCCESS: "ORGANIZATIONS_CREATE_SUCCESS",
     ORGANIZATIONS_CREATE_ERROR: "ORGANIZATIONS_CREATE_ERROR",
-    ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL: "ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL" 
+    ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL: "ORGANIZATIONS_MANAGEMENT_SHOW_INITIAL_ORGANIZATION_USER_DETAIL",
+    CLEAR_ORGANIZATIONS: "CLEAR_ORGANIZATIONS",
+    CLEAR_ORGANIZATION_MANAGEMENT: "CLEAR_ORGANIZATION_MANAGEMENT"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -34,15 +42,14 @@ function getErrorMessageFromStatusCode(statusCode: number) {
 
 export const getOrganizations = () => async (dispatch: Dispatch<any>) => {
     dispatch({
-        type: organizationsActionTypes.ORGANIZATIONS_GET_PENDING,
-        payload: {}
+        type: organizationsActionTypes.ORGANIZATIONS_GET_PENDING
     });
 
     try {
-        const organizations = await organizationService.getOrganizations();
+        const organizations: Organization[] = (await organizationService.getOrganizations()).data;
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_GET_SUCCESS,
-            payload: organizations.data
+            payload: organizations
         });
     } catch (e) {
         dispatch({
@@ -54,46 +61,53 @@ export const getOrganizations = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const clearManagementInitialOrganization = () => (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION,
-        payload: { organization: {data: null as any }, users: {data: null as any}}
-    });
-};
-
 export const loadManagementInitialOrganization = (organizationId: string) => async (dispatch: Dispatch<any>) => {
-    const organization = organizationId != null ? await organizationService.getOrganizationById(organizationId) : null;
-    const users = await userService.getUsers();
+    try {
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING
+        });
 
-    organization.data.selectedUsers = organization.data.userOrganizations
-        .map((userOrganization:any) => {
-            return {
-                value: userOrganization.user.id, 
-                label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmailAddress}`
+        const organization: Organization = organizationId != null ? (await organizationService.getOrganizationById(organizationId)).data : null;
+        const users: User[] = (await userService.getUsers()).data;
+    
+        organization.selectedUsers = organization.userOrganizations
+            .map((userOrganization: UserOrganization) => {
+                return {
+                    value: userOrganization.user.id, 
+                    label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmailAddress}`
+                }
+            })
+            .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label));
+    
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS,
+            payload: { organization, users }
+        });
+    
+        dispatch(reset("organizationManagement"))
+    } 
+    catch(e) {
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }
-        })
-        .sort((a: any, b: any) => a.label.localeCompare(b.label));
-
-    dispatch({
-        type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION,
-        payload: { organization, users }
-    });
-
-    dispatch(reset("organizationManagement"))
+        });
+    }
 };
 
-export const removeUserFromOrganization = (index: any) => (dispatch: Dispatch<any>) => {
+export const removeUserFromOrganization = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: organizationsActionTypes.ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION,
         payload: { index }
     });
 }
 
-export const selectUser = (user: any) => (dispatch: Dispatch<any>) => {
-    dispatch(change('organizationManagementForm', 'selectedUser', user.value ? {name: user.label, id: user.value} : ""));
+export const selectUser = (user: Dropdown) => (dispatch: Dispatch<any>) => {
+    dispatch(change('organizationManagementForm', 'selectedUser', user.value ? { name: user.label, id: user.value } : ""));
 }
 
-export const addUser = (user: any) => (dispatch: Dispatch<any>) => {
+export const addUser = (user: Dropdown) => (dispatch: Dispatch<any>) => {
     if (user != null) {
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_ADD_USER_INITIAL_ORGANIZATION,
@@ -103,13 +117,14 @@ export const addUser = (user: any) => (dispatch: Dispatch<any>) => {
     }
 }
 
-export const editOrganization = (id: string, name: string, userIds: any[]) => async (dispatch: Dispatch<any>) => {
+export const editOrganization = (organizationId: string, name: string, userIds: string[]) => async (dispatch: Dispatch<any>) => {
+
     dispatch({
         type: organizationsActionTypes.ORGANIZATIONS_SAVE_PENDING
     });
 
     try {
-        await organizationService.editOrganization(id, {name, userIds});
+        await organizationService.editOrganization(organizationId, name, userIds);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_SAVE_SUCCESS
@@ -126,17 +141,16 @@ export const editOrganization = (id: string, name: string, userIds: any[]) => as
     }
 };
 
-export const createOrganization = (name: string, userIds: any[]) => async (dispatch: Dispatch<any>) => {
+export const createOrganization = (name: string, userIds: Dropdown[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: organizationsActionTypes.ORGANIZATIONS_CREATE_PENDING
     });
 
     try {
-        await organizationService.createOrganization({name, personal: false, userIds: userIds ? userIds.map((x:any) => x.value) : []});
+        await organizationService.createOrganization(name, userIds);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_CREATE_SUCCESS
-
         });
         history.push('/organizations');
     } catch (e) {
@@ -149,13 +163,13 @@ export const createOrganization = (name: string, userIds: any[]) => async (dispa
     }
 };
 
-export const deleteOrganization = (id: string) => async (dispatch: Dispatch<any>) => {
+export const deleteOrganization = (organizationId: string) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: organizationsActionTypes.ORGANIZATIONS_DELETE_PENDING
     });
 
     try {
-        await organizationService.deleteOrganization(id);
+        await organizationService.deleteOrganization(organizationId);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_DELETE_SUCCESS

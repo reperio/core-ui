@@ -1,33 +1,51 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import {FormGroup} from "react-bootstrap";
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { TextboxElement, ButtonElement, Wrapper } from '@reperio/ui-components';
+import { StateAuthSession } from '../../store/initialState';
 
-const LoginForm = (props: any) => (
+interface LoginProps {
+    navigateToForgotPassword(): void;
+    onSubmit(): void;
+    authSession: StateAuthSession;
+}
+
+type Form = LoginProps & InjectedFormProps<any>;
+
+const LoginForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
-        <div className="row">
-            <Wrapper>
-                <div className="col-xs-12 col-md-8">
+        <Wrapper>
+            <div className="r-wrapper-child ">
+                {props.authSession.isError ?
                     <div className="row">
-                        {props.authSession.isError ? <p className="alert alert-danger">{props.authSession.errorMessage}</p> : ""}
+                        <div className="r-row-child">
+                            <p className="alert alert-danger">{props.authSession.errorMessage}</p>
+                        </div>
+                    </div>
+                : null}
+                <div className="row">
+                    <div className="r-row-child">
                         <h2>Login</h2>
                         <hr />
                     </div>
-                    <div className="row">
-                        <FormGroup>
-                            <Field name="primaryEmailAddress" placeholder="Email" type="text" component={TextboxElement} />
-                        </FormGroup>
-                        <FormGroup>
-                            <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
-                        </FormGroup>
-                        <FormGroup>
-                            <ButtonElement type="submit" name="signin" color="success" text="Sign In" />
-                            <ButtonElement type="button" color="neutral" text="Forgot Password" onClick={() => props.navigateToForgotPassword()} />
-                        </FormGroup>
+                </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <Field name="primaryEmailAddress" placeholder="Email" type="text" component={TextboxElement} />
                     </div>
                 </div>
-            </Wrapper>
-        </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <Field name="password" placeholder="Password" type="password" component={TextboxElement} />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <ButtonElement type="submit" name="signin" color="success" text="Sign In" />
+                        <ButtonElement type="button" color="neutral" text="Forgot Password" onClick={() => props.navigateToForgotPassword()} />
+                    </div>
+                </div>
+            </div>
+        </Wrapper>
     </form>
 );
 

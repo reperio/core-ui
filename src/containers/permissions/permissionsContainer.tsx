@@ -3,28 +3,28 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Permissions from "../../components/permissions/permissions";
 import { getPermissions } from '../../actions/permissionsActions';
-import { locationChange } from "../../actions/navActions";
 import { State } from '../../store/initialState';
-import {Redirect} from "react-router";
+import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
 
-class PermissionsContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class PermissionsContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async componentDidMount() {
         await this.props.actions.getPermissions();
     }
 
-    navigateToCreate() {
-        this.props.actions.locationChange('/permissions/new');
-    }
-
-    navigateToManagement(permissionId: number) {
-        this.props.actions.locationChange(`/permissions/${permissionId}/edit`);
+    navigateToManagement(permissionId: string) {
+        history.push(`/permissions/${permissionId}/edit`);
     }
 
     render() {
         return (
-            <Permissions navigateToManagement={this.navigateToManagement.bind(this)} navigateToCreate={this.navigateToCreate.bind(this)} gridData={this.props.permissions.permissions} />
+            <Permissions    navigateToManagement={this.navigateToManagement.bind(this)}
+                            gridData={this.props.permissions.permissions} />
         );
     }
 }
@@ -37,7 +37,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({getPermissions, locationChange}, dispatch)
+        actions: bindActionCreators({getPermissions}, dispatch)
     };
 }
 

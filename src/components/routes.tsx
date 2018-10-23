@@ -21,6 +21,7 @@ import OrganizationManagementContainer from "../containers/organizations/organiz
 import OrganizationCreateFormContainer from "../containers/organizations/organizationCreateFormContainer";
 import ForgotPasswordFormContainer from "../containers/auth/forgotPasswordFormContainer";
 import ResetPasswordFormContainer from "../containers/auth/resetPasswordFormContainer";
+import ErrorContainer from '../containers/errorContainer';
 
 const Routes = () => (
     <div className="app-content">
@@ -44,6 +45,7 @@ const Routes = () => (
             <PublicRouteContainer exact path="/emailVerification/:token" component={EmailVerificationContainer} />
             <PublicRouteContainer exact path="/forgotPassword" component={ForgotPasswordFormContainer} />
             <PublicRouteContainer exact path="/resetPassword/:token" component={ResetPasswordFormContainer} />
+            <PublicRouteContainer exact path="/error" component={ErrorContainer} />
             <Route>
                 <Redirect to="/home"/>
             </Route>

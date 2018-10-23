@@ -27,6 +27,14 @@ export function organizationsReducer(state = initialState.organizations, action:
                 organizations: []
             };
         }
+        case organizationsActionTypes.CLEAR_ORGANIZATIONS: {
+            return {
+                isPending: false,
+                isError: false,
+                errorMessage: null,
+                organizations: []
+            };
+        }
         default: {
             return state;
         }

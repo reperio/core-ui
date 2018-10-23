@@ -3,9 +3,11 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {logout} from "../actions/authActions";
 import NavMenuLogOutLink from "../components/navMenu/navMenuLogOutLink";
+import { RouteComponentProps } from 'react-router';
 
-class NavMenuLogOutLinkContainer extends React.Component {
-    props: any;
+interface ActionProps extends ReturnType<typeof mapActionToProps> {}
+
+class NavMenuLogOutLinkContainer extends React.Component<RouteComponentProps<any> & ActionProps> {
 
     render() {
         return (

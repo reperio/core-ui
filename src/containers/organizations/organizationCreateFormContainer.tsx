@@ -5,15 +5,20 @@ import OrganizationCreateForm from '../../components/organizations/organizationC
 import { State } from '../../store/initialState';
 import { createOrganization } from '../../actions/organizationsActions';
 import { getUsers } from '../../actions/usersActions';
-import { locationChange } from '../../actions/navActions';
+import { history } from '../../store/history';
+import { RouteComponentProps } from 'react-router';
+import Dropdown from '../../models/dropdown';
 
 class OrganizationCreateFormValues {
     name: string;
-    selectedUsers: any;
+    selectedUsers: Dropdown[];
 }
 
-class OrganizationCreateFormContainer extends React.Component {
-    props: any;
+interface StateProps extends ReturnType<typeof mapStateToProps> {}
+
+interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
+
+class OrganizationCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: OrganizationCreateFormValues) {
         await this.props.actions.createOrganization(form.name, form.selectedUsers);
@@ -24,30 +29,27 @@ class OrganizationCreateFormContainer extends React.Component {
     }
 
     async navigateToOrganizations() {
-        this.props.actions.locationChange('/organizations', null, null);
+        history.push('/organizations');
     }
 
     render() {
         return (
-            <div>
-                <OrganizationCreateForm navigateToOrganizations={this.navigateToOrganizations.bind(this)} 
-                                        users={this.props.users}
-                                        onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <OrganizationCreateForm navigateToOrganizations={this.navigateToOrganizations.bind(this)} 
+                                    users={this.props.users}
+                                    onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }
 
 function mapStateToProps(state: State) {
     return {
-        authSession: state.authSession,
         users: state.users.users
     };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({createOrganization, locationChange, getUsers}, dispatch)
+        actions: bindActionCreators({createOrganization, getUsers}, dispatch)
     };
 }
 

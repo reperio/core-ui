@@ -77,14 +77,15 @@ export const loadManagementInitialPermission = (permissionId: string) => async (
     }
 };
 
-export const removePermissionFromRole = (index: any) => (dispatch: Dispatch<any>) => {
+export const removePermissionFromRole = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: permissionsActionTypes.PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION,
         payload: { index }
     });
 }
 
-export const editPermission = (permissionId: string, displayName: string, name: string, description: string, isSystemAdminPermission:boolean, rolePermissions: RolePermission[]) => async (dispatch: Dispatch<any>) => {
+export const editPermission = (permissionId: string, displayName: string, name: string, description: string, isSystemAdminPermission: boolean, rolePermissions: RolePermission[]) => async (dispatch: Dispatch<any>) => {
+
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
     });
@@ -98,7 +99,8 @@ export const editPermission = (permissionId: string, displayName: string, name: 
         });
 
     try {
-        await permissionService.editPermission(permissionId, {description, displayName, isSystemAdminPermission, name, rolePermissions: rp});
+        await permissionService.editPermission(permissionId, displayName, name, description, isSystemAdminPermission, rolePermissions);
+
 
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_SAVE_SUCCESS

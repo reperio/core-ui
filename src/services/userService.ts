@@ -1,4 +1,5 @@
 import { axios } from "./axiosService";
+import UserEmail from "../models/userEmail";
 
 class UserService {
     async getUserById(userId: string) {
@@ -10,11 +11,32 @@ class UserService {
     }
 
     async createUser(primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) {
-        return await axios.post(`/users`, {primaryEmailAddress, firstName, lastName, password, confirmPassword, organizationIds});
+        const payload = {
+            primaryEmailAddress, 
+            firstName, 
+            lastName, 
+            password, 
+            confirmPassword, 
+            organizationIds
+        }
+        return await axios.post(`/users`, payload);
     }
 
-    async editUser(userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: any[], primaryEmailAddress: string) {
-        return await axios.put(`/users/${userId}`, { firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress});
+    async editUser(userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailAddress: string) {
+        const payload = {
+            firstName, 
+            lastName, 
+            organizationIds, 
+            roleIds, 
+            userEmails: userEmails.map((userEmail: UserEmail) => { 
+                return { 
+                    email: userEmail.email, 
+                    id: userEmail.id 
+                }
+            }), 
+            primaryEmailAddress
+        }
+        return await axios.put(`/users/${userId}`, payload);
     }
 }
 

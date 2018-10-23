@@ -7,11 +7,12 @@ import RoleManagementForm from '../../components/roles/roleManagementForm';
 import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
+import Dropdown from '../../models/dropdown';
 
 class RoleManagementFormValues {
     id: string;
     name: string;
-    selectedPermissions: any[];
+    selectedPermissions: Dropdown[];
 }
 
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
@@ -22,7 +23,7 @@ class RoleManagementFormContainer extends React.Component<RouteComponentProps<an
 
     async onSubmit(form: RoleManagementFormValues) {
         const permissions = form.selectedPermissions
-            .map((permission:any) => {
+            .map((permission: Dropdown) => {
                 return permission.value
             });
 
@@ -41,33 +42,31 @@ class RoleManagementFormContainer extends React.Component<RouteComponentProps<an
         this.props.actions.removePermissionFromRole(index);
     }
 
-    selectPermission(permission: any) {
+    selectPermission(permission: Dropdown) {
         this.props.actions.selectPermission(permission);
     }
 
-    addPermission(permission: any) {
+    addPermission(permission: Dropdown) {
         this.props.actions.addPermission(permission);
     }
 
-    deleteRole(roleId: any) {
+    deleteRole(roleId: string) {
         this.props.actions.deleteRole(roleId);
     }
 
     render() {
         return (
-            <div>
-                <RoleManagementForm navigateToRoles={this.navigateToRoles.bind(this)} 
-                                    initialValues={this.props.initialRole}
-                                    isError={this.props.isError}
-                                    errorMessage={this.props.errorMessage}
-                                    removePermission={this.removePermission.bind(this)}
-                                    deleteRole={this.deleteRole.bind(this)}
-                                    selectedPermission={this.props.selectedPermission}
-                                    addPermission={this.addPermission.bind(this)}
-                                    selectPermission={this.selectPermission.bind(this)}
-                                    permissions={this.props.permissions}
-                                    onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <RoleManagementForm navigateToRoles={this.navigateToRoles.bind(this)} 
+                                initialValues={this.props.initialRole}
+                                isError={this.props.isError}
+                                errorMessage={this.props.errorMessage}
+                                removePermission={this.removePermission.bind(this)}
+                                deleteRole={this.deleteRole.bind(this)}
+                                selectedPermission={this.props.selectedPermission}
+                                addPermission={this.addPermission.bind(this)}
+                                selectPermission={this.selectPermission.bind(this)}
+                                permissions={this.props.permissions}
+                                onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }
@@ -85,7 +84,7 @@ function mapStateToProps(state: State) {
         isError: roleManagement.isError,
         errorMessage: roleManagement.errorMessage,
         permissions: roleManagement.permissions,
-        selectedPermission: selector(state, 'selectedPermission')
+        selectedPermission: selector(state, 'selectedPermission') as Dropdown
     };
 }
 

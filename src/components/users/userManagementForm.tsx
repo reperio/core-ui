@@ -8,6 +8,8 @@ import RolePermission from '../../models/rolePermission';
 import User from '../../models/user';
 import SelectedRole from '../../models/selectedRole';
 import { StateAuthSession } from '../../store/initialState';
+import UserEmail from '../../models/userEmail';
+import { Redirect } from 'react-router';
 
 interface OrganizationsFieldArrayProps {
     removeOrganization(index: number): void;
@@ -15,39 +17,53 @@ interface OrganizationsFieldArrayProps {
 }
 
 const organizationsFieldArray: React.SFC<OrganizationsFieldArrayProps> = (props: OrganizationsFieldArrayProps) => (
-    <div>
+    <div className="row">
+        <div className="r-row-child no-padding-container">
         <hr />
         {props.initialValues.map((member:any, index:number) =>
-            <div key={index}>
-                <div className="row">
-                    <div className="col-xs-8 management-organizations">
-                        {props.initialValues[index].label}
-                    </div>
-                    <div className="col-xs-4">
-                        <ButtonElement type="button" color="danger" text="Leave" onClick={() => props.removeOrganization(index)} />
+            <div className="row">
+                <div className="r-row-child">
+                    <div className="row" key={index}>
+                        <div className="r-row-child">
+                            {props.initialValues[index].label}
+                        </div>
+                        <div className="r-row-child">
+                            <ButtonElement type="button" color="danger" text="Leave" onClick={() => props.removeOrganization(index)} />
+                        </div>
                     </div>
                 </div>
-                <div className="row">
-                    <hr />
-                </div>
+                <hr />
             </div>
         )}
+        </div>
     </div>
 );
 
-const userEmailFieldArray = (props: any) => (
-    <div>
-        {props.fields.map((member:string, index:number) =>
-            <div key={index}>
-                <div className="row">
-                    <div className="col-xs-8 management-organizations">
+interface UserEmailFieldArrayProps {
+    removeEmailAddress(index: number): void;
+    sendVerificationEmail(index: number): void;
+    setPrimaryEmailAddress(index: number): void;
+    initialValues: {
+        userEmails: UserEmail[],
+        primaryEmailAddress: string
+    };
+    fields: any[];
+}
+
+
+const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEmailFieldArrayProps) => (
+        <div className="row">
+            <div className="r-row-child no-padding-container">
+            {props.fields.map((member:string, index:number) =>
+                <div className="row" key={index}>
+                    <div className="r-row-child">
                         <Field  disabled={true} 
                                 name={`${member}.email`} 
                                 placeholder="Email Address" 
                                 type="email" 
                                 component={TextboxElement} />
                     </div>
-                    <div className="col-xs-4">
+                    <div className="r-row-child">
                         <ButtonElement  type="button"
                                         title="Remove Email"
                                         color="danger" 
@@ -72,8 +88,8 @@ const userEmailFieldArray = (props: any) => (
                                 component={CheckboxElement} />
                     </div>
                 </div>
-            </div>
-        )}
+            )}
+        </div>
     </div>
 );
 
@@ -86,39 +102,57 @@ interface RolesAndPermissionsFieldArrayProps {
 }
 
 const rolesAndPermissionsFieldArray: React.SFC<RolesAndPermissionsFieldArrayProps> = (props: RolesAndPermissionsFieldArrayProps) => (
-    <div>
-        <hr />
-        {props.initialValues.map((member:any, index:number) =>
-            <div key={index}>
-                <div className="row">
-                    <div className="col-xs-8 roles-permissions-row" onClick={() => props.toggle ? props.toggleRoleDetails(index) :  null}>
-                        <div className={`fa ${props.initialValues[index].role.visible ? 'fa-caret-down' : 'fa-caret-right'} fa-lg roles-permissions-row-arrow`}></div>
-                        {props.organizations.filter((organization: Organization) => organization.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].label}
-                    </div>
-                    <div className="col-xs-4">
-                        <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeRole(index)} />
+    <div className="row">
+        <div className="r-row-child no-padding-container">
+            <hr />
+            {props.initialValues.map((member:any, index:number) =>
+                <div className="row" key={index}>
+                    <div className="r-row-child">
+                        <div className="row">
+                            <div className="r-row-child roles-permissions-row" onClick={() => props.toggle ? props.toggleRoleDetails(index) :  null}>
+                                <div className={`fa ${props.initialValues[index].role.visible ? 'fa-caret-down' : 'fa-caret-right'} fa-lg roles-permissions-row-arrow`}></div>
+                                {props.organizations.filter((organization: Organization) => organization.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].label}
+                            </div>
+                            <div className="r-row-child">
+                                <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeRole(index)} />
+                            </div>
+                        </div>
+                        <div className="row">
+                            {props.toggle && props.initialValues[index].role.visible ? 
+                                <div className="r-row-child roles-permissions-detail-container">
+                                    <div className="row">
+                                        <div className="r-row-child roles-permissions-detail-header">
+                                            Permissions
+                                        </div>
+                                    </div>
+                                        {props.initialValues[index].role.rolePermissions.map((rolePermission: RolePermission, index: number) => {
+                                            return (
+                                                <div className="row" key={index}>
+                                                    <div className="r-row-child no-padding-container">
+                                                        <div className="row">
+                                                            <div className="r-row-child roles-permissions-detail-permission-name">
+                                                                {rolePermission.permission.name}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="r-row-child no-padding-container">
+                                                        <div className="row">
+                                                            <div className="r-row-child">
+                                                                {rolePermission.permission.description}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                            : null }
+                            <hr />
+                        </div>
                     </div>
                 </div>
-                {props.toggle && props.initialValues[index].role.visible ? 
-                    <div className="row roles-permissions-detail-container">
-                        <div className="roles-permissions-detail-header">Permissions</div>
-                        {props.initialValues[index].role.rolePermissions.map((rolePermission: RolePermission, index: number) => {
-                            return (
-                                <div key={index}>
-                                    <div className="roles-permissions-detail-permission-name">
-                                        {rolePermission.permission.name}
-                                    </div>
-                                    <div className="roles-permissions-detail-permission-description">
-                                        {rolePermission.permission.description}
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                : null }
-                <hr />
-            </div>
-        )}
+            )}
+        </div>
     </div>
 );
 
@@ -144,29 +178,35 @@ interface UserManagementProps {
     selectedOrganization: Dropdown;
     selectedRole: Dropdown;
     toggleRoleDetails: boolean;
+    redirectToErrorPage: boolean;
 }
 
 type Form = UserManagementProps & InjectedFormProps<any>;
 
 const UserManagementForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
+        {props.redirectToErrorPage ?
+            <Redirect to="/error" /> 
+        : null }
         {props.initialValues ? 
             <div className="management-container">
                 <div className="management-left">
                     <div className="row management-top">
                         <Wrapper>
-                            <div className="col-xs-6">
-                                <div className="profile-circle">
-                                    {props.initialValues.firstName.charAt(0).toUpperCase()}{props.initialValues.lastName.charAt(0).toUpperCase()}
-                                </div>
-                            </div>
-                            <div className="col-xs-6">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="management-name">
-                                        {props.initialValues.firstName} {props.initialValues.lastName}
+                                    <div className="r-row-child">
+                                        <div className="profile-circle">
+                                            {props.initialValues.firstName.charAt(0).toUpperCase()}{props.initialValues.lastName.charAt(0).toUpperCase()}
+                                        </div>
                                     </div>
-                                    <div className="profile-primaryEmailAddress">
-                                        {props.initialValues.primaryEmailAddress}
+                                    <div className="r-row-child">
+                                        <div className="row management-name">
+                                                {props.initialValues.firstName} {props.initialValues.lastName}
+                                        </div>
+                                        <div className="row profile-primaryEmailAddress">
+                                            {props.initialValues.primaryEmailAddress}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -174,18 +214,18 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <h2>General Information</h2>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-xs-6">
+                                    <div className="r-row-child">
                                         <label>First Name</label>
                                         <Field name="firstName" placeholder="First Name" type="text" component={TextboxElement} />
                                     </div>
-                                    <div className="col-xs-6">
+                                    <div className="r-row-child">
                                         <label>Last Name</label>
                                         <Field name="lastName" placeholder="Last Name" type="text" component={TextboxElement} />
                                     </div>
@@ -195,43 +235,41 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <h2>Emails</h2>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-xs-8">
+                                    <div className="r-row-child">
                                         <Field  name="email"
                                                 placeholder="Email Address"
                                                 component={TextboxElement} />
                                     </div>
-                                    <div className="col-xs-4">
+                                    <div className="r-row-child">
                                         <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addEmailAddress()}} />
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <FieldArray name="userEmails"
-                                                initialValues={{userEmails: props.initialValues.userEmails, primaryEmailAddress: props.initialValues.primaryEmailAddress}}
-                                                setPrimaryEmailAddress={props.setPrimaryEmailAddress}
-                                                sendVerificationEmail={props.sendVerificationEmail}
-                                                removeEmailAddress={props.removeEmailAddress}
-                                                component={userEmailFieldArray}/>
-                                </div>
+                                <FieldArray name="userEmails"
+                                            initialValues={{userEmails: props.initialValues.userEmails, primaryEmailAddress: props.initialValues.primaryEmailAddress}}
+                                            setPrimaryEmailAddress={props.setPrimaryEmailAddress}
+                                            sendVerificationEmail={props.sendVerificationEmail}
+                                            removeEmailAddress={props.removeEmailAddress}
+                                            component={userEmailFieldArray}/>
                             </div>
                         </Wrapper>
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <h2>Organizations</h2>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-xs-8">
+                                    <div className="r-row-child">
                                         <Field  name="selectedOrganization"
                                                 options={
                                                     props.organizations
@@ -250,30 +288,28 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                                                 component={PickerElement} 
                                                 onChange={props.selectOrganization} />
                                     </div>
-                                    <div className="col-xs-4">
+                                    <div className="r-row-child">
                                         <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addOrganization(props.selectedOrganization)}} />
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <FieldArray name="organizations"
-                                                rerenderOnEveryChange={true}
-                                                initialValues={props.initialValues.selectedOrganizations}
-                                                removeOrganization={props.removeOrganization}
-                                                component={organizationsFieldArray}/>
-                                </div>
+                                <FieldArray name="organizations"
+                                            rerenderOnEveryChange={true}
+                                            initialValues={props.initialValues.selectedOrganizations}
+                                            removeOrganization={props.removeOrganization}
+                                            component={organizationsFieldArray}/>
                             </div>
                         </Wrapper>
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <h2>Roles and Permissions</h2>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-xs-8">
+                                    <div className="r-row-child">
                                         <Field  name="selectedRole"
                                                 options={
                                                     props.roles
@@ -292,32 +328,28 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                                                 component={PickerElement} 
                                                 onChange={props.selectRole} />
                                     </div>
-                                    <div className="col-xs-4">
+                                    <div className="r-row-child">
                                         <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addRole(props.selectedRole)}} />
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <FieldArray name="roles"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.selectedRoles}
-                                                    organizations={props.organizations}
-                                                    toggleRoleDetails={props.toggleRoleDetails}
-                                                    removeRole={props.removeRole}
-                                                    toggle={true}
-                                                    component={rolesAndPermissionsFieldArray}/>
-                                    </div>
-                                </div>
+                                <FieldArray name="roles"
+                                            rerenderOnEveryChange={true}
+                                            initialValues={props.initialValues.selectedRoles}
+                                            organizations={props.organizations}
+                                            toggleRoleDetails={props.toggleRoleDetails}
+                                            removeRole={props.removeRole}
+                                            toggle={true}
+                                            component={rolesAndPermissionsFieldArray}/>
                             </div>
                         </Wrapper>
                     </div>
                     <div className="row management-controls-bottom">
                         <Wrapper>
-                            <div className="col-xs-12 management-submission-controls-container">
-                                <div className="col-xs-6 management-submission-controls">
+                            <div className="row management-submission-controls-container">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
                                 </div>
-                                <div className="col-xs-6 management-submission-controls">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>
@@ -327,18 +359,20 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                 <div className="management-right">
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-6">
-                                <div className="profile-circle">
-                                    {props.initialValues.firstName.charAt(0).toUpperCase()}{props.initialValues.lastName.charAt(0).toUpperCase()}
-                                </div>
-                            </div>
-                            <div className="col-xs-6">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="management-name">
-                                        {props.initialValues.firstName} {props.initialValues.lastName}
+                                    <div className="r-row-child">
+                                        <div className="profile-circle">
+                                            {props.initialValues.firstName.charAt(0).toUpperCase()}{props.initialValues.lastName.charAt(0).toUpperCase()}
+                                        </div>
                                     </div>
-                                    <div className="profile-primaryEmailAddress">
-                                        {props.initialValues.primaryEmailAddress}
+                                    <div className="r-row-child">
+                                        <div className="row management-name">
+                                                {props.initialValues.firstName} {props.initialValues.lastName}
+                                        </div>
+                                        <div className="row profile-primaryEmailAddress">
+                                            {props.initialValues.primaryEmailAddress}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -346,11 +380,11 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12 management-submission-controls-container">
-                                <div className="col-xs-6 management-submission-controls">
+                            <div className="row management-submission-controls-container">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToUsers()} />
                                 </div>
-                                <div className="col-xs-6 management-submission-controls">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>

@@ -19,9 +19,7 @@ class EmailVerificationContainer extends React.Component<RouteComponentProps<any
 
     render() {
         return (
-            <div>
-                <EmailVerification response={this.props.response} />
-            </div>
+            <EmailVerification response={this.props.response} />
         );
     }
 }

@@ -102,18 +102,18 @@ export const loadManagementInitialRole = (roleId: string) => async (dispatch: Di
     }
 };
 
-export const removePermissionFromRole = (index: any) => (dispatch: Dispatch<any>) => {
+export const removePermissionFromRole = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: rolesActionTypes.ROLE_MANAGEMENT_REMOVE_PERMISSION_INITIAL_ROLE,
         payload: { index }
     });
 }
 
-export const selectPermission = (permission: any) => (dispatch: Dispatch<any>) => {
+export const selectPermission = (permission: Dropdown) => (dispatch: Dispatch<any>) => {
     dispatch(change('roleManagementForm', 'selectedPermission', permission.value ? {name: permission.label, id: permission.value} : ""));
 }
 
-export const addPermission = (permission: any) => (dispatch: Dispatch<any>) => {
+export const addPermission = (permission: Dropdown) => (dispatch: Dispatch<any>) => {
     if (permission != null) {
         dispatch({
             type: rolesActionTypes.ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE,
@@ -129,7 +129,7 @@ export const editRole = (roleId: string, name: string, permissionIds: string[]) 
     });
 
     try {
-        await roleService.editRole(roleId, {name, permissionIds});
+        await roleService.editRole(roleId, name, permissionIds);
 
         dispatch({
             type: rolesActionTypes.ROLES_SAVE_SUCCESS
@@ -151,7 +151,7 @@ export const createRole = (name: string, application: Dropdown, organization: Dr
     });
 
     try {
-        await roleService.createRole({name, applicationId: application ? application.value : null, organizationId: organization.value, permissionIds: permissions ? permissions.map((x: Dropdown) => x.value) : []});
+        await roleService.createRole(name, application, organization, permissions);
 
         dispatch({
             type: rolesActionTypes.ROLES_CREATE_SUCCESS

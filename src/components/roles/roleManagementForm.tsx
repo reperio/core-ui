@@ -30,7 +30,7 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                 <div className="management-left">
                     <div className="row management-top">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
                                     <div className="management-name">
                                         {props.initialValues.name}
@@ -41,14 +41,14 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <h2>General Information</h2>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <label>Name</label>
                                         <Field name="name" placeholder="Name" type="text" component={TextboxElement} />
                                     </div>
@@ -58,14 +58,14 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-wrapper-child">
                                 <div className="row">
-                                    <div className="col-md-12">
+                                    <div className="r-row-child">
                                         <h2>Permissions</h2>
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-xs-8">
+                                    <div className="r-row-child">
                                         <Field  name="selectedPermission"
                                                 options={
                                                     props.permissions
@@ -84,33 +84,29 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                                 component={PickerElement} 
                                                 onChange={props.selectPermission} />
                                     </div>
-                                    <div className="col-xs-4">
+                                    <div className="r-row-child">
                                         <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addPermission(props.selectedPermission)}} />
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="col-md-12">
-                                        <FieldArray name="permissions"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={props.initialValues.selectedPermissions}
-                                                    toggle={false}
-                                                    removePermission={props.removePermission}
-                                                    component={PermissionsArray}/>
-                                    </div>
-                                </div>
+                                <FieldArray name="permissions"
+                                            rerenderOnEveryChange={true}
+                                            initialValues={props.initialValues.selectedPermissions}
+                                            toggle={false}
+                                            removePermission={props.removePermission}
+                                            component={PermissionsArray}/>
                             </div>
                         </Wrapper>
                     </div>
                     <div className="row management-controls-bottom">
                         <Wrapper>
-                            <div className="col-xs-12 management-submission-controls-container">
-                                <div className="col-xs-4 management-submission-controls">
+                            <div className="row management-submission-controls-container">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
                                 </div>
-                                <div className="col-xs-4 management-submission-controls">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
                                 </div>
-                                <div className="col-xs-4 management-submission-controls">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>
@@ -120,7 +116,7 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                 <div className="management-right">
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12">
+                            <div className="r-row-child">
                                 <div className="row">
                                     <div className="management-name">
                                         {props.initialValues.name}
@@ -131,14 +127,14 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                     </div>
                     <div className="row">
                         <Wrapper>
-                            <div className="col-xs-12 management-submission-controls-container">
-                                <div className="col-xs-4 management-submission-controls">
+                            <div className="row management-submission-controls-container">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
                                 </div>
-                                <div className="col-xs-4 management-submission-controls">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
                                 </div>
-                                <div className="col-xs-4 management-submission-controls">
+                                <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="submit"  color="success" wide text="Save" />
                                 </div>
                             </div>

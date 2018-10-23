@@ -6,6 +6,9 @@ import { State } from '../../store/initialState';
 import { createUser } from '../../actions/usersActions';
 import { RouteComponentProps } from 'react-router';
 import { history } from '../../store/history';
+import Dropdown from '../../models/dropdown';
+import UserOrganization from '../../models/userOrganization';
+
 
 class UserCreateFormValues {
     primaryEmailAddress: string;
@@ -13,7 +16,7 @@ class UserCreateFormValues {
     lastName: string;
     password: string;
     confirmPassword: string;
-    organizations: any[];
+    organizations: Dropdown[];
 }
 
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
@@ -22,15 +25,15 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 
 class UserCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
-    async onSubmit(values: UserCreateFormValues) {
-        const organizations = values.organizations == ("" || null) 
+    async onSubmit(form: UserCreateFormValues) {
+        const organizations = form.organizations == ("" || null) 
             ? [] 
-            : values.organizations
-                .map((organization:any) => {
+            : form.organizations
+                .map((organization: Dropdown) => {
                     return organization.value
                 });
 
-        await this.props.actions.createUser(values.primaryEmailAddress, values.firstName, values.lastName, values.password, values.confirmPassword, organizations);
+        await this.props.actions.createUser(form.primaryEmailAddress, form.firstName, form.lastName, form.password, form.confirmPassword, organizations);
     };
 
     navigateToUsers() {
@@ -39,16 +42,14 @@ class UserCreateFormContainer extends React.Component<RouteComponentProps<any> &
 
     render() {
         return (
-            <div>
-                <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} 
-                                onSubmit={this.onSubmit.bind(this)} 
-                                organizations={
-                                    this.props.authSession.user.userOrganizations
-                                        .map((userOrganization:any) => { 
-                                            return userOrganization.organization
-                                        })
-                                } />
-            </div>
+            <UserCreateForm navigateToUsers={this.navigateToUsers.bind(this)} 
+                            onSubmit={this.onSubmit.bind(this)} 
+                            organizations={
+                                this.props.authSession.user.userOrganizations
+                                    .map((userOrganization: UserOrganization) => { 
+                                        return userOrganization.organization
+                                    })
+                            } />
         );
     }
 }

@@ -13,46 +13,46 @@ type Form = OrganizationCreateProps & InjectedFormProps<any>;
 
 const OrganizationCreateForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
-        <div className="row">
-            <Wrapper>
-                <div className="col-md-8 col-xs-12">
-                    <div className="row">
+        <Wrapper>
+            <div className="r-wrapper-child ">
+                <div className="row">
+                    <div className="r-row-child">
                         <h2>Organization Create</h2>
                         <hr />
                     </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <label>Name</label>
-                            <Field name="name" placeholder="First Name" type="text" component={TextboxElement} />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12">
-                            <label>Users</label>
-                            <Field  name="selectedUsers"
-                                    placeholder="Users"
-                                    options={
-                                        props.users
-                                            .map((user: User, index: number) => { 
-                                                return {
-                                                    value: user.id,
-                                                    label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`
-                                                }
-                                            })
-                                    }
-                                    multi
-                                    component={PickerElement} />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <ButtonElement type="submit"  color="neutral" text="Create Organization" />
-                            <ButtonElement type="button" color="cancel" text="Cancel" onClick={() => props.navigateToOrganizations()} />
-                        </div>
+                </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <label>Name</label>
+                        <Field name="name" placeholder="First Name" type="text" component={TextboxElement} />
                     </div>
                 </div>
-            </Wrapper>
-        </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <label>Users</label>
+                        <Field  name="selectedUsers"
+                                placeholder="Users"
+                                options={
+                                    props.users
+                                        .map((user: User, index: number) => { 
+                                            return {
+                                                value: user.id,
+                                                label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`
+                                            }
+                                        })
+                                }
+                                multi
+                                component={PickerElement} />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <ButtonElement type="submit"  color="neutral" text="Create Organization" />
+                        <ButtonElement type="button" color="cancel" text="Cancel" onClick={() => props.navigateToOrganizations()} />
+                    </div>
+                </div>
+            </div>
+        </Wrapper>
     </form>
 );
 

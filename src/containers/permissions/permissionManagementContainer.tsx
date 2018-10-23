@@ -4,7 +4,6 @@ import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { loadManagementInitialPermission, editPermission, removePermissionFromRole, clearManagementInitialPermission } from '../../actions/permissionsActions';
 import PermissionManagementForm from '../../components/permissions/permissionManagementForm';
-import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
 import RolePermission from '../../models/rolePermission';
@@ -43,20 +42,17 @@ class PermissionManagementFormContainer extends React.Component<RouteComponentPr
 
     render() {
         return (
-            <div>
-                <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)} 
-                                            initialValues={this.props.initialPermission}
-                                            isError={this.props.isError}
-                                            errorMessage={this.props.errorMessage}
-                                            removePermission={this.removePermission.bind(this)}
-                                            onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)} 
+                                        initialValues={this.props.initialPermission}
+                                        isError={this.props.isError}
+                                        errorMessage={this.props.errorMessage}
+                                        removePermission={this.removePermission.bind(this)}
+                                        onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }
 
 function mapStateToProps(state: State) {
-    const selector = formValueSelector('userManagementForm');
     const permissionManagement = state.permissionManagement;
     return {
         initialPermission: permissionManagement.initialPermission != null ? {
@@ -68,9 +64,7 @@ function mapStateToProps(state: State) {
             rolePermissions: permissionManagement.initialPermission.rolePermissions
         } : null,
         isError: permissionManagement.isError,
-        errorMessage: permissionManagement.errorMessage,
-        authSession: state.authSession,
-        selectedOrganization: selector(state, 'selectedOrganization')
+        errorMessage: permissionManagement.errorMessage
     };
 }
 

@@ -23,32 +23,36 @@ const Organizations = (props: OrganizationsProps) => {
     ];
 
     return (
-        <form>
-            <div className="row">
-                <Wrapper>
-                    <div className="col-xs-12">
-                        <div className="row">
-                            <h2>Organizations</h2>
-                            <hr />
-                            <ButtonElement text="Create new organization" color="neutral" onClick={() => props.navigateToCreate()} />
-                        </div>
-                        <div className="row">
-                            <Grid
-                                columns={gridColumns} 
-                                data={props.gridData}
-                                rowClick={(state: any, rowInfo: any) => { 
-                                    return { onClick: (e:any) => {
-                                        if (e.target.innerHTML !== '<span>&nbsp;</span>') {
-                                            props.navigateToManagement(rowInfo.original.id)
-                                        }
-                                    }}
-                                }}
-                                filterable={true} />
-                        </div>
+        <div className="r-wrapper-container">
+            <Wrapper flexColumnDirection={true}>
+                <div className="row">
+                    <div className="r-row-child">
+                        <h2>Organizations</h2>
+                        <hr />
                     </div>
-                </Wrapper>
-            </div>
-        </form>
+                </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <ButtonElement text="Create new organization" color="neutral" onClick={() => props.navigateToCreate()} />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="r-row-child">
+                        <Grid
+                            columns={gridColumns} 
+                            data={props.gridData}
+                            rowClick={(state: any, rowInfo: any) => { 
+                                return { onClick: (e:any) => {
+                                    if (e.target.innerHTML !== '<span>&nbsp;</span>') {
+                                        props.navigateToManagement(rowInfo.original.id)
+                                    }
+                                }}
+                            }}
+                            filterable={true} />
+                    </div>
+                </div>
+            </Wrapper>
+        </div>
     )
 };
 

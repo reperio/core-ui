@@ -33,15 +33,9 @@ class ResetPasswordFormContainer extends React.Component<RouteComponentProps<any
 
     render() {
         return (
-            <div>
-                {this.props.response == true ?
-                    <ResetPasswordForm  onSubmit={this.onSubmit.bind(this)} 
-                                        navigateToLogin={this.navigateToLogin.bind(this)} />
-                : null}
-                {this.props.response == false ?
-                    'Link expired'
-                : null}
-            </div>
+            <ResetPasswordForm  onSubmit={this.onSubmit.bind(this)} 
+                                navigateToLogin={this.navigateToLogin.bind(this)}
+                                response={this.props.response} />
         );
     }
 }

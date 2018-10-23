@@ -1,24 +1,34 @@
 import { axios } from "./axiosService";
+import Dropdown from "../models/dropdown";
 
 class OrganizationService {
-    async getOrganizationById(orgId: string) {
-        return await axios.get(`/organizations/${orgId}`);
+    async getOrganizationById(organizationId: string) {
+        return await axios.get(`/organizations/${organizationId}`);
     }
 
     async getOrganizations() {
         return await axios.get(`/organizations`);
     }
 
-    async createOrganization(organization: any) {
-        return await axios.post(`/organizations`, organization);
+    async createOrganization(name: string, userIds: Dropdown[]) {
+        const payload = {
+            name, 
+            personal: false, 
+            userIds: userIds ? userIds.map((x: Dropdown) => x.value) : []
+        }
+        return await axios.post(`/organizations`, payload);
     }
 
-    async editOrganization(orgId: string, role: any) {
-        return await axios.put(`/organizations/${orgId}`, role);
+    async editOrganization(organizationId: string, name: string, userIds: string[]) {
+        const payload = {
+            name, 
+            userIds
+        }
+        return await axios.put(`/organizations/${organizationId}`, payload);
     }
 
-    async deleteOrganization(orgId: string) {
-        return await axios.delete(`/organizations/${orgId}`);
+    async deleteOrganization(organizationId: string) {
+        return await axios.delete(`/organizations/${organizationId}`);
     }
 }
 

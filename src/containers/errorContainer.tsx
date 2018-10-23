@@ -23,9 +23,7 @@ class ErrorContainer extends React.Component<RouteComponentProps<any> & StatePro
 
     render() {
         return (
-            <div>
-                <Error goHome={this.goHome.bind(this)} />
-            </div>
+            <Error goHome={this.goHome.bind(this)} />
         );
     }
 }

@@ -27,11 +27,9 @@ class UsersContainer extends React.Component<RouteComponentProps<any> & StatePro
 
     render() {
         return (
-            <div>
-                <Users  gridData={this.props.users.users} 
-                        navigateToManagement={this.navigateToManagement.bind(this)} 
-                        navigateToUserCreate={this.navigateToUserCreate.bind(this)} />
-            </div>
+            <Users  gridData={this.props.users.users} 
+                    navigateToManagement={this.navigateToManagement.bind(this)} 
+                    navigateToUserCreate={this.navigateToUserCreate.bind(this)} />
         );
     }
 }

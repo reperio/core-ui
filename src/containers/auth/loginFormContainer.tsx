@@ -28,11 +28,9 @@ class LoginFormContainer extends React.Component<RouteComponentProps<any> & Stat
 
     render() {
         return (
-            <div>
-                <LoginForm  onSubmit={this.onSubmit.bind(this)} 
-                            navigateToForgotPassword={this.navigateToForgotPassword.bind(this)} 
-                            authSession={this.props.authSession} />
-            </div>
+            <LoginForm  onSubmit={this.onSubmit.bind(this)} 
+                        navigateToForgotPassword={this.navigateToForgotPassword.bind(this)} 
+                        authSession={this.props.authSession} />
         );
     }
 }

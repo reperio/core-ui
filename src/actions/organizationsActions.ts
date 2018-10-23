@@ -96,7 +96,7 @@ export const loadManagementInitialOrganization = (organizationId: string) => asy
     }
 };
 
-export const removeUserFromOrganization = (index: any) => (dispatch: Dispatch<any>) => {
+export const removeUserFromOrganization = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: organizationsActionTypes.ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION,
         payload: { index }
@@ -117,13 +117,14 @@ export const addUser = (user: Dropdown) => (dispatch: Dispatch<any>) => {
     }
 }
 
-export const editOrganization = (organizationId: string, name: string, userIds: any[]) => async (dispatch: Dispatch<any>) => {
+export const editOrganization = (organizationId: string, name: string, userIds: string[]) => async (dispatch: Dispatch<any>) => {
+
     dispatch({
         type: organizationsActionTypes.ORGANIZATIONS_SAVE_PENDING
     });
 
     try {
-        await organizationService.editOrganization(organizationId, {name, userIds});
+        await organizationService.editOrganization(organizationId, name, userIds);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_SAVE_SUCCESS
@@ -146,7 +147,7 @@ export const createOrganization = (name: string, userIds: Dropdown[]) => async (
     });
 
     try {
-        await organizationService.createOrganization({name, personal: false, userIds: userIds ? userIds.map((x: Dropdown) => x.value) : []});
+        await organizationService.createOrganization(name, userIds);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_CREATE_SUCCESS

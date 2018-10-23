@@ -5,6 +5,8 @@
     display: flex;
     flex-direction: column;
     height:100%;
+    width: 100%;
+    min-width: 1280px;
 
     .app-root {
         display: flex;
@@ -15,18 +17,19 @@
             flex-direction: row;
             width: 100%;
 
-            @media (max-width: 767px) {
-                flex-direction: column;
-            }
-
             .app-sidebar {
                 background-color: $dark1
             }
 
             .app-content {
                 flex: 1;
-                background-color: $reperio-content-background;
-                margin-top: 65px;
+                padding-top: 20px;
+                padding-left: 50px;
+                padding-right: 50px;
+                padding-bottom: 40px;
+                display: flex;
+                flex-grow: 1;
+                overflow-y: auto;
             }
         }
     }
@@ -46,6 +49,7 @@ h2 {
   body {
     margin: 0px;
     padding: 0px;
+    width: 100%;
   }
 
 .group { 
@@ -76,38 +80,6 @@ label {
     -moz-transition:0.2s ease all; 
     -webkit-transition:0.2s ease all;
 }
- 
-
-/* active state */
-.inputMaterial:focus ~ label, .inputMaterial:valid ~ label {
-    top:-20px;
-    font-size:14px;
-    color: #009688;
-}
-
-.bar 	{ position:relative; display:block; width:315px; }
-.bar:before, .bar:after 	{
-    content:'';
-    height:2px; 
-    width:0;
-    bottom:1px; 
-    position:absolute;
-    background: #009688; 
-    transition:0.2s ease all; 
-    -moz-transition:0.2s ease all; 
-    -webkit-transition:0.2s ease all;
-}
-.bar:before {
-    left:50%;
-}
-.bar:after {
-    right:50%; 
-}
-
-/* active state */
-.inputMaterial:focus ~ .bar:before, .inputMaterial:focus ~ .bar:after {
-    width:50%;
-}
 
 .profile-circle {
   border-radius: 50%;
@@ -131,10 +103,12 @@ label {
   font-weight: 400;
   font-size: 35px;
   color: $primary-color;
+  margin-bottom: 0.5em;
 }
 
 .management-submission-controls-container {
-  padding:15px;
+  padding-top: 1.5em;
+  width: 100%;
 }
 
 .management-submission-controls {
@@ -167,16 +141,20 @@ label {
 }
 
 form {
-  padding: 15px;
+  flex: 1;
 }
 
-@media all and (min-width: 1163px) {
+.management-form {
+  max-width: 100% !important;
+}
+
+@media all and (min-width: 1621px) {
   .management-right{display:block;}
   .management-top{display:none;}
   .management-controls-bottom{display:none;}
 }
 
-@media all and (max-width: 1164px) {
+@media all and (max-width: 1622px) {
   .management-right{display:none;}
   .management-top{display:block;}
   .management-controls-bottom{display:block;}
@@ -195,14 +173,31 @@ form {
   font-weight: bold;
 }
 
-.roles-permissions-detail-permission-description {
-  padding-left:40px;
-}
-
 .roles-permissions-row {
   cursor: pointer;
 }
 
 .roles-permissions-row-arrow {
   padding-right: 5px;
+}
+
+.no-padding-container {
+  padding: 0px;
+}
+
+.dropdown-menu > li > a{
+  color:black !important;
+}
+
+.nav > .open > .dropdown-toggle {
+  background-color: transparent !important;
+  color: gray !important;
+}
+
+.nav-menu-container {
+  width: 300px;
+}
+
+.r-wrapper-column-direction {
+  flex-direction: column;
 }

@@ -40,13 +40,11 @@ class RoleCreateFormContainer extends React.Component<RouteComponentProps<any> &
 
     render() {
         return (
-            <div>
-                <RoleCreateForm navigateToRoles={this.navigateToRoles.bind(this)} 
-                                applications={this.props.applications} 
-                                organizations={this.props.organizations}
-                                permissions={this.props.permissions}
-                                onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <RoleCreateForm navigateToRoles={this.navigateToRoles.bind(this)} 
+                            applications={this.props.applications} 
+                            organizations={this.props.organizations}
+                            permissions={this.props.permissions}
+                            onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }

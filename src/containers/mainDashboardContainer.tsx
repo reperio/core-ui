@@ -12,9 +12,7 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class MainDashboardContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
     render() {
         return (
-            <div>
-                <MainDashboard authSession={this.props.authSession} />
-            </div>
+            <MainDashboard authSession={this.props.authSession} />
         );
     }
 }

@@ -32,17 +32,15 @@ class SignupFormContainer extends React.Component<RouteComponentProps<any> & Sta
 
     render() {
         return (
-            <div>
-                <SignupForm onSubmit={this.onSubmit.bind(this)} 
-                            authSession={this.props.authSession} 
-                            recaptcha={this.props.recaptcha}>
-                    <ReCAPTCHA
-                        ref="recaptcha"
-                        sitekey="6LfjumIUAAAAAMbk65jFCXIkLsGiby092A6d2_Vv"
-                        onChange={this.onChange.bind(this)}
-                    />
-                </SignupForm>
-            </div>
+            <SignupForm onSubmit={this.onSubmit.bind(this)} 
+                        authSession={this.props.authSession} 
+                        recaptcha={this.props.recaptcha}>
+                <ReCAPTCHA
+                    ref="recaptcha"
+                    sitekey="6LfjumIUAAAAAMbk65jFCXIkLsGiby092A6d2_Vv"
+                    onChange={this.onChange.bind(this)}
+                />
+            </SignupForm>
         );
     }
 }
@@ -51,7 +49,7 @@ function mapStateToProps(state: State) {
     const selector = formValueSelector('signupForm');
     return {
         authSession: state.authSession,
-        recaptcha: selector(state, 'recaptcha')
+        recaptcha: selector(state, 'recaptcha') as boolean
     };
 }
 

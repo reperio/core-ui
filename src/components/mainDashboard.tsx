@@ -7,15 +7,13 @@ interface MainDashboardProps {
 }
 
 const MainDashboard = (props: MainDashboardProps) => (
-    <form>
-        <div className="row">
-            <Wrapper>
-                <div className="col-xs-12">
-                    <p>Welcome, {props.authSession.user.primaryEmailAddress}!</p>
-                </div>
-            </Wrapper>
-        </div>
-    </form>
+    <div className="r-wrapper-container">
+        <Wrapper flexColumnDirection={true}>
+            <div className="row">
+                <p>Welcome, {props.authSession.user.primaryEmailAddress}!</p>
+            </div>
+        </Wrapper>  
+    </div>
 );
 
 export default MainDashboard;

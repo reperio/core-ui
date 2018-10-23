@@ -1,8 +1,8 @@
-import Organization from "./organization";
 import Dropdown from "./dropdown";
 import SelectedRole from "./selectedRole";
 import UserOrganization from "./userOrganization";
 import UserRole from "./userRole";
+import UserEmail from "./userEmail";
 
 export default class User {
     id: string;
@@ -12,6 +12,7 @@ export default class User {
     selectedOrganizations: Dropdown[];
     userOrganizations: UserOrganization[];
     userRoles: UserRole[];
+    userEmails: UserEmail[];
     primaryEmailAddress: string;
     selectedRoles: SelectedRole[];
 }

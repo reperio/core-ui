@@ -7,11 +7,12 @@ import OrganizationManagementForm from '../../components/organizations/organizat
 import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
+import Dropdown from '../../models/dropdown';
 
 class UserManagementFormValues {
     id: string;
     name: string;
-    selectedUsers: any[];
+    selectedUsers: Dropdown[];
 }
 
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
@@ -21,7 +22,8 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class OrganizationManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editOrganization(form.id, form.name, form.selectedUsers.map((selectedUser: any) => selectedUser.value));
+        const selectedUsers = form.selectedUsers.map((selectedUser: Dropdown) => selectedUser.value);
+        await this.props.actions.editOrganization(form.id, form.name, selectedUsers);
     };
 
     async componentDidMount() {
@@ -36,33 +38,31 @@ class OrganizationManagementFormContainer extends React.Component<RouteComponent
         this.props.actions.removeUserFromOrganization(index);
     }
 
-    selectUser(permission: any) {
+    selectUser(permission: Dropdown) {
         this.props.actions.selectUser(permission);
     }
 
-    addUser(permission: any) {
+    addUser(permission: Dropdown) {
         this.props.actions.addUser(permission);
     }
 
-    deleteOrganization(roleId: any) {
+    deleteOrganization(roleId: string) {
         this.props.actions.deleteOrganization(roleId);
     }
 
     render() {
         return (
-            <div>
-                <OrganizationManagementForm navigateToOrganizations={this.navigateToOrganizations.bind(this)} 
-                                            initialValues={this.props.initialOrganization}
-                                            isError={this.props.isError}
-                                            errorMessage={this.props.errorMessage}
-                                            removeUser={this.removeUser.bind(this)}
-                                            deleteOrganization={this.deleteOrganization.bind(this)}
-                                            selectedUser={this.props.selectedUser}
-                                            addUser={this.addUser.bind(this)}
-                                            selectUser={this.selectUser.bind(this)}
-                                            users={this.props.users}
-                                            onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <OrganizationManagementForm navigateToOrganizations={this.navigateToOrganizations.bind(this)} 
+                                        initialValues={this.props.initialOrganization}
+                                        isError={this.props.isError}
+                                        errorMessage={this.props.errorMessage}
+                                        removeUser={this.removeUser.bind(this)}
+                                        deleteOrganization={this.deleteOrganization.bind(this)}
+                                        selectedUser={this.props.selectedUser}
+                                        addUser={this.addUser.bind(this)}
+                                        selectUser={this.selectUser.bind(this)}
+                                        users={this.props.users}
+                                        onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }
@@ -76,7 +76,7 @@ function mapStateToProps(state: State) {
         errorMessage: organizationManagement.errorMessage,
         authSession: state.authSession,
         users: organizationManagement.users,
-        selectedUser: selector(state, 'selectedUser')
+        selectedUser: selector(state, 'selectedUser') as Dropdown
     };
 }
 

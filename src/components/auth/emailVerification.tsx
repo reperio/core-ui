@@ -6,18 +6,16 @@ interface EmailVerificationProps {
 }
 
 const EmailVerification = (props: EmailVerificationProps) => (
-    <form>
-        <div className="row">
-            <Wrapper>
-                <div className="col-xs-12">
-                    <p>
-                        {props.response == true ? 'Email verified' : null}
-                        {props.response == false ? 'Link expired' : null}
-                    </p>
+    <div className="r-wrapper-container">
+        <Wrapper>
+            <div className="row">
+                <div className="r-row-child">
+                    {props.response == true ? 'Email verified' : null}
+                    {props.response == false ? 'Link expired' : null}
                 </div>
-            </Wrapper>
-        </div>
-    </form>
+            </div>
+        </Wrapper>
+    </div>
 );
 
 export default EmailVerification;

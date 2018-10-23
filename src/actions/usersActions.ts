@@ -8,6 +8,8 @@ import UserOrganization from "../models/userOrganization";
 import Dropdown from "../models/dropdown";
 import UserRole from "../models/userRole";
 import SelectedRole from "../models/selectedRole";
+import UserEmail from "../models/userEmail";
+import Role from "../models/role";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -66,13 +68,14 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: any[], primaryEmailAddress: any[]) => async (dispatch: Dispatch<any>) => {
+export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailAddress: UserEmail[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        await userService.editUser(userId, firstName, lastName, organizationIds, roleIds);
+        await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress.length > 0 ? primaryEmailAddress[0].email : null);
+
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });
@@ -162,8 +165,8 @@ export const selectOrganization = (organization: Dropdown) => (dispatch: Dispatc
     dispatch(change('userManagementForm', 'selectedOrganization', organization.value ? { name: organization.label, id: organization.value } : ""));
 }
 
-export const selectRole = (role: Dropdown) => (dispatch: Dispatch<any>) => {
-    dispatch(change('userManagementForm', 'selectedOrganization', role.value ? {name: role.label, id: role.value} : ""));
+export const selectRole = (role: SelectedRole) => (dispatch: Dispatch<any>) => {
+    dispatch(change('userManagementForm', 'selectedOrganization', role.value ? { name: role.label, id: role.value } : ""));
 }
 
 export const addOrganization = (organization: Dropdown) => (dispatch: Dispatch<any>) => {
@@ -176,7 +179,7 @@ export const addOrganization = (organization: Dropdown) => (dispatch: Dispatch<a
     }
 }
 
-export const removeOrganization = (index: any) => (dispatch: Dispatch<any>) => {
+export const removeOrganization = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER,
         payload: { index }
@@ -190,13 +193,13 @@ export const toggleRoleDetails = (index: number) => (dispatch: Dispatch<any>) =>
     });
 }
 
-export const addRole = (role: any, roles: any[]) => (dispatch: Dispatch<any>) => {
+export const addRole = (selectedRole: Dropdown, roles: Role[]) => (dispatch: Dispatch<any>) => {
 
-    if (role != null) {
-        const matchedRole = roles.filter((x: any) => x.id == role.value)[0];
+    if (selectedRole != null) {
+        const matchedRole = roles.filter((role: Role) => role.id == selectedRole.value)[0];
         const payload = {
-            label: role.label,
-            value: role.value,
+            label: selectedRole.label,
+            value: selectedRole.value,
             role: matchedRole,
             organizationId: matchedRole.organizationId
         }
@@ -208,21 +211,21 @@ export const addRole = (role: any, roles: any[]) => (dispatch: Dispatch<any>) =>
     }
 }
 
-export const removeRole = (index: any) => (dispatch: Dispatch<any>) => {
+export const removeRole = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER,
         payload: { index }
     });
 }
 
-export const removeEmailAddress = (index: any) => (dispatch: Dispatch<any>) => {
+export const removeEmailAddress = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER,
         payload: { index }
     });
 }
 
-export const setPrimaryEmailAddress = (index: any) => (dispatch: Dispatch<any>) => {
+export const setPrimaryEmailAddress = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER,
         payload: { index }
@@ -234,7 +237,7 @@ export const addEmailAddress = () => (dispatch: Dispatch<any>) => {
 
     const selector = formValueSelector('userManagementForm');
 
-    const email = selector(state, 'email');
+    const email = selector(state, 'email') as string;
     dispatch({
         type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER,
         payload: { email }

@@ -34,11 +34,9 @@ class OrganizationCreateFormContainer extends React.Component<RouteComponentProp
 
     render() {
         return (
-            <div>
-                <OrganizationCreateForm navigateToOrganizations={this.navigateToOrganizations.bind(this)} 
-                                        users={this.props.users}
-                                        onSubmit={this.onSubmit.bind(this)} />
-            </div>
+            <OrganizationCreateForm navigateToOrganizations={this.navigateToOrganizations.bind(this)} 
+                                    users={this.props.users}
+                                    onSubmit={this.onSubmit.bind(this)} />
         );
     }
 }

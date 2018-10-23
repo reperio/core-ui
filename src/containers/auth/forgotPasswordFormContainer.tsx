@@ -27,10 +27,8 @@ class ForgotPasswordFormContainer extends React.Component<RouteComponentProps<an
 
     render() {
         return (
-            <div>
-                <ForgotPasswordForm onSubmit={this.onSubmit.bind(this)} 
-                                    navigateToLogin={this.navigateToLogin.bind(this)} />
-            </div>
+            <ForgotPasswordForm onSubmit={this.onSubmit.bind(this)} 
+                                navigateToLogin={this.navigateToLogin.bind(this)} />
         );
     }
 }

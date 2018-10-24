@@ -74,7 +74,7 @@ export const editUser = (userId: string, firstName: string, lastName: string, or
     });
 
     try {
-        await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress.length > 0 ? primaryEmailAddress[0].email : null);
+        await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress.length > 0 ? primaryEmailAddress[0].id : null);
 
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS

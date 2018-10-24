@@ -22,7 +22,7 @@ class UserService {
         return await axios.post(`/users`, payload);
     }
 
-    async editUser(userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailAddress: string) {
+    async editUser(userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailId: string) {
         const payload = {
             firstName, 
             lastName, 
@@ -34,7 +34,7 @@ class UserService {
                     id: userEmail.id 
                 }
             }), 
-            primaryEmailAddress
+            primaryEmailId
         }
         return await axios.put(`/users/${userId}`, payload);
     }

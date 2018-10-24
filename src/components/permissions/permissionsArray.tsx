@@ -11,10 +11,10 @@ interface PermissionsArrayProps {
 
 const PermissionsArray: React.SFC<PermissionsArrayProps> = (props: PermissionsArrayProps) => {
     return (
-        <div className="row">
+        <div>
             <div className="r-row-child">
                 {props.initialValues.map((member:any, index:number) =>
-                    <div className="row" key={index}>
+                    <div key={index}>
                         <hr />
                         <div className="r-row-child">
                             <div className="row" onClick={() => props.toggle ? props.togglePermissionDetails(index) :  null}>

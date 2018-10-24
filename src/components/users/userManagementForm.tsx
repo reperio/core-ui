@@ -21,9 +21,9 @@ const organizationsFieldArray: React.SFC<OrganizationsFieldArrayProps> = (props:
         <div className="r-row-child no-padding-container">
         <hr />
         {props.initialValues.map((member:any, index:number) =>
-            <div className="row">
+            <div key={index}>
                 <div className="r-row-child">
-                    <div className="row" key={index}>
+                    <div className="row">
                         <div className="r-row-child">
                             {props.initialValues[index].label}
                         </div>
@@ -66,7 +66,8 @@ const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEma
                     <div className="r-row-child">
                         <ButtonElement  type="button"
                                         title="Remove Email"
-                                        color="danger" 
+                                        color="danger"
+                                        disabled={props.initialValues.userEmails[index] && props.initialValues.userEmails[index].email == props.initialValues.primaryEmailAddress}
                                         children={
                                             <i className="fa fa-trash"></i>
                                         }
@@ -80,6 +81,7 @@ const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEma
                                         } 
                                         onClick={() => props.sendVerificationEmail(index)}/>
                         <Field  checked={props.initialValues.userEmails[index].primary == null || !props.initialValues.primaryEmailAddress ? false : props.initialValues.userEmails[index].primary}
+                                disabled={props.initialValues.userEmails[index] && props.initialValues.userEmails[index].emailVerified == false || !props.initialValues.userEmails[index].id}
                                 id={`${index}`}
                                 title="Set As Primary Email Address"
                                 name={`${member}.primary`} 
@@ -102,11 +104,11 @@ interface RolesAndPermissionsFieldArrayProps {
 }
 
 const rolesAndPermissionsFieldArray: React.SFC<RolesAndPermissionsFieldArrayProps> = (props: RolesAndPermissionsFieldArrayProps) => (
-    <div className="row">
+    <div>
         <div className="r-row-child no-padding-container">
             <hr />
             {props.initialValues.map((member:any, index:number) =>
-                <div className="row" key={index}>
+                <div key={index}>
                     <div className="r-row-child">
                         <div className="row">
                             <div className="r-row-child roles-permissions-row" onClick={() => props.toggle ? props.toggleRoleDetails(index) :  null}>

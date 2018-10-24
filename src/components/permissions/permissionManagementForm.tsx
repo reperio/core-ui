@@ -98,25 +98,21 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                                         <h2>Roles Using This Permission</h2>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="r-row-child">
-                                        <FieldArray name="roles"
-                                                    rerenderOnEveryChange={true}
-                                                    initialValues={
-                                                        [].concat(...props.initialValues.rolePermissions
-                                                            .map((x: RolePermission) => x.role)
-                                                        )
-                                                        .map((y:Role)=> { 
-                                                            return {
-                                                                label: y.name, value: y.id 
-                                                            }
-                                                        })
-                                                        .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label))
+                                <FieldArray name="roles"
+                                            rerenderOnEveryChange={true}
+                                            initialValues={
+                                                [].concat(...props.initialValues.rolePermissions
+                                                    .map((x: RolePermission) => x.role)
+                                                )
+                                                .map((y:Role)=> { 
+                                                    return {
+                                                        label: y.name, value: y.id 
                                                     }
-                                                    removePermission={props.removePermission}
-                                                    component={PermissionsArray}/>
-                                    </div>
-                                </div>
+                                                })
+                                                .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label))
+                                            }
+                                            removePermission={props.removePermission}
+                                            component={PermissionsArray}/>
                             </div>
                         </Wrapper>
                     </div>

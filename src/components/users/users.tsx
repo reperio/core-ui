@@ -3,7 +3,7 @@ import { Grid, ButtonElement, Wrapper } from '@reperio/ui-components';
 import User from '../../models/user';
 
 interface UsersProps {
-    navigateToManagement(permissionId: string): void;
+    navigateToManagement(permissionName: string): void;
     navigateToUserCreate(): void;
     gridData: User[];
 }

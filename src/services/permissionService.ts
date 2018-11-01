@@ -2,28 +2,27 @@ import { axios } from "./axiosService";
 import RolePermission from "../models/rolePermission";
 
 class PermissionService {
-    async getPermissionById(permissionId: string) {
-        return await axios.get(`/permissions/${permissionId}`);
+    async getPermissionById(permissionName: string) {
+        return await axios.get(`/permissions/${permissionName}`);
     }
 
     async getPermissions() {
         return await axios.get(`/permissions`);
     }
 
-    async editPermission(permissionId: string, displayName: string, name: string, description: string, isSystemAdminPermission: boolean, rolePermissions: RolePermission[]) {
+    async editPermission(permissionName: string, displayName: string, description: string, isSystemAdminPermission: boolean, rolePermissions: RolePermission[]) {
         const payload = {
             displayName,
-            name,
             description,
             isSystemAdminPermission,
             rolePermissions: rolePermissions.map((rolePermission: RolePermission) => {
                 return {
                     roleId: rolePermission.roleId,
-                    permissionId: rolePermission.permissionId
+                    permissionName: rolePermission.permissionName
                 }
             })
         }
-        return await axios.put(`/permissions/${permissionId}`, payload);
+        return await axios.put(`/permissions/${permissionName}`, payload);
     }
 }
 

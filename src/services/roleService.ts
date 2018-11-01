@@ -15,15 +15,15 @@ class RoleService {
             name, 
             applicationId: application ? application.value : null, 
             organizationId: organization.value, 
-            permissionIds: permissions ? permissions.map((x: Dropdown) => x.value) : []
+            permissions: permissions ? permissions.map((x: Dropdown) => x.value) : []
         }
         return await axios.post(`/roles`, payload);
     }
 
-    async editRole(roleId: string, name: string, permissionIds: string[]) {
+    async editRole(roleId: string, name: string, permissions: string[]) {
         const payload = {
             name, 
-            permissionIds
+            permissions
         }
         return await axios.put(`/roles/${roleId}`, payload);
     }

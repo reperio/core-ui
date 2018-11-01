@@ -4,7 +4,7 @@ import Role from '../../models/role';
 
 interface RolesProps {
     navigateToCreate(): void;
-    navigateToManagement(permissionId: string): void;
+    navigateToManagement(permissionName: string): void;
     gridData: Role[];
 }
 

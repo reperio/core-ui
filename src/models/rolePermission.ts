@@ -3,7 +3,7 @@ import Permission from "./permission";
 
 export default class RolePermission {
     roleId: string;
-    permissionId: string;
+    permissionName: string;
     role: Role;
     permission: Permission;
 }

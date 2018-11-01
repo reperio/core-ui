@@ -3,7 +3,7 @@ import {Grid, Wrapper} from '@reperio/ui-components';
 import Permission from '../../models/permission';
 
 interface PermissionsProps {
-    navigateToManagement(permissionId: string): void;
+    navigateToManagement(permissionName: string): void;
     gridData: Permission[];
 }
 
@@ -38,7 +38,7 @@ const Permissions = (props: PermissionsProps) => {
                             rowClick={(state: any, rowInfo: any) => { 
                                 return { onClick: (e:any) => {
                                     if (e.target.innerHTML !== '<span>&nbsp;</span>') {
-                                        props.navigateToManagement(rowInfo.original.id)
+                                        props.navigateToManagement(rowInfo.original.name)
                                     }
                                 }}
                             }}

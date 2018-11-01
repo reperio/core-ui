@@ -37,6 +37,7 @@ export class StateUserManagement {
     isError: boolean;
     errorMessage: string;
     initialUser: User;
+    user: User;
 }
 export class StatePermissions {
     isPending: boolean;
@@ -107,7 +108,8 @@ export const initialState: State = {
         isPending: false,
         isError: false,
         errorMessage: null,
-        initialUser: null
+        initialUser: null,
+        user: null
     },
     permissions: {
         isPending: false,

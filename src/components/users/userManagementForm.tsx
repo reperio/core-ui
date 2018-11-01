@@ -11,6 +11,16 @@ import { StateAuthSession } from '../../store/initialState';
 import UserEmail from '../../models/userEmail';
 import { Redirect } from 'react-router';
 
+const Panel = (props: any) => (
+	<fieldset className={`${props.active ? 'wrapper-panel-open' : 'wrapper-panel'} row`} 
+       style={props.active ? {zIndex: 10} : {}}
+       disabled={!props.active}
+       onSubmit={props.onSubmit}
+       onClick={() => props.onClick()}>
+    {props.children}
+  </fieldset>
+)
+
 interface OrganizationsFieldArrayProps {
     removeOrganization(index: number): void;
     initialValues: Dropdown[];
@@ -133,7 +143,7 @@ const rolesAndPermissionsFieldArray: React.SFC<RolesAndPermissionsFieldArrayProp
                                                     <div className="r-row-child no-padding-container">
                                                         <div className="row">
                                                             <div className="r-row-child roles-permissions-detail-permission-name">
-                                                                {rolePermission.permission.name}
+                                                                {rolePermission.permission.displayName}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -171,6 +181,12 @@ interface UserManagementProps {
     selectRole(): void;
     sendVerificationEmail(): void;
     setPrimaryEmailAddress(): void;
+    togglePanel(index: number): void;
+    cancelUserInfo(): void;
+    editUserGeneral(): void;
+    cancelUserEmails(): void;
+    cancelUserOrganizations(): void;
+    cancelUserRolesPermissions(): void;
     authSession: StateAuthSession;
     errorMessage: string;
     initialValues: User;
@@ -181,12 +197,15 @@ interface UserManagementProps {
     selectedRole: Dropdown;
     toggleRoleDetails: boolean;
     redirectToErrorPage: boolean;
+    activePanelIndex: number;
 }
 
 type Form = UserManagementProps & InjectedFormProps<any>;
 
+const Overlay = () => <div id="overlay"></div>
+
 const UserManagementForm: React.SFC<Form> = (props: Form) => (
-    <form onSubmit={props.handleSubmit(props.onSubmit)}>
+    <div>
         {props.redirectToErrorPage ?
             <Redirect to="/error" /> 
         : null }
@@ -214,13 +233,21 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                             </div>
                         </Wrapper>
                     </div>
-                    <div className="row">
+                    <Panel  active={props.activePanelIndex === 0}
+                            onClick={() => { props.activePanelIndex != 0 ? props.togglePanel(0) : null}}
+                            >
                         <Wrapper>
-                            <div className="r-wrapper-child">
+                            <form className="r-wrapper-child" onSubmit={props.handleSubmit(props.editUserGeneral)}>
                                 <div className="row">
                                     <div className="r-row-child">
                                         <h2>General Information</h2>
                                     </div>
+                                    {props.activePanelIndex == 0 ?                                     
+                                        <div className="panel-controls">
+                                            <i className="panel-control-item fa fa-ban fa-lg" onClick={() => props.cancelUserInfo()}></i>
+                                            <button type="submit"><i className="panel-control-item fa fa-check fa-lg"></i></button>
+                                        </div> 
+                                    : null}
                                 </div>
                                 <div className="row">
                                     <div className="r-row-child">
@@ -232,9 +259,10 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                                         <Field name="lastName" placeholder="Last Name" type="text" component={TextboxElement} />
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </Wrapper>
-                    </div>
+                    </Panel>
+                    {props.activePanelIndex != null ? <Overlay /> : null}
                     <div className="row">
                         <Wrapper>
                             <div className="r-wrapper-child">
@@ -395,7 +423,7 @@ const UserManagementForm: React.SFC<Form> = (props: Form) => (
                 </div>
             </div>
         : null }
-    </form>
+    </div>
 );
 
 // casted to <any> because reduxForm doesn't play nicely with other things

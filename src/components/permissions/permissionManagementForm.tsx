@@ -65,7 +65,7 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                                 <div className="row">
                                     <div className="r-row-child">
                                         <label>Name</label>
-                                        <Field name="name" placeholder="Name" type="text" component={TextboxElement} />
+                                        <Field name="name" placeholder="Name" type="text" component={TextboxElement} disabled />
                                     </div>
                                 </div>
                                 <div className="row">

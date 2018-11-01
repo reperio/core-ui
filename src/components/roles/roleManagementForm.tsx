@@ -70,12 +70,12 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                                 options={
                                                     props.permissions
                                                         .filter((permission: Permission) => {
-                                                            return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.id)
+                                                            return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.name)
                                                         })
                                                         .map((permission: Permission, index: number) => { 
                                                             return {
-                                                                value: permission.id,
-                                                                label:permission.name
+                                                                value: permission.name,
+                                                                label:permission.displayName
                                                             }
                                                         })
                                                 }

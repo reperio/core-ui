@@ -9,7 +9,7 @@ interface MainDashboardProps {
 const MainDashboard = (props: MainDashboardProps) => (
     <div className="r-wrapper-container">
         <Wrapper flexColumnDirection={true}>
-            <div className="row">
+            <div>
                 <p>Welcome, {props.authSession.user.primaryEmailAddress}!</p>
             </div>
         </Wrapper>  

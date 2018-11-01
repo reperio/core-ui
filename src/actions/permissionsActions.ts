@@ -52,13 +52,13 @@ export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const loadManagementInitialPermission = (permissionId: string) => async (dispatch: Dispatch<any>) => {
+export const loadManagementInitialPermission = (permissionName: string) => async (dispatch: Dispatch<any>) => {
     try {
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING
         });
 
-        const permission: Permission = permissionId != null ? (await permissionService.getPermissionById(permissionId)).data : null;
+        const permission: Permission = permissionName != null ? (await permissionService.getPermissionById(permissionName)).data : null;
 
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS,
@@ -84,7 +84,7 @@ export const removePermissionFromRole = (index: number) => (dispatch: Dispatch<a
     });
 }
 
-export const editPermission = (permissionId: string, displayName: string, name: string, description: string, isSystemAdminPermission: boolean, rolePermissions: RolePermission[]) => async (dispatch: Dispatch<any>) => {
+export const editPermission = (permissionName: string, displayName: string, description: string, isSystemAdminPermission: boolean, rolePermissions: RolePermission[]) => async (dispatch: Dispatch<any>) => {
 
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
@@ -94,12 +94,12 @@ export const editPermission = (permissionId: string, displayName: string, name: 
         .map((rolePermission: RolePermission) => {
             return {
                 roleId: rolePermission.roleId,
-                permissionId: rolePermission.permissionId
+                permissionName: rolePermission.permissionName
             }
         });
 
     try {
-        await permissionService.editPermission(permissionId, displayName, name, description, isSystemAdminPermission, rolePermissions);
+        await permissionService.editPermission(permissionName, displayName, description, isSystemAdminPermission, rolePermissions);
 
 
         dispatch({

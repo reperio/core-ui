@@ -36,7 +36,7 @@ const Routes = () => (
             <PrivateRouteContainer exact path="/roles/:roleId/edit" component={RoleManagementContainer} />
             <PrivateRouteContainer exact path="/roles/new" component={RoleCreateFormContainer} />
             <PrivateRouteContainer exact path="/permissions" component={PermissionsContainer} />
-            <PrivateRouteContainer exact path="/permissions/:permissionId/edit" component={PermissionManagementContainer} />
+            <PrivateRouteContainer exact path="/permissions/:permissionName/edit" component={PermissionManagementContainer} />
             <PrivateRouteContainer exact path="/organizations" component={OrganizationsContainer} />
             <PrivateRouteContainer exact path="/organizations/:organizationId/edit" component={OrganizationManagementContainer} />
             <PrivateRouteContainer exact path="/organizations/new" component={OrganizationCreateFormContainer} />

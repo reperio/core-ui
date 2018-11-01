@@ -10,6 +10,7 @@ import UserRole from "../models/userRole";
 import SelectedRole from "../models/selectedRole";
 import UserEmail from "../models/userEmail";
 import Role from "../models/role";
+import Organization from "../models/organization";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -21,19 +22,25 @@ export const usersActionTypes = {
     USERS_EDIT_PENDING: "USERS_EDIT_PENDING",
     USERS_EDIT_SUCCESS: "USERS_EDIT_SUCCESS",
     USERS_EDIT_ERROR: "USERS_EDIT_ERROR",
+
+    USERS_EDIT_GENERAL_PENDING: "USERS_EDIT_GENERAL_PENDING",
+    USERS_EDIT_GENERAL_SUCCESS: "USERS_EDIT_GENERAL_SUCCESS",
+    USERS_EDIT_GENERAL_ERROR: "USERS_EDIT_GENERAL_ERROR",
+
     USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS: "USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS",
     USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING: "USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING",
     USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR: "USERS_MANAGEMENT_LOAD_INITIAL_USER_ERROR",
-    USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER",
-    USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER: "USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER",
-    USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL: "USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL",
-    USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER: "USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER",
-    USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER",
-    USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER",
-    USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER",
-    USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER: "USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER",
+    USERS_MANAGEMENT_REMOVE_ORGANIZATION: "USERS_MANAGEMENT_REMOVE_ORGANIZATION",
+    USERS_MANAGEMENT_ADD_ORGANIZATION: "USERS_MANAGEMENT_ADD_ORGANIZATION",
+    USERS_MANAGEMENT_SHOW_ROLE_DETAIL: "USERS_MANAGEMENT_SHOW_ROLE_DETAIL",
+    USERS_MANAGEMENT_ADD_ROLE: "USERS_MANAGEMENT_ADD_ROLE",
+    USERS_MANAGEMENT_REMOVE_ROLE: "USERS_MANAGEMENT_REMOVE_ROLE",
+    USERS_MANAGEMENT_REMOVE_EMAIL: "USERS_MANAGEMENT_REMOVE_EMAIL",
+    USERS_MANAGEMENT_ADD_EMAIL: "USERS_MANAGEMENT_ADD_EMAIL",
+    USERS_MANAGEMENT_SET_PRIMARY_EMAIL: "USERS_MANAGEMENT_SET_PRIMARY_EMAIL",
     CLEAR_USERS: "CLEAR_USERS",
-    CLEAR_USER_MANAGEMENT: "CLEAR_USER_MANAGEMENT"
+    CLEAR_USER_MANAGEMENT: "CLEAR_USER_MANAGEMENT",
+    RESET_USER_MANAGEMENT: "RESET_USER_MANAGEMENT"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -68,27 +75,27 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailAddress: UserEmail[]) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: usersActionTypes.USERS_EDIT_PENDING
-    });
+// export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailAddress: UserEmail[]) => async (dispatch: Dispatch<any>) => {
+//     dispatch({
+//         type: usersActionTypes.USERS_EDIT_PENDING
+//     });
 
-    try {
-        await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress.length > 0 ? primaryEmailAddress[0].id : null);
+//     try {
+//         await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress.length > 0 ? primaryEmailAddress[0].id : null);
 
-        dispatch({
-            type: usersActionTypes.USERS_EDIT_SUCCESS
-        });
-        history.push('/users');
-    } catch (e) {
-        dispatch({
-            type: usersActionTypes.USERS_EDIT_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-};
+//         dispatch({
+//             type: usersActionTypes.USERS_EDIT_SUCCESS
+//         });
+//         history.push('/users');
+//     } catch (e) {
+//         dispatch({
+//             type: usersActionTypes.USERS_EDIT_ERROR,
+//             payload: {
+//                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+//             }
+//         });
+//     }
+// };
 
 export const createUser = (primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
@@ -162,33 +169,33 @@ export const loadManagementInitialUser = (userId: string) => async (dispatch: Di
 };
 
 export const selectOrganization = (organization: Dropdown) => (dispatch: Dispatch<any>) => {
-    dispatch(change('userManagementForm', 'selectedOrganization', organization.value ? { name: organization.label, id: organization.value } : ""));
+    dispatch(change('userManagementOrganizationsForm', 'selectedOrganization', organization.value ? { name: organization.label, id: organization.value } : ""));
 }
 
 export const selectRole = (role: SelectedRole) => (dispatch: Dispatch<any>) => {
-    dispatch(change('userManagementForm', 'selectedOrganization', role.value ? { name: role.label, id: role.value } : ""));
+    dispatch(change('userManagementRolesForm', 'selectedOrganization', role.value ? { name: role.label, id: role.value } : ""));
 }
 
 export const addOrganization = (organization: Dropdown) => (dispatch: Dispatch<any>) => {
     if (organization != null) {
         dispatch({
-            type: usersActionTypes.USERS_MANAGEMENT_ADD_ORGANIZATION_INITIAL_USER,
+            type: usersActionTypes.USERS_MANAGEMENT_ADD_ORGANIZATION,
             payload: { organization }
         });
-        dispatch(change('userManagementForm', 'selectedOrganization', null));
+        dispatch(change('userManagementOrganizationsForm', 'selectedOrganization', null));
     }
 }
 
 export const removeOrganization = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ORGANIZATION_INITIAL_USER,
+        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ORGANIZATION,
         payload: { index }
     });
 }
 
 export const toggleRoleDetails = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_SHOW_INITIAL_USER_ROLE_DETAIL,
+        type: usersActionTypes.USERS_MANAGEMENT_SHOW_ROLE_DETAIL,
         payload: { index }
     });
 }
@@ -204,30 +211,30 @@ export const addRole = (selectedRole: Dropdown, roles: Role[]) => (dispatch: Dis
             organizationId: matchedRole.organizationId
         }
         dispatch({
-            type: usersActionTypes.USERS_MANAGEMENT_ADD_ROLE_INITIAL_USER,
+            type: usersActionTypes.USERS_MANAGEMENT_ADD_ROLE,
             payload: { payload }
         });
-        dispatch(change('userManagementForm', 'selectedRole', null));
+        dispatch(change('userManagementRolesForm', 'selectedRole', null));
     }
 }
 
 export const removeRole = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE_INITIAL_USER,
+        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE,
         payload: { index }
     });
 }
 
 export const removeEmailAddress = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL_INITIAL_USER,
+        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL,
         payload: { index }
     });
 }
 
 export const setPrimaryEmailAddress = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL_INITIAL_USER,
+        type: usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL,
         payload: { index }
     });
 }
@@ -235,11 +242,91 @@ export const setPrimaryEmailAddress = (index: number) => (dispatch: Dispatch<any
 export const addEmailAddress = () => (dispatch: Dispatch<any>) => {
     const state = store.getState();
 
-    const selector = formValueSelector('userManagementForm');
+    const selector = formValueSelector('userManagementEmailsForm');
 
     const email = selector(state, 'email') as string;
     dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL_INITIAL_USER,
+        type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL,
         payload: { email }
     });
 }
+
+export const togglePanel = (index: number) => (dispatch: Dispatch<any>) => {
+    dispatch(change('userManagementForm', 'activePanelIndex', index));
+}
+
+export const cancelUserPanel = () => (dispatch: Dispatch<any>) => { 
+    dispatch({
+        type: usersActionTypes.RESET_USER_MANAGEMENT
+    });
+    dispatch(change('userManagementForm', 'activePanelIndex', null));
+}
+
+export const editUserGeneral = (userId: string, firstName: string, lastName: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_EDIT_PENDING
+    });
+
+    try {
+        await userService.editUserGeneral(userId, firstName, lastName);
+        dispatch(change('userManagementForm', 'activePanelIndex', null));
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_SUCCESS
+        });
+        loadManagementInitialUser(userId)(dispatch);
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const editUserEmails = (userId: string, userEmails: UserEmail[], initialUser: User, primaryEmailAddress: UserEmail[]) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_EDIT_PENDING
+    });
+
+    try {
+        const added = userEmails.filter((userEmail: UserEmail) => userEmail.id == null);
+        const deleted = initialUser.userEmails.filter((userEmail: UserEmail) => !userEmails.map((x: UserEmail) => x.id).includes(userEmail.id));
+
+        await userService.editUserEmails(userId, initialUser, added, deleted, primaryEmailAddress.length > 0 ? primaryEmailAddress[0] : null);
+        dispatch(change('userManagementForm', 'activePanelIndex', null));
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_SUCCESS
+        });
+        loadManagementInitialUser(userId)(dispatch);
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const editUserOrganizations = (userId: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_EDIT_PENDING
+    });
+
+    try {
+        await userService.editUserOrganizations(userId, organizationIds);
+        dispatch(change('userManagementForm', 'activePanelIndex', null));
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_SUCCESS
+        });
+        loadManagementInitialUser(userId)(dispatch);
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};

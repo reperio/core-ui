@@ -17,8 +17,8 @@ class PermissionsContainer extends React.Component<RouteComponentProps<any> & St
         await this.props.actions.getPermissions();
     }
 
-    navigateToManagement(permissionId: string) {
-        history.push(`/permissions/${permissionId}/edit`);
+    navigateToManagement(permissionName: string) {
+        history.push(`/permissions/${permissionName}/edit`);
     }
 
     render() {

@@ -9,11 +9,9 @@ import { RouteComponentProps } from 'react-router';
 import RolePermission from '../../models/rolePermission';
 
 class UserManagementFormValues {
-    id: string;
     displayName: string;
     description: string;
     isSystemAdminPermission: boolean;
-    name: string;
     rolePermissions: RolePermission[];
 }
 
@@ -24,12 +22,12 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class PermissionManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: UserManagementFormValues) {
-        await this.props.actions.editPermission(form.id, form.displayName, form.name, form.description, form.isSystemAdminPermission, form.rolePermissions);
+        await this.props.actions.editPermission(this.props.match.params.permissionName, form.displayName, form.description, form.isSystemAdminPermission, form.rolePermissions);
     };
 
     async componentDidMount() {
         this.props.actions.clearManagementInitialPermission();
-        await this.props.actions.loadManagementInitialPermission(this.props.match.params.permissionId);
+        await this.props.actions.loadManagementInitialPermission(this.props.match.params.permissionName);
     }
 
     navigateToPermissions() {
@@ -56,7 +54,6 @@ function mapStateToProps(state: State) {
     const permissionManagement = state.permissionManagement;
     return {
         initialPermission: permissionManagement.initialPermission != null ? {
-            id: permissionManagement.initialPermission.id,
             name: permissionManagement.initialPermission.name,
             displayName: permissionManagement.initialPermission.displayName,
             description: permissionManagement.initialPermission.description,

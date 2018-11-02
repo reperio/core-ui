@@ -73,8 +73,8 @@ const RoleCreateForm: React.SFC<Form> = (props: Form) => (
                                     props.permissions
                                         .map((permission: Permission, index: number) => { 
                                             return {
-                                                value: permission.id,
-                                                label: permission.name
+                                                value: permission.name,
+                                                label: permission.displayName
                                             }
                                         })
                                 }

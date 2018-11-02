@@ -80,8 +80,8 @@ export const loadManagementInitialRole = (roleId: string) => async (dispatch: Di
         role.selectedPermissions = role.rolePermissions
             .map((rolePermission: RolePermission) => {
                 return {
-                    value: rolePermission.permission.id, 
-                    label: rolePermission.permission.name
+                    value: rolePermission.permission.name, 
+                    label: rolePermission.permission.displayName
                 }
             })
             .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label));
@@ -123,13 +123,13 @@ export const addPermission = (permission: Dropdown) => (dispatch: Dispatch<any>)
     }
 }
 
-export const editRole = (roleId: string, name: string, permissionIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const editRole = (roleId: string, name: string, permissions: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: rolesActionTypes.ROLES_SAVE_PENDING
     });
 
     try {
-        await roleService.editRole(roleId, name, permissionIds);
+        await roleService.editRole(roleId, name, permissions);
 
         dispatch({
             type: rolesActionTypes.ROLES_SAVE_SUCCESS

@@ -8,20 +8,14 @@ import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
 import { sendVerificationEmail } from '../../actions/authActions';
 import { formValueSelector } from 'redux-form';
-import { RouteComponentProps, Redirect } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import { history } from '../../store/history';
 import SelectedRole from '../../models/selectedRole';
 import UserEmail from '../../models/userEmail';
 import Dropdown from '../../models/dropdown';
 import { connect } from 'react-redux';
-import UserManagementGeneralForm from '../../components/users/userManagementGeneralForm';
-import Panel from '../../components/panel';
 import {submitForm} from '../../actions/miscActions';
-import UserManagementProfile from '../../components/users/UserManagementProfile';
-import UserManagementEmailsForm from '../../components/users/userManagementEmailsForm';
-import UserManagementOrganizationsForm from '../../components/users/userManagementOrganizationsForm';
-import UserManagementRolesForm from '../../components/users/userManagementRolesForm';
-import UserManagementControls from '../../components/users/userManagementControls';
+import UserManagementForm from '../../components/users/userManagementForm';
 
 class UserManagementFormValues {
     id: string;
@@ -37,8 +31,6 @@ interface OwnProps {}
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
 
 interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
-
-const Overlay = () => <div id="overlay"></div>
 
 class UserManagementFormContainer extends React.Component<RouteComponentProps<any> & OwnProps & StateProps & DispatchProps> {
 
@@ -131,71 +123,31 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
 
     render() {
         return (
-            <div style={{flex: 1}}>
-            {this.props.user != null ?
-                <div className="management-container">
-                {this.props.redirectToErrorPage ?
-                    <Redirect to="/error" /> 
-                : null }
-                    {this.props.activePanelIndex != null ? <Overlay /> : null}
-                    <div className="management-left">
-                        <UserManagementProfile top={true} initialValues={this.props.user} />
-                        <Panel  active={this.props.activePanelIndex === 0}
-                                onClick={() => { this.props.activePanelIndex != 0 ? this.togglePanel(0) : null}}
-                                submit={this.submitForm.bind(this, 'userManagementGeneralForm')}
-                                cancel={this.cancelUserPanel.bind(this)}>
-                            <UserManagementGeneralForm  initialValues={this.props.user} 
-                                                        onSubmit={this.editUserGeneral.bind(this)}/>
-                        </Panel>
-                        <Panel  active={this.props.activePanelIndex === 1}
-                                onClick={() => { this.props.activePanelIndex != 1 ? this.togglePanel(1) : null}}
-                                submit={this.submitForm.bind(this, 'userManagementEmailsForm')}
-                                cancel={this.cancelUserPanel.bind(this)}>
-                            <UserManagementEmailsForm   initialValues={this.props.user} 
-                                                        onSubmit={this.editUserEmails.bind(this)}
-                                                        setPrimaryEmailAddress={this.setPrimaryEmailAddress.bind(this)}
-                                                        removeEmailAddress={this.removeEmailAddress.bind(this)}
-                                                        addEmailAddress={this.addEmailAddress.bind(this)}
-                                                        sendVerificationEmail={this.sendVerificationEmail.bind(this)}/>
-                        </Panel>
-                        <Panel  active={this.props.activePanelIndex === 2}
-                                onClick={() => { this.props.activePanelIndex != 2 ? this.togglePanel(2) : null}}
-                                submit={this.submitForm.bind(this, 'userManagementOrganizationsForm')}
-                                cancel={this.cancelUserPanel.bind(this)}>
-                            <UserManagementOrganizationsForm    initialValues={this.props.user}
-                                                                organizations={this.props.organizations}
-                                                                onSubmit={this.editUserOrganizations.bind(this)}
-                                                                removeOrganization={this.removeOrganization.bind(this)}
-                                                                selectedOrganization={this.props.selectedOrganization}
-                                                                selectOrganization={this.selectOrganization.bind(this)}
-                                                                addOrganization={this.addOrganization.bind(this)}/>
-                        </Panel>
-                        <Panel  active={this.props.activePanelIndex === 3}
-                                onClick={() => { this.props.activePanelIndex != 3 ? this.togglePanel(3) : null}}
-                                submit={this.submitForm.bind(this, 'userManagementRolesForm')}
-                                cancel={this.cancelUserPanel.bind(this)}>
-                            <UserManagementRolesForm    initialValues={this.props.user}
-                                                        roles={this.props.roles}
-                                                        selectRole={this.selectRole.bind(this)}
-                                                        selectedRole={this.props.selectedRole}
-                                                        addRole={this.addRole.bind(this)}
-                                                        toggleRoleDetails={this.toggleRoleDetails.bind(this)}
-                                                        removeRole={this.removeRole.bind(this)}
-                                                        organizations={this.props.organizations}
-                                                        onSubmit={this.editUserOrganizations.bind(this)}/>
-                        </Panel>
-                        <UserManagementControls right={false} 
-                                                children={null} 
-                                                navigateToUsers={this.navigateToUsers.bind(this)} />
-                    </div>
-                    <UserManagementControls right={true} 
-                                            children={
-                                                <UserManagementProfile  top={false} initialValues={this.props.user} />
-                                            } 
-                                            navigateToUsers={this.navigateToUsers.bind(this)} />
-                </div>
-            : null}
-            </div>
+            <UserManagementForm activePanelIndex={this.props.activePanelIndex}
+                                addEmailAddress={this.addEmailAddress.bind(this)}
+                                addOrganization={this.addOrganization.bind(this)}
+                                addRole={this.addRole.bind(this)}
+                                cancelUserPanel={this.cancelUserPanel.bind(this)}
+                                editUserEmails={this.editUserEmails.bind(this)}
+                                editUserGeneral={this.editUserGeneral.bind(this)}
+                                editUserOrganizations={this.editUserOrganizations.bind(this)}
+                                navigateToUsers={this.navigateToUsers.bind(this)} 
+                                organizations={this.props.organizations}
+                                redirectToErrorPage={this.props.redirectToErrorPage}
+                                removeEmailAddress={this.removeEmailAddress.bind(this)}
+                                removeOrganization={this.removeOrganization.bind(this)}
+                                removeRole={this.removeRole.bind(this)}
+                                roles={this.props.roles}
+                                selectOrganization={this.selectOrganization.bind(this)}
+                                selectedOrganization={this.props.selectedOrganization}
+                                selectRole={this.selectRole.bind(this)}
+                                selectedRole={this.props.selectedRole}
+                                submitForm={this.submitForm.bind(this)}
+                                sendVerificationEmail={this.sendVerificationEmail.bind(this)}
+                                setPrimaryEmailAddress={this.setPrimaryEmailAddress.bind(this)}
+                                togglePanel={this.togglePanel.bind(this)}
+                                toggleRoleDetails={this.toggleRoleDetails.bind(this)}
+                                user={this.props.user}/>
         );
     }
 }

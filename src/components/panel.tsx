@@ -1,9 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-const Panel = (props: any) => (
+interface PanelProps {
+    active: boolean;
+    onClick(): void;
+    submit(): void;
+    cancel(): void;
+    children: JSX.Element;
+}
+
+const Panel: React.SFC<PanelProps> = (props: PanelProps) => (
     <fieldset disabled={!props.active} className={`${props.active ? 'wrapper-panel-open' : 'wrapper-panel'} row`} 
         style={props.active ? {zIndex: 10} : {}}
-        onClick={() => props.onClick()}>
+        onClick={props.onClick}>
             {props.active ?                                     
                 <div className="panel-controls">
                     <i className="panel-control-item fa fa-ban fa-lg" onClick={() => props.cancel()}></i>

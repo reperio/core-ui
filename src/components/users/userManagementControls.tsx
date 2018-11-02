@@ -4,7 +4,7 @@ import { Wrapper, ButtonElement } from '@reperio/ui-components';
 interface UserManagementControlsProps {
     navigateToUsers(): void;
     right: boolean;
-    children: any;
+    children: JSX.Element;
 }
 
 const UserManagementControls: React.SFC<UserManagementControlsProps> = (props: UserManagementControlsProps) => (

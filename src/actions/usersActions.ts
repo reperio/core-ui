@@ -75,28 +75,6 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-// export const editUser = (userId: string, firstName: string, lastName: string, organizationIds: string[], roleIds: string[], userEmails: UserEmail[], primaryEmailAddress: UserEmail[]) => async (dispatch: Dispatch<any>) => {
-//     dispatch({
-//         type: usersActionTypes.USERS_EDIT_PENDING
-//     });
-
-//     try {
-//         await userService.editUser(userId, firstName, lastName, organizationIds, roleIds, userEmails, primaryEmailAddress.length > 0 ? primaryEmailAddress[0].id : null);
-
-//         dispatch({
-//             type: usersActionTypes.USERS_EDIT_SUCCESS
-//         });
-//         history.push('/users');
-//     } catch (e) {
-//         dispatch({
-//             type: usersActionTypes.USERS_EDIT_ERROR,
-//             payload: {
-//                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-//             }
-//         });
-//     }
-// };
-
 export const createUser = (primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.USERS_CREATE_PENDING

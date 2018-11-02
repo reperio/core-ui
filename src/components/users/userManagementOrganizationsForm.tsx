@@ -4,34 +4,7 @@ import {Field, reduxForm, InjectedFormProps, FieldArray } from 'redux-form';
 import Organization from '../../models/organization';
 import User from '../../models/user';
 import Dropdown from '../../models/dropdown';
-
-interface OrganizationsFieldArrayProps {
-    removeOrganization(index: number): void;
-    initialValues: Dropdown[];
-}
-
-const organizationsFieldArray: React.SFC<OrganizationsFieldArrayProps> = (props: OrganizationsFieldArrayProps) => (
-    <div className="row">
-        <div className="r-row-child no-padding-container">
-        <hr />
-        {props.initialValues.map((member:any, index:number) =>
-            <div key={index}>
-                <div className="r-row-child">
-                    <div className="row">
-                        <div className="r-row-child">
-                            {props.initialValues[index].label}
-                        </div>
-                        <div className="r-row-child">
-                            <ButtonElement type="button" color="danger" text="Leave" onClick={() => props.removeOrganization(index)} />
-                        </div>
-                    </div>
-                </div>
-                <hr />
-            </div>
-        )}
-        </div>
-    </div>
-);
+import OrganizationFieldArray from '../organizations/organizationFieldArray';
 
 interface UserManagementProps {
     submit(): void;
@@ -49,6 +22,7 @@ interface UserManagementProps {
     selectedOrganization: Dropdown;
     redirectToErrorPage: boolean;
     activePanelIndex: number;
+    active: boolean;
 }
 
 type Form = UserManagementProps & InjectedFormProps<any>;
@@ -63,6 +37,7 @@ const UserManagementOrganizationsForm: React.SFC<Form> = (props: Form) => (
                         <h2>Organizations</h2>
                     </div>
                 </div>
+                {props.active ? 
                 <div className="row">
                     <div className="r-row-child">
                         <Field  name="selectedOrganization"
@@ -87,11 +62,13 @@ const UserManagementOrganizationsForm: React.SFC<Form> = (props: Form) => (
                         <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addOrganization(props.selectedOrganization)}} />
                     </div>
                 </div>
+                : null }
                 <FieldArray name="organizations"
+                            active={props.active}
                             rerenderOnEveryChange={true}
                             initialValues={props.initialValues.selectedOrganizations}
                             removeOrganization={props.removeOrganization}
-                            component={organizationsFieldArray}/>
+                            component={OrganizationFieldArray}/>
             </div>
         </Wrapper>
         : null }

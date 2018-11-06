@@ -5,7 +5,7 @@ import Organization from '../../models/organization';
 import User from '../../models/user';
 import Dropdown from '../../models/dropdown';
 import Role from '../../models/role';
-import RolePermissionFieldArray from '../roles/RolePermissionFieldArray';
+import RolePermissionFieldArray from '../roles/rolePermissionFieldArray';
 
 interface UserManagementProps {
     addRole(selectedRole: Dropdown): void;

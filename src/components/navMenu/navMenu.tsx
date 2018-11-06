@@ -1,6 +1,5 @@
 import React from 'react'
 import {Navbar, LinkContainer, NavItem} from '@reperio/ui-components'
-import NavMenuLoginLink from './navMenuLoginLink';
 import { NavDropdown } from 'react-bootstrap';
 import { StateAuthSession } from '../../store/initialState';
 
@@ -38,9 +37,11 @@ const NavMenu = (props: NavMenuProps) => (
                     </NavItem> 
                 </LinkContainer> : null,
             !props.authSession.isAuthenticated ?
-                <LinkContainer key="5" exact to="">
-                    <NavMenuLoginLink/>
-                </LinkContainer> : null,
+            <LinkContainer key="5" to="/login">
+                <NavItem>
+                    Login
+                </NavItem>
+            </LinkContainer> : null,
             props.authSession.isAuthenticated ?
                 <NavDropdown pullRight key="6" title="Administration" id="admin-dropdown">
                     {props.authSession.isAuthenticated ?

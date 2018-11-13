@@ -25,7 +25,8 @@ export const authActionTypes = {
     AUTH_SEND_VERIFICATION_EMAIL_PENDING: "AUTH_SEND_VERIFICATION_EMAIL_PENDING",
     AUTH_SEND_VERIFICATION_EMAIL_SUCCESS: "AUTH_SEND_VERIFICATION_EMAIL_SUCCESS",
     AUTH_SEND_VERIFICATION_EMAIL_ERROR: "AUTH_SEND_VERIFICATION_EMAIL_ERROR",
-    AUTH_SET_USER: "AUTH_SET_USER"
+    AUTH_SET_USER: "AUTH_SET_USER",
+    AUTH_SET_IS_AUTH_INITIALIZED: "AUTH_SET_IS_AUTH_INITIALIZED"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -42,6 +43,17 @@ export const logout = () => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: authActionTypes.AUTH_CLEAR_TOKEN,
         payload: null
+    });
+};
+
+export const initializeAuth = () => async (dispatch: Dispatch<any>, getState: () => State) => {
+    const state = getState();
+
+    if (state.authSession.reperioCoreJWT != null) {
+        await executeWithLoadedToken()(dispatch, getState);
+    }
+    dispatch({
+        type: authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED
     });
 };
 

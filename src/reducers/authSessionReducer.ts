@@ -90,6 +90,12 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 user: null
             };
         }
+        case authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED: {
+            return {
+                ...state,
+                isAuthInitialized: true
+            }
+        }
         default: {
             return state;
         }

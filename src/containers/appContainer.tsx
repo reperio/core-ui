@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from "react-redux";
 import Routes from "../components/routes";
 import {TitleBar, ApplicationMenuItem } from '@reperio/ui-components'
-import { logout } from '../actions/authActions';
+import { initializeAuth, logout } from '../actions/authActions';
 import { State } from '../store/initialState';
 import { bindActionCreators } from '../../node_modules/redux';
 import NavMenuContainer from "./navMenuContainer";
@@ -10,12 +10,18 @@ import NavMenuContainer from "./navMenuContainer";
 class AppContainer extends React.Component {
     props: any;
 
+    componentDidMount() {
+        if (!this.props.authSession.isAuthInitialized) {
+            this.props.actions.initializeAuth();
+        }
+    }
+
     logout() {
         this.props.actions.logout();
     };
 
     render() {
-        return (
+        return this.props.authSession.isAuthInitialized ? (
             <div className="app-main">
                 <NavMenuContainer/>
                 <div className="page-container">
@@ -39,7 +45,7 @@ class AppContainer extends React.Component {
                     <Routes/>
                 </div>
             </div>
-        );
+        ) : null;
     }
 }
 
@@ -51,7 +57,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({logout}, dispatch)
+        actions: bindActionCreators({logout, initializeAuth}, dispatch)
     };
 }
 

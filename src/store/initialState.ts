@@ -18,6 +18,7 @@ export class State {
 }
 
 export class StateAuthSession {
+    isAuthInitialized: boolean;
     isPending: boolean;
     isAuthenticated: boolean;
     isError: boolean;
@@ -93,6 +94,7 @@ export class StateApplications {
 
 export const initialState: State = {
     authSession: {
+        isAuthInitialized: false,
         isPending: false,
         isAuthenticated: false,
         isError: false,

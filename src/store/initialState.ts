@@ -23,6 +23,7 @@ export class StateAuthSession {
     isError: boolean;
     errorMessage: string;
     user: User;
+    reperioCoreJWT: string;
 }
 
 export class StateUsers {
@@ -96,7 +97,8 @@ export const initialState: State = {
         isAuthenticated: false,
         isError: false,
         errorMessage: null,
-        user: null
+        user: null,
+        reperioCoreJWT: null
     },
     users: {
         isPending: false,

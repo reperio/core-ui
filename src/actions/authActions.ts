@@ -2,7 +2,7 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { State } from '../store/initialState';
 
-import { authService } from "../services/authService";
+import { coreApiService } from "../services/coreApiService";
 import { userService } from "../services/userService";
 import { change } from "redux-form";
 import User from "../models/user";
@@ -60,9 +60,9 @@ export const initializeAuth = () => async (dispatch: Dispatch<any>, getState: ()
 export const setAuthToken = (authToken: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
     const state = getState();
     const oldAuthToken = state.authSession.reperioCoreJWT;
-    const oldParsedToken = oldAuthToken == null ? null : authService.parseJwt(oldAuthToken);
+    const oldParsedToken = oldAuthToken == null ? null : coreApiService.authService.parseJwt(oldAuthToken);
 
-    const parsedToken = authToken == null ? null : authService.parseJwt(authToken);
+    const parsedToken = authToken == null ? null : coreApiService.authService.parseJwt(authToken);
 
     if (parsedToken != null && Math.round((new Date()).getTime() / 1000) < parsedToken.exp) {
         // if the provided authToken is not null and it's not expired...
@@ -91,7 +91,7 @@ export const executeWithLoadedToken = () => async (dispatch: Dispatch<any>, getS
     const state = getState();
     const authToken = state.authSession.reperioCoreJWT;
 
-    const parsedToken = authToken == null ? null : authService.parseJwt(authToken);
+    const parsedToken = authToken == null ? null : coreApiService.authService.parseJwt(authToken);
     const user: User = (await userService.getUserById(parsedToken.currentUserId)).data;
     dispatch({
         type: authActionTypes.AUTH_SET_USER,
@@ -113,7 +113,7 @@ export const submitAuth = (primaryEmailAddress: string, password: string) => asy
     });
 
     try {
-        await authService.login(primaryEmailAddress, password);
+        await coreApiService.authService.login(primaryEmailAddress, password);
         history.push('/');
     } catch (e) {
         dispatch({
@@ -132,7 +132,7 @@ export const signup = (primaryEmailAddress: string, firstName: string, lastName:
     });
 
     try {
-        await authService.signup(primaryEmailAddress, firstName, lastName, password, confirmPassword);
+        await coreApiService.authService.signup(primaryEmailAddress, firstName, lastName, password, confirmPassword);
         history.push('/');
     } catch (e) {
         dispatch({
@@ -146,7 +146,7 @@ export const signup = (primaryEmailAddress: string, firstName: string, lastName:
 
 export const recaptcha = (recaptchaResponse: string) => async (dispatch: Dispatch<any>) => {
     try {
-        const { data: response } = await authService.recaptcha(recaptchaResponse);
+        const { data: response } = await coreApiService.authService.recaptcha(recaptchaResponse);
         dispatch(change('signupForm', 'recaptcha', response.success));
     } catch (e) {
         dispatch(change('signupForm', 'recaptcha', false));
@@ -155,7 +155,7 @@ export const recaptcha = (recaptchaResponse: string) => async (dispatch: Dispatc
 
 export const emailVerification = (token: string) => async (dispatch: Dispatch<any>) => {
     try {
-        const { data: response } = await authService.emailVerification(token);
+        const { data: response } = await coreApiService.authService.emailVerification(token);
         setTimeout(()=>{
             history.push('/');
         }, 3000);
@@ -171,7 +171,7 @@ export const forgotPassword = (primaryEmailAddress: string) => async (dispatch: 
     });
 
     try {
-        await authService.forgotPassword(primaryEmailAddress);
+        await coreApiService.authService.forgotPassword(primaryEmailAddress);
 
         dispatch({
             type: authActionTypes.AUTH_FORGOT_PASSWORD_SUCCESS
@@ -190,7 +190,7 @@ export const forgotPassword = (primaryEmailAddress: string) => async (dispatch: 
 
 export const verifyResetPassword = (token: string) => async (dispatch: Dispatch<any>) => {
     try {
-        const { data: response } = await authService.verifyResetPassword(token);
+        const { data: response } = await coreApiService.authService.verifyResetPassword(token);
         if (response == false) {
             setTimeout(()=>{
                 history.push('/');
@@ -208,7 +208,7 @@ export const resetPassword = (token: string, password: string, confirmPassword: 
     });
 
     try {
-        await authService.resetPassword(token, password, confirmPassword);
+        await coreApiService.authService.resetPassword(token, password, confirmPassword);
 
         dispatch({
             type: authActionTypes.AUTH_RESET_PASSWORD_SUCCESS
@@ -231,7 +231,7 @@ export const sendVerificationEmail = (userId: string, email: string) => async (d
     });
 
     try {
-        await authService.sendVerificationEmail(userId, email);
+        await coreApiService.authService.sendVerificationEmail(userId, email);
 
         dispatch({
             type: authActionTypes.AUTH_SEND_VERIFICATION_EMAIL_SUCCESS

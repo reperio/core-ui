@@ -6954,6 +6954,13 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
+reperio-core-connector@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/reperio-core-connector/-/reperio-core-connector-1.0.0.tgz#32639f9a8a79ee9c4f504bb662911a3dbbe28c22"
+  dependencies:
+    axios "^0.18.0"
+    typescript "^3.1.6"
+
 replace-ext@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-0.0.1.tgz#29bbd92078a739f0bcce2b4ee41e837953522924"
@@ -7986,6 +7993,10 @@ typedarray@^0.0.6:
 typescript@^2.7.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
+
+typescript@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
 
 ua-parser-js@^0.7.18:
   version "0.7.18"

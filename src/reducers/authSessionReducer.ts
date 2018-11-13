@@ -33,26 +33,21 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 user: null
             };
         }
+        case authActionTypes.AUTH_SET_USER: {
+            return {
+                ...state,
+                isPending: false,
+                isAuthenticated: true,
+                isError: false,
+                errorMessage: null,
+                user: action.payload.user != null ? Object.assign({}, action.payload.user) : null
+            };
+        }
         case authActionTypes.AUTH_SET_TOKEN: {
-            if (action.payload.user != null) {
-                return {
-                    ...state,
-                    isPending: false,
-                    isAuthenticated: true,
-                    isError: false,
-                    errorMessage: null,
-                    user: Object.assign({}, action.payload.user)
-                };
-            } else {
-                return {
-                    ...state,
-                    isPending: false,
-                    isAuthenticated: false,
-                    isError: false,
-                    errorMessage: null,
-                    user: null
-                };
-            }
+            return {
+                ...state,
+                reperioCoreJWT: action.payload.authToken
+            };
         }
         case authActionTypes.AUTH_CLEAR_TOKEN: {
             return {
@@ -61,7 +56,8 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 isAuthenticated: false,
                 isError: false,
                 errorMessage: null,
-                user: null
+                user: null,
+                reperioCoreJWT: null
             };
         }
         case authActionTypes.SIGNUP_PENDING: {

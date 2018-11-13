@@ -1,5 +1,6 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
+import { State } from '../store/initialState';
 
 import { authService } from "../services/authService";
 import { userService } from "../services/userService";
@@ -23,7 +24,8 @@ export const authActionTypes = {
     AUTH_RESET_PASSWORD_ERROR: "AUTH_RESET_PASSWORD_ERROR",
     AUTH_SEND_VERIFICATION_EMAIL_PENDING: "AUTH_SEND_VERIFICATION_EMAIL_PENDING",
     AUTH_SEND_VERIFICATION_EMAIL_SUCCESS: "AUTH_SEND_VERIFICATION_EMAIL_SUCCESS",
-    AUTH_SEND_VERIFICATION_EMAIL_ERROR: "AUTH_SEND_VERIFICATION_EMAIL_ERROR"
+    AUTH_SEND_VERIFICATION_EMAIL_ERROR: "AUTH_SEND_VERIFICATION_EMAIL_ERROR",
+    AUTH_SET_USER: "AUTH_SET_USER"
 };
 
 function getErrorMessageFromStatusCode(statusCode: number) {
@@ -37,38 +39,52 @@ function getErrorMessageFromStatusCode(statusCode: number) {
 }
 
 export const logout = () => async (dispatch: Dispatch<any>) => {
-    window.localStorage.removeItem("authToken");
     dispatch({
         type: authActionTypes.AUTH_CLEAR_TOKEN,
         payload: null
     });
 };
 
-export const getAuthToken = () => {
-    return window.localStorage.getItem("authToken");
-};
-
-export const setAuthToken = (authToken: string, forceActionDispatch = false) => async (dispatch: Dispatch<any>) => {
-    const parsedToken = authToken == null ? null : authService.parseJwt(authToken);
-    const oldAuthToken = getAuthToken();
+export const setAuthToken = (authToken: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
+    const state = getState();
+    const oldAuthToken = state.authSession.reperioCoreJWT;
     const oldParsedToken = oldAuthToken == null ? null : authService.parseJwt(oldAuthToken);
+
+    const parsedToken = authToken == null ? null : authService.parseJwt(authToken);
+
     if (parsedToken != null && Math.round((new Date()).getTime() / 1000) < parsedToken.exp) {
-        window.localStorage.setItem("authToken", authToken);
-        if (forceActionDispatch || oldParsedToken == null || oldParsedToken.currentUserId !== parsedToken.currentUserId) {
-            const user: User = (await userService.getUserById(parsedToken.currentUserId)).data;
-            dispatch({
-                type: authActionTypes.AUTH_SET_TOKEN,
-                payload: {authToken, user}
-            });
+        // if the provided authToken is not null and it's not expired...
+
+        dispatch({
+            type: authActionTypes.AUTH_SET_TOKEN,
+            payload: {authToken}
+        });
+
+        if (oldParsedToken == null || oldParsedToken.currentUserId !== parsedToken.currentUserId) {
+            // if we're forcing the action dispatch, or the old auth token was null, or the new auth token has a different user...
+
+            await executeWithLoadedToken()(dispatch, getState);
         }
     } else {
-        if (forceActionDispatch || oldAuthToken != null) {
-            dispatch({
-                type: authActionTypes.AUTH_CLEAR_TOKEN,
-                payload: null
-            });
-        }
+        // if the provided authToken is null or it's expired...
+
+        dispatch({
+            type: authActionTypes.AUTH_CLEAR_TOKEN,
+            payload: null
+        });
     }
+};
+
+export const executeWithLoadedToken = () => async (dispatch: Dispatch<any>, getState: () => State) => {
+    const state = getState();
+    const authToken = state.authSession.reperioCoreJWT;
+
+    const parsedToken = authToken == null ? null : authService.parseJwt(authToken);
+    const user: User = (await userService.getUserById(parsedToken.currentUserId)).data;
+    dispatch({
+        type: authActionTypes.AUTH_SET_USER,
+        payload: {user}
+    });
 };
 
 export const setAuth = (user: User) => async (dispatch: Dispatch<any>) => {

@@ -25,7 +25,7 @@ async function load() {
     ReactDOM.render(
         <Provider store={store}>
             <ConnectedRouter history={history}>
-                <App/>
+                <AppContainer/>
             </ConnectedRouter>
         </Provider>,
         document.getElementById('root')

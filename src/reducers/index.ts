@@ -1,5 +1,7 @@
 import { combineReducers } from "redux";
 import { reducer as formReducer } from 'redux-form'
+import { connectRouter } from 'connected-react-router';
+
 import { authSessionReducer } from "./authSessionReducer"
 import { usersReducer } from "./usersReducer";
 import { userManagementReducer } from "./userManagementReducer";
@@ -11,7 +13,8 @@ import { organizationsReducer } from "./organizationsReducer";
 import { organizationManagementReducer } from "./organizationManagementReducer";
 import { applicationsReducer } from "./applicationsReducer";
 
-export const rootReducer = combineReducers({
+export const createRootReducer = (history: any) => combineReducers({
+    router: connectRouter(history),
     form: formReducer,
     authSession: authSessionReducer,
     users: usersReducer,

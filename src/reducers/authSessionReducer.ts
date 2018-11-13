@@ -5,6 +5,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
     switch (action.type) {
         case authActionTypes.AUTH_LOGIN_PENDING: {
             return {
+                ...state,
                 isPending: true,
                 isAuthenticated: false,
                 isError: false,
@@ -14,6 +15,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         }
         case authActionTypes.AUTH_LOGIN_SUCCESSFUL: {
             return {
+                ...state,
                 isPending: false,
                 isAuthenticated: true,
                 isError: false,
@@ -23,6 +25,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         }
         case authActionTypes.AUTH_LOGIN_ERROR: {
             return {
+                ...state,
                 isPending: false,
                 isAuthenticated: false,
                 isError: true,
@@ -33,6 +36,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         case authActionTypes.AUTH_SET_TOKEN: {
             if (action.payload.user != null) {
                 return {
+                    ...state,
                     isPending: false,
                     isAuthenticated: true,
                     isError: false,
@@ -41,6 +45,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 };
             } else {
                 return {
+                    ...state,
                     isPending: false,
                     isAuthenticated: false,
                     isError: false,
@@ -51,6 +56,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         }
         case authActionTypes.AUTH_CLEAR_TOKEN: {
             return {
+                ...state,
                 isPending: false,
                 isAuthenticated: false,
                 isError: false,
@@ -60,6 +66,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         }
         case authActionTypes.SIGNUP_PENDING: {
             return {
+                ...state,
                 isPending: true,
                 isAuthenticated: false,
                 isError: false,
@@ -69,6 +76,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         }
         case authActionTypes.SIGNUP_SUCCESSFUL: {
             return {
+                ...state,
                 isPending: false,
                 isAuthenticated: true,
                 isError: false,
@@ -78,6 +86,7 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
         }
         case authActionTypes.SIGNUP_ERROR: {
             return {
+                ...state,
                 isPending: false,
                 isAuthenticated: false,
                 isError: true,

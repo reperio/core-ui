@@ -94,6 +94,10 @@ class UserService {
         }
         return await axios.put(`/users/${userId}/roles`, payload);
     }
+
+    async deleteUser(userId: string) {
+        return await axios.delete(`/users/${userId}`);
+    }
 }
 
 export const userService = new UserService();

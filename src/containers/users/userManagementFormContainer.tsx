@@ -3,7 +3,7 @@ import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, 
     addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress, togglePanel, cancelUserPanel, editUserGeneral, 
-    editUserEmails, editUserOrganizations} from '../../actions/usersActions';
+    editUserEmails, editUserOrganizations } from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
 import { sendVerificationEmail } from '../../actions/authActions';
@@ -147,7 +147,8 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
                                 setPrimaryEmailAddress={this.setPrimaryEmailAddress.bind(this)}
                                 togglePanel={this.togglePanel.bind(this)}
                                 toggleRoleDetails={this.toggleRoleDetails.bind(this)}
-                                user={this.props.user}/>
+                                loggedInUser={this.props.authSession.user}
+                                managedUser={this.props.user}/>
         );
     }
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import {Field, FieldArray, reduxForm, InjectedFormProps} from 'redux-form'
 import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
 import PermissionsArray from '../permissions/permissionsArray';
-import Permission from '../../models/permission';
+import { Permission } from '../../models/permission';
 import Role from '../../models/role';
 import Dropdown from '../../models/dropdown';
 
@@ -13,6 +13,8 @@ interface RoleManagementProps {
     onSubmit(): void;
     removePermission(): void;
     selectPermission(): void;
+    canDeleteRoles: boolean;
+    canUpdateRoles: boolean;
     errorMessage: string;
     initialValues: Role;
     isError: boolean;
@@ -39,7 +41,7 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                             </div>
                         </Wrapper>
                     </div>
-                    <div className="row">
+                    <fieldset disabled={!props.canUpdateRoles} className="row">
                         <Wrapper>
                             <div className="r-wrapper-child">
                                 <div className="row">
@@ -55,8 +57,8 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                 </div>
                             </div>
                         </Wrapper>
-                    </div>
-                    <div className="row">
+                    </fieldset>
+                    <fieldset disabled={!props.canUpdateRoles} className="row">
                         <Wrapper>
                             <div className="r-wrapper-child">
                                 <div className="row">
@@ -64,31 +66,34 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                         <h2>Permissions</h2>
                                     </div>
                                 </div>
-                                <div className="row">
-                                    <div className="r-row-child">
-                                        <Field  name="selectedPermission"
-                                                options={
-                                                    props.permissions
-                                                        .filter((permission: Permission) => {
-                                                            return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.name)
-                                                        })
-                                                        .map((permission: Permission, index: number) => { 
-                                                            return {
-                                                                value: permission.name,
-                                                                label:permission.displayName
-                                                            }
-                                                        })
-                                                }
-                                                pickerValue={props.selectedPermission ? props.selectedPermission: ""}
-                                                placeholder="Permissions" 
-                                                component={PickerElement} 
-                                                onChange={props.selectPermission} />
+                                {props.canUpdateRoles ? 
+                                    <div className="row">
+                                        <div className="r-row-child">
+                                            <Field  name="selectedPermission"
+                                                    options={
+                                                        props.permissions
+                                                            .filter((permission: Permission) => {
+                                                                return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.name)
+                                                            })
+                                                            .map((permission: Permission, index: number) => { 
+                                                                return {
+                                                                    value: permission.name,
+                                                                    label:permission.displayName
+                                                                }
+                                                            })
+                                                    }
+                                                    pickerValue={props.selectedPermission ? props.selectedPermission: ""}
+                                                    placeholder="Permissions" 
+                                                    component={PickerElement} 
+                                                    onChange={props.selectPermission} />
+                                        </div>
+                                        <div className="r-row-child">
+                                            <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addPermission(props.selectedPermission)}} />
+                                        </div>
                                     </div>
-                                    <div className="r-row-child">
-                                        <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addPermission(props.selectedPermission)}} />
-                                    </div>
-                                </div>
+                                : null }
                                 <FieldArray name="permissions"
+                                            canUpdateRoles={props.canUpdateRoles}
                                             rerenderOnEveryChange={true}
                                             initialValues={props.initialValues.selectedPermissions}
                                             toggle={false}
@@ -96,19 +101,23 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                             component={PermissionsArray}/>
                             </div>
                         </Wrapper>
-                    </div>
+                    </fieldset>
                     <div className="row management-controls-bottom">
                         <Wrapper>
                             <div className="row management-submission-controls-container">
                                 <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
                                 </div>
-                                <div className="r-row-child management-submission-controls">
-                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
-                                </div>
-                                <div className="r-row-child management-submission-controls">
-                                    <ButtonElement type="submit"  color="success" wide text="Save" />
-                                </div>
+                                {props.canDeleteRoles ? 
+                                    <div className="r-row-child management-submission-controls">
+                                        <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
+                                    </div>
+                                : null }
+                                {props.canUpdateRoles ? 
+                                    <div className="r-row-child management-submission-controls">
+                                        <ButtonElement type="submit"  color="success" wide text="Save" />
+                                    </div>
+                                : null }
                             </div>
                         </Wrapper>
                     </div>
@@ -131,12 +140,16 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                 <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToRoles()} />
                                 </div>
-                                <div className="r-row-child management-submission-controls">
-                                    <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
-                                </div>
-                                <div className="r-row-child management-submission-controls">
-                                    <ButtonElement type="submit"  color="success" wide text="Save" />
-                                </div>
+                                {props.canDeleteRoles ? 
+                                    <div className="r-row-child management-submission-controls">
+                                        <ButtonElement type="button" color="danger" wide text="Delete" onClick={() => props.deleteRole(props.initialValues.id)} />
+                                    </div>
+                                : null }
+                                {props.canUpdateRoles ? 
+                                    <div className="r-row-child management-submission-controls">
+                                        <ButtonElement type="submit"  color="success" wide text="Save" />
+                                    </div>
+                                : null }
                             </div>
                         </Wrapper>
                     </div>

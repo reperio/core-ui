@@ -8,6 +8,7 @@ import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
 import Dropdown from '../../models/dropdown';
+import { CorePermissions } from '../../models/permission';
 
 class RoleManagementFormValues {
     id: string;
@@ -56,7 +57,9 @@ class RoleManagementFormContainer extends React.Component<RouteComponentProps<an
 
     render() {
         return (
-            <RoleManagementForm navigateToRoles={this.navigateToRoles.bind(this)} 
+            <RoleManagementForm navigateToRoles={this.navigateToRoles.bind(this)}
+                                canUpdateRoles={this.props.authSession.user.permissions.includes(CorePermissions.UpdateRoles)}
+                                canDeleteRoles={this.props.authSession.user.permissions.includes(CorePermissions.DeleteRoles)}
                                 initialValues={this.props.initialRole}
                                 isError={this.props.isError}
                                 errorMessage={this.props.errorMessage}
@@ -84,7 +87,8 @@ function mapStateToProps(state: State) {
         isError: roleManagement.isError,
         errorMessage: roleManagement.errorMessage,
         permissions: roleManagement.permissions,
-        selectedPermission: selector(state, 'selectedPermission') as Dropdown
+        selectedPermission: selector(state, 'selectedPermission') as Dropdown,
+        authSession: state.authSession
     };
 }
 

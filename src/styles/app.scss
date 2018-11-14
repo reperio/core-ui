@@ -199,24 +199,21 @@ fieldset {
   color: gray !important;
 }
 
-.nav-menu-container {
-  width: 300px;
-}
-
-.r-wrapper-column-direction {
-  flex-direction: column;
-}
-
-.wrapper-panel {
+.r-wrapper-editable-panel {
   position: relative;
   cursor: pointer;
 }
 
-.wrapper-panel-open {
+.r-wrapper-editable-panel-disabled {
+  position: relative;
+  cursor: default;
+}  
+
+.r-wrapper-editable-panel-open {
   position: relative;
 }
 
-#overlay {
+.r-editable-panel-overlay {
   position: fixed;
   background-color: #333;
   opacity: 0.7;
@@ -227,7 +224,7 @@ fieldset {
   z-index: 5;
 }
 
-.panel-controls {
+.r-editable-panel-controls {
   position: absolute;
   right: 0;
   padding-top: 15px;
@@ -235,12 +232,13 @@ fieldset {
   display: flex;
 }
 
-.panel-control-item {
+.r-editable-panel-control-item {
   flex: 1;
   cursor: pointer;
   min-width: 25px;
 }
 
-.panel-form {
+.r-editable-panel-form {
   margin: 0px;
+  flex: 1;
 }

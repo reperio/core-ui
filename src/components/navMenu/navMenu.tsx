@@ -2,6 +2,13 @@ import React from 'react'
 import {Navbar, LinkContainer, NavItem} from '@reperio/ui-components'
 import { NavDropdown } from 'react-bootstrap';
 
+import { StateAuthSession } from '../../store/initialState';
+import { CorePermissions } from '../../models/permission';
+
+interface NavMenuProps {
+    authSession: StateAuthSession;
+}
+
 export const HomeLink = () => (
     <LinkContainer exact to="/home">
         <NavItem>
@@ -42,22 +49,19 @@ export const OrganizationsLink = () => (
     </LinkContainer>
 );
 
-export const AdminDropdown = () => (
-    <NavDropdown pullRight title="Administration" id="admin-dropdown">
-        <PermissionsLink />
-        <OrganizationsLink />
-    </NavDropdown>
-);
-
-const NavMenu = () => (
+const NavMenu = (props: NavMenuProps) => (
     <Navbar
         applicationName={"test"}
         authenticated={true}>
 
         <HomeLink />
-        <UsersLink />
-        <RolesLink />
-        <AdminDropdown />
+        {props.authSession.user.permissions.includes(CorePermissions.ViewUsers) ? <UsersLink /> : null}
+        {props.authSession.user.permissions.includes(CorePermissions.ViewRoles) ? <RolesLink /> : null}
+        {props.authSession.user.permissions.includes(CorePermissions.ViewPermissions) || props.authSession.user.permissions.includes(CorePermissions.ViewOrganizations) ?
+            <NavDropdown pullRight title="Administration" id="admin-dropdown">
+                {props.authSession.user.permissions.includes(CorePermissions.ViewPermissions) ? <PermissionsLink /> : null}
+                {props.authSession.user.permissions.includes(CorePermissions.ViewOrganizations) ? <OrganizationsLink /> : null}
+            </NavDropdown> : null}
     </Navbar>
 );
 

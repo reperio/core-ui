@@ -1,6 +1,6 @@
 import React from 'react'
 import {Grid, Wrapper} from '@reperio/ui-components';
-import Permission from '../../models/permission';
+import { Permission } from '../../models/permission';
 
 interface PermissionsProps {
     navigateToManagement(permissionName: string): void;

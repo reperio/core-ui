@@ -4,6 +4,7 @@ import { Wrapper, ButtonElement } from '@reperio/ui-components';
 interface UserManagementControlsProps {
     navigateToUsers(): void;
     right: boolean;
+    canDeleteUser: boolean;
     children: JSX.Element;
 }
 

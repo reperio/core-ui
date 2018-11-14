@@ -3,7 +3,7 @@ import { history } from '../store/history';
 import { permissionService } from "../services/permissionService";
 import {reset} from "redux-form";
 import RolePermission from "../models/rolePermission";
-import Permission from "../models/permission";
+import { Permission } from "../models/permission";
 
 export const permissionsActionTypes = {
     PERMISSIONS_GET_PENDING: "PERMISSIONS_GET_PENDING",

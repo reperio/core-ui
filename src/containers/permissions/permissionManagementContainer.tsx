@@ -7,6 +7,7 @@ import PermissionManagementForm from '../../components/permissions/permissionMan
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
 import RolePermission from '../../models/rolePermission';
+import { CorePermissions } from '../../models/permission';
 
 class UserManagementFormValues {
     displayName: string;
@@ -40,7 +41,8 @@ class PermissionManagementFormContainer extends React.Component<RouteComponentPr
 
     render() {
         return (
-            <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)} 
+            <PermissionManagementForm   navigateToPermissions={this.navigateToPermissions.bind(this)}
+                                        canUpdatePermissions={this.props.authSession.user.permissions.includes(CorePermissions.UpdatePermissions)}
                                         initialValues={this.props.initialPermission}
                                         isError={this.props.isError}
                                         errorMessage={this.props.errorMessage}
@@ -61,7 +63,8 @@ function mapStateToProps(state: State) {
             rolePermissions: permissionManagement.initialPermission.rolePermissions
         } : null,
         isError: permissionManagement.isError,
-        errorMessage: permissionManagement.errorMessage
+        errorMessage: permissionManagement.errorMessage,
+        authSession: state.authSession
     };
 }
 

@@ -9,6 +9,9 @@ interface UserEmailFieldArrayProps {
     sendVerificationEmail(index: number): void;
     setPrimaryEmailAddress(index: number): void;
     active: boolean;
+    canDeleteEmail: boolean;
+    canSetPrimary: boolean;
+    canResendVerificationEmail: boolean;
     initialValues: {
         userEmails: UserEmail[],
         primaryEmailAddress: string
@@ -31,6 +34,7 @@ const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEma
                     </div>
                     {props.active ? 
                         <div className="r-row-child">
+                        {props.canDeleteEmail ? 
                             <ButtonElement  type="button"
                                             title="Remove Email"
                                             color="danger"
@@ -39,6 +43,8 @@ const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEma
                                                 <i className="fa fa-trash"></i>
                                             }
                                             onClick={() => props.removeEmailAddress(index)}/>
+                        : null }
+                        {props.canResendVerificationEmail ? 
                             <ButtonElement  type="button"
                                             title="Send Verification Email"
                                             color="neutral" 
@@ -47,6 +53,8 @@ const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEma
                                                 <i className="fa fa-paper-plane"></i>
                                             } 
                                             onClick={() => props.sendVerificationEmail(index)}/>
+                        : null}
+                        {props.canSetPrimary ? 
                             <Field  checked={props.initialValues.userEmails[index].primary == null || !props.initialValues.primaryEmailAddress ? false : props.initialValues.userEmails[index].primary}
                                     disabled={props.initialValues.userEmails[index] && props.initialValues.userEmails[index].emailVerified == false || !props.initialValues.userEmails[index].id}
                                     id={`${index}`}
@@ -55,6 +63,7 @@ const userEmailFieldArray: React.SFC<UserEmailFieldArrayProps> = (props: UserEma
                                     label="Primary" 
                                     onChange={() => props.setPrimaryEmailAddress(index)}
                                     component={CheckboxElement} />
+                        : null}
                         </div>
                     :                     
                         <div className="r-row-child" style={{display: 'flex', alignItems: 'center'}}>
@@ -73,13 +82,17 @@ interface UserManagementProps {
     sendVerificationEmail(): void;
     setPrimaryEmailAddress(): void;
     active: boolean;
+    canAddEmails: boolean;
+    canDeleteEmail: boolean;
+    canResendVerificationEmail: boolean;
+    canSetPrimary: boolean;
     initialValues: User;
 }
 
 type Form = UserManagementProps & InjectedFormProps<any>;
 
 const UserManagementEmailsForm: React.SFC<Form> = (props: Form) => (
-    <form onSubmit={props.handleSubmit(props.submit)} className="row panel-form">
+    <form onSubmit={props.handleSubmit(props.submit)} className="row r-editable-panel-form">
     {props.initialValues ?
         <Wrapper>
             <div className="r-wrapper-child">
@@ -88,21 +101,23 @@ const UserManagementEmailsForm: React.SFC<Form> = (props: Form) => (
                         <h2>Emails</h2>
                     </div>
                 </div>
-                {props.active ? 
-                <div className="row">
-                    <div className="r-row-child">
-                        <Field  name="email"
-                                placeholder="Email Address"
-                                component={TextboxElement} />
-                    </div>
-                    <div className="r-row-child">
-
+                {props.active && props.canAddEmails ? 
+                    <div className="row">
+                        <div className="r-row-child">
+                            <Field  name="email"
+                                    placeholder="Email Address"
+                                    component={TextboxElement} />
+                        </div>
+                        <div className="r-row-child">
                             <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addEmailAddress()}} />
+                        </div>
                     </div>
-                </div>
                 : null}
                 <FieldArray name="userEmails"
                             active={props.active}
+                            canDeleteEmail={props.canDeleteEmail}
+                            canResendVerificationEmail={props.canResendVerificationEmail}
+                            canSetPrimary={props.canSetPrimary}
                             initialValues={{userEmails: props.initialValues.userEmails, primaryEmailAddress: props.initialValues.primaryEmailAddress}}
                             setPrimaryEmailAddress={props.setPrimaryEmailAddress}
                             sendVerificationEmail={props.sendVerificationEmail}

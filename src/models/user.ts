@@ -15,4 +15,5 @@ export default class User {
     userEmails: UserEmail[];
     primaryEmailAddress: string;
     selectedRoles: SelectedRole[];
+    permissions: string[];
 }

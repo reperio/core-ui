@@ -11,8 +11,9 @@ import Dropdown from '../../models/dropdown';
 import User from '../../models/user';
 import Organization from '../../models/organization';
 import Role from '../../models/role';
+import { CorePermissions } from '../../models/permission';
 
-const Overlay = () => <div id="overlay"></div>
+const Overlay = () => <div className="r-editable-panel-overlay"></div>
 
 interface UserManagementProps {
     addEmailAddress(): void;
@@ -34,38 +35,45 @@ interface UserManagementProps {
     togglePanel(panel: number): void;
     toggleRoleDetails(): void;
     activePanelIndex: number;
+    loggedInUser: User;
+    managedUser: User;
     organizations: Organization[];
     redirectToErrorPage: boolean;
     roles: Role[];
     selectedOrganization: Dropdown;
     selectedRole: Dropdown;
-    user: User;
 }
 
 const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagementProps) => (
     <div style={{flex: 1}}>
-    {props.user != null ?
+    {props.managedUser != null ?
         <div className="management-container">
         {props.redirectToErrorPage ?
             <Redirect to="/error" /> 
         : null }
             {props.activePanelIndex != null ? <Overlay /> : null}
             <div className="management-left">
-                <UserManagementProfile top={true} initialValues={props.user} />
+                <UserManagementProfile top={true} initialValues={props.managedUser} />
                 <Panel  active={props.activePanelIndex === 0}
+                        permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.UpdateBasicUserInfo)}
                         onClick={() => { props.activePanelIndex != 0 ? props.togglePanel(0) : null}}
                         submit={props.submitForm.bind(this, 'userManagementGeneralForm')}
                         cancel={props.cancelUserPanel.bind(this)}>
                     <UserManagementGeneralForm  active={props.activePanelIndex === 0}
-                                                initialValues={props.user}
+                                                initialValues={props.managedUser}
                                                 onSubmit={props.editUserGeneral.bind(this)}/>
                 </Panel>
                 <Panel  active={props.activePanelIndex === 1}
+                        permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.AddEmail) || props.loggedInUser.permissions.includes(CorePermissions.DeleteEmail) || props.loggedInUser.permissions.includes(CorePermissions.SetPrimaryEmail) || props.loggedInUser.permissions.includes(CorePermissions.ResendVerificationEmails)}
                         onClick={() => { props.activePanelIndex != 1 ? props.togglePanel(1) : null}}
                         submit={props.submitForm.bind(this, 'userManagementEmailsForm')}
                         cancel={props.cancelUserPanel.bind(this)}>
                     <UserManagementEmailsForm   active={props.activePanelIndex === 1}
-                                                initialValues={props.user} 
+                                                initialValues={props.managedUser}
+                                                canAddEmails={props.loggedInUser.permissions.includes(CorePermissions.AddEmail)}
+                                                canDeleteEmail={props.loggedInUser.permissions.includes(CorePermissions.DeleteEmail)}
+                                                canResendVerificationEmail={props.loggedInUser.permissions.includes(CorePermissions.ResendVerificationEmails)}
+                                                canSetPrimary={props.loggedInUser.permissions.includes(CorePermissions.SetPrimaryEmail)}
                                                 onSubmit={props.editUserEmails.bind(this)}
                                                 setPrimaryEmailAddress={props.setPrimaryEmailAddress.bind(this)}
                                                 removeEmailAddress={props.removeEmailAddress.bind(this)}
@@ -73,11 +81,12 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                 sendVerificationEmail={props.sendVerificationEmail.bind(this)}/>
                 </Panel>
                 <Panel  active={props.activePanelIndex === 2}
+                        permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserOrganizations)}
                         onClick={() => { props.activePanelIndex != 2 ? props.togglePanel(2) : null}}
                         submit={props.submitForm.bind(this, 'userManagementOrganizationsForm')}
                         cancel={props.cancelUserPanel.bind(this)}>
                     <UserManagementOrganizationsForm    active={props.activePanelIndex === 2}
-                                                        initialValues={props.user}
+                                                        initialValues={props.managedUser}
                                                         organizations={props.organizations}
                                                         onSubmit={props.editUserOrganizations.bind(this)}
                                                         removeOrganization={props.removeOrganization.bind(this)}
@@ -86,11 +95,12 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                         addOrganization={props.addOrganization.bind(this)}/>
                 </Panel>
                 <Panel  active={props.activePanelIndex === 3}
+                        permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserRoles)}
                         onClick={() => { props.activePanelIndex != 3 ? props.togglePanel(3) : null}}
                         submit={props.submitForm.bind(this, 'userManagementRolesForm')}
                         cancel={props.cancelUserPanel.bind(this)}>
                     <UserManagementRolesForm    active={props.activePanelIndex === 3}
-                                                initialValues={props.user}
+                                                initialValues={props.managedUser}
                                                 roles={props.roles}
                                                 selectRole={props.selectRole.bind(this)}
                                                 selectedRole={props.selectedRole}
@@ -101,13 +111,15 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                 onSubmit={props.editUserOrganizations.bind(this)}/>
                 </Panel>
                 <UserManagementControls right={false} 
-                                        children={null} 
+                                        canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
+                                        children={null}
                                         navigateToUsers={props.navigateToUsers.bind(this)} />
             </div>
             <UserManagementControls right={true} 
                                     children={
-                                        <UserManagementProfile  top={false} initialValues={props.user} />
-                                    } 
+                                        <UserManagementProfile  top={false} initialValues={props.managedUser} />
+                                    }
+                                    canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
                                     navigateToUsers={props.navigateToUsers.bind(this)} />
         </div>
     : null}

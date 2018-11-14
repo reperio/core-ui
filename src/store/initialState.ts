@@ -22,6 +22,8 @@ export class StateAuthSession {
     isPending: boolean;
     isAuthenticated: boolean;
     isError: boolean;
+    otpIsPending: boolean;
+    otpIsError: boolean;
     errorMessage: string;
     user: User;
     reperioCoreJWT: string;
@@ -98,6 +100,8 @@ export const initialState: State = {
         isPending: false,
         isAuthenticated: false,
         isError: false,
+        otpIsPending: false,
+        otpIsError: false,
         errorMessage: null,
         user: null,
         reperioCoreJWT: null

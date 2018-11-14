@@ -12,6 +12,8 @@ test('Checks to see if logged out, shows two links on the navbar: one for signup
             errorMessage: null,
             isError: null,
             isPending: false,
+            otpIsPending: false,
+            otpIsError: false,
             reperioCoreJWT: null
         }} />
     );
@@ -41,6 +43,8 @@ test('Checks to see if logged in, does not show login link and the first is home
             errorMessage: null,
             isError: null,
             isPending: false,
+            otpIsPending: false,
+            otpIsError: false,
             reperioCoreJWT: null
         }} />
     );

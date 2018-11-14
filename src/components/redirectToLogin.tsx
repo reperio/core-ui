@@ -1,10 +1,16 @@
 import React from 'react';
+import queryString from 'query-string';
 
 declare const CORE_AUTH_UI_URL: string;
 
 const RedirectToLogin = (): null => {
     const redirectUrl = CORE_AUTH_UI_URL;
-    const next = window.location.href;
+    const {origin, pathname, search, hash} = window.location;
+
+    const {otp, ...queryParams} = queryString.parse(search);
+    const newSearch = queryString.stringify(queryParams);
+
+    const next = `${origin}${pathname}${newSearch}${hash}`;
 
     setTimeout(() => {
         window.location.assign(`${redirectUrl}?next=${encodeURIComponent(next)}`);

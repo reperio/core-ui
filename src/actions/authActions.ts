@@ -11,6 +11,8 @@ export const authActionTypes = {
     AUTH_LOGIN_PENDING: "AUTH_LOGIN_PENDING",
     AUTH_LOGIN_SUCCESSFUL: "AUTH_LOGIN_SUCCESSFUL",
     AUTH_LOGIN_ERROR: "AUTH_LOGIN_ERROR",
+    AUTH_OTP_LOGIN_PENDING: "AUTH_OTP_LOGIN_PENDING",
+    AUTH_OTP_LOGIN_ERROR: "AUTH_OTP_LOGIN_ERROR",
     AUTH_SET_TOKEN: "AUTH_SET_TOKEN",
     AUTH_CLEAR_TOKEN: "AUTH_CLEAR_TOKEN",
     SIGNUP_PENDING: "SIGNUP_PENDING",
@@ -47,11 +49,8 @@ export const logout = () => async (dispatch: Dispatch<any>) => {
 };
 
 export const initializeAuth = () => async (dispatch: Dispatch<any>, getState: () => State) => {
-    const state = getState();
+    await loadAuthSessionUser(null)(dispatch, getState);
 
-    if (state.authSession.reperioCoreJWT != null) {
-        await executeWithLoadedToken()(dispatch, getState);
-    }
     dispatch({
         type: authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED
     });
@@ -60,43 +59,68 @@ export const initializeAuth = () => async (dispatch: Dispatch<any>, getState: ()
 export const setAuthToken = (authToken: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
     const state = getState();
     const oldAuthToken = state.authSession.reperioCoreJWT;
-    const oldParsedToken = oldAuthToken == null ? null : coreApiService.authService.parseJwt(oldAuthToken);
+    const oldParsedToken = getParsedToken(oldAuthToken);
+    const oldUserId = oldParsedToken != null ? oldParsedToken.currentUserId : null;
 
-    const parsedToken = authToken == null ? null : coreApiService.authService.parseJwt(authToken);
+    dispatch({
+        type: authActionTypes.AUTH_SET_TOKEN,
+        payload: {authToken}
+    });
 
-    if (parsedToken != null && Math.round((new Date()).getTime() / 1000) < parsedToken.exp) {
-        // if the provided authToken is not null and it's not expired...
+    await loadAuthSessionUser(oldUserId)(dispatch, getState);
+};
 
-        dispatch({
-            type: authActionTypes.AUTH_SET_TOKEN,
-            payload: {authToken}
-        });
+const getParsedToken = (jwt: string) => {
+    try {
+        const parsedToken = jwt != null ? coreApiService.authService.parseJwt(jwt) : null;
+        const validParsedToken = parsedToken != null && Math.round((new Date()).getTime() / 1000) < parsedToken.exp ? parsedToken : null;
+        return validParsedToken;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}
 
-        if (oldParsedToken == null || oldParsedToken.currentUserId !== parsedToken.currentUserId) {
-            // if we're forcing the action dispatch, or the old auth token was null, or the new auth token has a different user...
+const retrieveUserById = async (userId: string) => {
+    if (userId == null) {
+        return null;
+    }
 
-            await executeWithLoadedToken()(dispatch, getState);
+    try {
+        const {data} = (await userService.getUserById(userId));
+        return data;
+    } catch (e) {
+        if (e && e.response && e.response.status === 401) {
+            return null;
         }
-    } else {
-        // if the provided authToken is null or it's expired...
-
-        dispatch({
-            type: authActionTypes.AUTH_CLEAR_TOKEN,
-            payload: null
-        });
+        throw e;
     }
 };
 
-export const executeWithLoadedToken = () => async (dispatch: Dispatch<any>, getState: () => State) => {
+export const loadAuthSessionUser = (oldUserId: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
     const state = getState();
     const authToken = state.authSession.reperioCoreJWT;
+    const parsedToken = getParsedToken(authToken);
 
-    const parsedToken = authToken == null ? null : coreApiService.authService.parseJwt(authToken);
-    const user: User = (await userService.getUserById(parsedToken.currentUserId)).data;
-    dispatch({
-        type: authActionTypes.AUTH_SET_USER,
-        payload: {user}
-    });
+    const newUserId = parsedToken != null ? parsedToken.currentUserId : null;
+
+    if (newUserId === oldUserId) {
+        return;
+    }
+
+    // retrieveUserById returns null if newUserId is null or if the response is a 401 (e.g. invalid token)
+    const newUser = oldUserId == null || (newUserId !== oldUserId && state.authSession) ? await retrieveUserById(newUserId) : state.authSession.user;
+
+    if (newUser == null) {
+        dispatch({
+            type: authActionTypes.AUTH_CLEAR_TOKEN
+        });
+    } else if (newUserId !== oldUserId) {
+        dispatch({
+            type: authActionTypes.AUTH_SET_USER,
+            payload: {user: newUser}
+        });
+    }
 };
 
 export const setAuth = (user: User) => async (dispatch: Dispatch<any>) => {
@@ -124,6 +148,25 @@ export const submitAuth = (primaryEmailAddress: string, password: string) => asy
         });
     }
 };
+
+export const submitAuthWithOTP = (otp: string, next: string = null) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: authActionTypes.AUTH_OTP_LOGIN_PENDING,
+        payload: {}
+    });
+
+    try {
+        await coreApiService.authService.authenticateWithOTP(otp);
+        history.push(next != null ? next : '/');
+    } catch (e) {
+        dispatch({
+            type: authActionTypes.AUTH_OTP_LOGIN_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+}
 
 export const signup = (primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
     dispatch({

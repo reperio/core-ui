@@ -19,6 +19,8 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 isPending: false,
                 isAuthenticated: true,
                 isError: false,
+                otpIsPending: false,
+                otpIsError: false,
                 errorMessage: null,
                 user: action.payload.user
             };
@@ -29,6 +31,32 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 isPending: false,
                 isAuthenticated: false,
                 isError: true,
+                otpIsPending: false,
+                otpIsError: false,
+                errorMessage: action.payload.message,
+                user: null
+            };
+        }
+        case authActionTypes.AUTH_OTP_LOGIN_PENDING: {
+            return {
+                ...state,
+                isPending: false,
+                isAuthenticated: false,
+                isError: false,
+                otpIsPending: true,
+                otpIsError: false,
+                errorMessage: null,
+                user: null
+            };
+        }
+        case authActionTypes.AUTH_OTP_LOGIN_ERROR: {
+            return {
+                ...state,
+                isPending: false,
+                isAuthenticated: false,
+                isError: false,
+                otpIsPending: false,
+                otpIsError: true,
                 errorMessage: action.payload.message,
                 user: null
             };

@@ -20,6 +20,7 @@ interface UserManagementProps {
     addOrganization(selectedRole: Dropdown): void;
     addRole(selectedRole: Dropdown): void;
     cancelUserPanel(): void;
+    deleteUser(): void;
     editUserOrganizations(): void;
     editUserGeneral(): void;
     editUserEmails(): void;
@@ -113,6 +114,7 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                 <UserManagementControls right={false} 
                                         canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
                                         children={null}
+                                        deleteUser={props.deleteUser.bind(this)}
                                         navigateToUsers={props.navigateToUsers.bind(this)} />
             </div>
             <UserManagementControls right={true} 
@@ -120,6 +122,7 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                         <UserManagementProfile  top={false} initialValues={props.managedUser} />
                                     }
                                     canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
+                                    deleteUser={props.deleteUser.bind(this)}
                                     navigateToUsers={props.navigateToUsers.bind(this)} />
         </div>
     : null}

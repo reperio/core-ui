@@ -3,7 +3,7 @@ import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, 
     addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress, togglePanel, cancelUserPanel, editUserGeneral, 
-    editUserEmails, editUserOrganizations } from '../../actions/usersActions';
+    editUserEmails, editUserOrganizations, deleteUser } from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
 import { sendVerificationEmail } from '../../actions/authActions';
@@ -121,6 +121,10 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         this.props.actions.editUserOrganizations(form.id, selectedOrganizations);
     }
 
+    deleteUser() {
+        this.props.actions.deleteUser(this.props.user.id);
+    }
+
     render() {
         return (
             <UserManagementForm activePanelIndex={this.props.activePanelIndex}
@@ -128,6 +132,7 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
                                 addOrganization={this.addOrganization.bind(this)}
                                 addRole={this.addRole.bind(this)}
                                 cancelUserPanel={this.cancelUserPanel.bind(this)}
+                                deleteUser={this.deleteUser.bind(this)}
                                 editUserEmails={this.editUserEmails.bind(this)}
                                 editUserGeneral={this.editUserGeneral.bind(this)}
                                 editUserOrganizations={this.editUserOrganizations.bind(this)}
@@ -195,7 +200,8 @@ function mapActionToProps(dispatch: any) {
                 editUserGeneral,
                 submitForm,
                 editUserEmails,
-                editUserOrganizations
+                editUserOrganizations,
+                deleteUser
             }, dispatch)
         };
     }

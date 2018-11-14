@@ -308,3 +308,24 @@ export const editUserOrganizations = (userId: string, organizationIds: string[])
         });
     }
 };
+
+export const deleteUser = (userId: string) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_EDIT_PENDING
+    });
+
+    try {
+        await userService.deleteUser(userId);
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_SUCCESS
+        });
+        history.push('/users');
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_EDIT_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+}

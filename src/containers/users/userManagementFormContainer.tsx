@@ -16,6 +16,7 @@ import Dropdown from '../../models/dropdown';
 import { connect } from 'react-redux';
 import {submitForm} from '../../actions/miscActions';
 import UserManagementForm from '../../components/users/userManagementForm';
+import { CorePermissions } from '../../models/permission';
 
 class UserManagementFormValues {
     id: string;
@@ -36,8 +37,15 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
 
      async componentDidMount() {
         this.props.actions.clearManagementInitialUser();
-        await this.props.actions.getOrganizations();
-        await this.props.actions.getRoles();
+        
+        if (this.props.authSession.user.permissions.includes(CorePermissions.ViewOrganizations)) {
+            await this.props.actions.getOrganizations();
+        }
+
+        if (this.props.authSession.user.permissions.includes(CorePermissions.ViewRoles)) {
+            await this.props.actions.getRoles();
+        }
+
         await this.props.actions.loadManagementInitialUser(this.props.match.params.userId);
      }
 

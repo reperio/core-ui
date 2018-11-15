@@ -81,36 +81,40 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                 addEmailAddress={props.addEmailAddress.bind(this)}
                                                 sendVerificationEmail={props.sendVerificationEmail.bind(this)}/>
                 </Panel>
-                <Panel  active={props.activePanelIndex === 2}
-                        permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserOrganizations)}
-                        onClick={() => { props.activePanelIndex != 2 ? props.togglePanel(2) : null}}
-                        submit={props.submitForm.bind(this, 'userManagementOrganizationsForm')}
-                        cancel={props.cancelUserPanel.bind(this)}>
-                    <UserManagementOrganizationsForm    active={props.activePanelIndex === 2}
-                                                        initialValues={props.managedUser}
-                                                        organizations={props.organizations}
-                                                        onSubmit={props.editUserOrganizations.bind(this)}
-                                                        removeOrganization={props.removeOrganization.bind(this)}
-                                                        selectedOrganization={props.selectedOrganization}
-                                                        selectOrganization={props.selectOrganization.bind(this)}
-                                                        addOrganization={props.addOrganization.bind(this)}/>
-                </Panel>
-                <Panel  active={props.activePanelIndex === 3}
-                        permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserRoles)}
-                        onClick={() => { props.activePanelIndex != 3 ? props.togglePanel(3) : null}}
-                        submit={props.submitForm.bind(this, 'userManagementRolesForm')}
-                        cancel={props.cancelUserPanel.bind(this)}>
-                    <UserManagementRolesForm    active={props.activePanelIndex === 3}
-                                                initialValues={props.managedUser}
-                                                roles={props.roles}
-                                                selectRole={props.selectRole.bind(this)}
-                                                selectedRole={props.selectedRole}
-                                                addRole={props.addRole.bind(this)}
-                                                toggleRoleDetails={props.toggleRoleDetails.bind(this)}
-                                                removeRole={props.removeRole.bind(this)}
-                                                organizations={props.organizations}
-                                                onSubmit={props.editUserOrganizations.bind(this)}/>
-                </Panel>
+                {props.loggedInUser.permissions.includes(CorePermissions.ViewOrganizations) ?
+                    <Panel  active={props.activePanelIndex === 2}
+                            permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserOrganizations)}
+                            onClick={() => { props.activePanelIndex != 2 ? props.togglePanel(2) : null}}
+                            submit={props.submitForm.bind(this, 'userManagementOrganizationsForm')}
+                            cancel={props.cancelUserPanel.bind(this)}>
+                        <UserManagementOrganizationsForm    active={props.activePanelIndex === 2}
+                                                            initialValues={props.managedUser}
+                                                            organizations={props.organizations}
+                                                            onSubmit={props.editUserOrganizations.bind(this)}
+                                                            removeOrganization={props.removeOrganization.bind(this)}
+                                                            selectedOrganization={props.selectedOrganization}
+                                                            selectOrganization={props.selectOrganization.bind(this)}
+                                                            addOrganization={props.addOrganization.bind(this)}/>
+                    </Panel>
+                : null}
+                {props.loggedInUser.permissions.includes(CorePermissions.ViewRoles) ?
+                    <Panel  active={props.activePanelIndex === 3}
+                            permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserRoles)}
+                            onClick={() => { props.activePanelIndex != 3 ? props.togglePanel(3) : null}}
+                            submit={props.submitForm.bind(this, 'userManagementRolesForm')}
+                            cancel={props.cancelUserPanel.bind(this)}>
+                        <UserManagementRolesForm    active={props.activePanelIndex === 3}
+                                                    initialValues={props.managedUser}
+                                                    roles={props.roles}
+                                                    selectRole={props.selectRole.bind(this)}
+                                                    selectedRole={props.selectedRole}
+                                                    addRole={props.addRole.bind(this)}
+                                                    toggleRoleDetails={props.toggleRoleDetails.bind(this)}
+                                                    removeRole={props.removeRole.bind(this)}
+                                                    organizations={props.organizations}
+                                                    onSubmit={props.editUserOrganizations.bind(this)}/>
+                    </Panel>
+                : null }
                 <UserManagementControls right={false} 
                                         canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
                                         children={null}

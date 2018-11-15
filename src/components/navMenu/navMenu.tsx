@@ -7,57 +7,80 @@ interface NavMenuProps {
     authSession: StateAuthSession;
 }
 
+export const HomeLink = () => (
+    <LinkContainer exact to="/home">
+        <NavItem>
+            Home
+        </NavItem>
+    </LinkContainer>
+);
+
+export const UsersLink = () => (
+    <LinkContainer exact to="/users">
+        <NavItem>
+            Users
+        </NavItem>
+    </LinkContainer>
+);
+
+export const RolesLink = () => (
+    <LinkContainer exact to="/roles">
+        <NavItem>
+            Roles
+        </NavItem>
+    </LinkContainer>
+);
+
+export const SignupLink = () => (
+    <LinkContainer exact to="/signup">
+        <NavItem>
+            Signup
+        </NavItem>
+    </LinkContainer>
+);
+
+export const LoginLink = () => (
+    <LinkContainer to="/login">
+        <NavItem>
+            Login
+        </NavItem>
+    </LinkContainer>
+);
+
+export const PermissionsLink = () => (
+    <LinkContainer exact to="/permissions">
+        <NavItem>
+            Permissions
+        </NavItem>
+    </LinkContainer>
+);
+
+export const OrganizationsLink = () => (
+    <LinkContainer exact to="/organizations">
+        <NavItem>
+            Organizations
+        </NavItem>
+    </LinkContainer>
+);
+
+export const AdminDropdown = () => (
+    <NavDropdown pullRight title="Administration" id="admin-dropdown">
+        <PermissionsLink />
+        <OrganizationsLink />
+    </NavDropdown>
+);
+
 const NavMenu = (props: NavMenuProps) => (
     <Navbar
         applicationName={"test"}
-        authenticated={props.authSession.isAuthenticated}
-        linkContainers={[
-            props.authSession.isAuthenticated ?
-                <LinkContainer key="1" exact to="/home">
-                    <NavItem>
-                        Home
-                    </NavItem>
-                </LinkContainer> : null,
-            props.authSession.isAuthenticated ?
-                <LinkContainer key="2" exact to="/users">
-                    <NavItem>
-                        Users
-                    </NavItem>
-                </LinkContainer> : null,
-            props.authSession.isAuthenticated ?
-            <LinkContainer key="3" exact to="/roles">
-                <NavItem>
-                    Roles
-                </NavItem>
-            </LinkContainer> : null,
-            !props.authSession.isAuthenticated ?
-                <LinkContainer key="4" exact to="/signup">
-                    <NavItem>
-                        Signup
-                    </NavItem> 
-                </LinkContainer> : null,
-            !props.authSession.isAuthenticated ?
-            <LinkContainer key="5" to="/login">
-                <NavItem>
-                    Login
-                </NavItem>
-            </LinkContainer> : null,
-            props.authSession.isAuthenticated ?
-                <NavDropdown pullRight key="6" title="Administration" id="admin-dropdown">
-                    {props.authSession.isAuthenticated ?
-                        <LinkContainer key="7" exact to="/permissions">
-                            <NavItem>
-                                Permissions
-                            </NavItem>
-                        </LinkContainer> : null}
-                    {props.authSession.isAuthenticated ?
-                        <LinkContainer key="8" exact to="/organizations">
-                            <NavItem>
-                                Organizations
-                            </NavItem>
-                        </LinkContainer> : null}
-                </NavDropdown> : null
-        ]}>
+        authenticated={props.authSession.isAuthenticated}>
+
+        {props.authSession.isAuthenticated ? <HomeLink /> : null}
+        {props.authSession.isAuthenticated ? <UsersLink /> : null}
+        {props.authSession.isAuthenticated ? <RolesLink /> : null}
+        {!props.authSession.isAuthenticated ? <SignupLink /> : null}
+        {!props.authSession.isAuthenticated ? <LoginLink /> : null}
+        {props.authSession.isAuthenticated ? <AdminDropdown /> : null}
     </Navbar>
 );
 

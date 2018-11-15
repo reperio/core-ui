@@ -5,7 +5,8 @@
     "main": "webpack.config.js",
     "scripts": {
         "start": "webpack-dev-server --mode development --open --port 8080 --host localhost --history-api-fallback",
-        "webpack": "webpack"
+        "webpack": "webpack",
+        "test": "jest"
     },
     "jest": {
         "setupTestFrameworkScriptFile": "./src/test-setup.js",

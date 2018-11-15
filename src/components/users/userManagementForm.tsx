@@ -22,6 +22,7 @@ interface UserManagementProps {
     editUserOrganizations(): void;
     editUserGeneral(): void;
     editUserEmails(): void;
+    editUserRoles(): void;
     navigateToUsers(): void;
     removeEmailAddress(): void;
     removeOrganization(organizationId: string): void;
@@ -110,7 +111,7 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                     toggleRoleDetails={props.toggleRoleDetails.bind(this)}
                                                     removeRole={props.removeRole.bind(this)}
                                                     organizations={props.organizations}
-                                                    onSubmit={props.editUserOrganizations.bind(this)}/>
+                                                    onSubmit={props.editUserRoles.bind(this)}/>
                     </EditablePanel>
                 : null }
                 <UserManagementControls right={false} 

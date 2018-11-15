@@ -1,6 +1,5 @@
 import React from 'react';
 import UserManagementGeneralForm from '../../components/users/userManagementGeneralForm';
-import Panel from '../../components/panel';
 import UserManagementProfile from '../../components/users/UserManagementProfile';
 import UserManagementEmailsForm from '../../components/users/userManagementEmailsForm';
 import UserManagementOrganizationsForm from '../../components/users/userManagementOrganizationsForm';
@@ -12,8 +11,7 @@ import User from '../../models/user';
 import Organization from '../../models/organization';
 import Role from '../../models/role';
 import { CorePermissions } from '../../models/permission';
-
-const Overlay = () => <div className="r-editable-panel-overlay"></div>
+import { EditablePanel, EditablePanelOverlay } from '@reperio/ui-components';
 
 interface UserManagementProps {
     addEmailAddress(): void;
@@ -46,16 +44,16 @@ interface UserManagementProps {
 }
 
 const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagementProps) => (
-    <div style={{flex: 1}}>
+    <React.Fragment>
     {props.managedUser != null ?
         <div className="management-container">
         {props.redirectToErrorPage ?
             <Redirect to="/error" /> 
         : null }
-            {props.activePanelIndex != null ? <Overlay /> : null}
+            {props.activePanelIndex != null ? <EditablePanelOverlay /> : null}
             <div className="management-left">
                 <UserManagementProfile top={true} initialValues={props.managedUser} />
-                <Panel  active={props.activePanelIndex === 0}
+                <EditablePanel  active={props.activePanelIndex === 0}
                         permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.UpdateBasicUserInfo)}
                         onClick={() => { props.activePanelIndex != 0 ? props.togglePanel(0) : null}}
                         submit={props.submitForm.bind(this, 'userManagementGeneralForm')}
@@ -63,8 +61,8 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                     <UserManagementGeneralForm  active={props.activePanelIndex === 0}
                                                 initialValues={props.managedUser}
                                                 onSubmit={props.editUserGeneral.bind(this)}/>
-                </Panel>
-                <Panel  active={props.activePanelIndex === 1}
+                </EditablePanel>
+                <EditablePanel  active={props.activePanelIndex === 1}
                         permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.AddEmail) || props.loggedInUser.permissions.includes(CorePermissions.DeleteEmail) || props.loggedInUser.permissions.includes(CorePermissions.SetPrimaryEmail) || props.loggedInUser.permissions.includes(CorePermissions.ResendVerificationEmails)}
                         onClick={() => { props.activePanelIndex != 1 ? props.togglePanel(1) : null}}
                         submit={props.submitForm.bind(this, 'userManagementEmailsForm')}
@@ -80,9 +78,9 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                 removeEmailAddress={props.removeEmailAddress.bind(this)}
                                                 addEmailAddress={props.addEmailAddress.bind(this)}
                                                 sendVerificationEmail={props.sendVerificationEmail.bind(this)}/>
-                </Panel>
+                </EditablePanel>
                 {props.loggedInUser.permissions.includes(CorePermissions.ViewOrganizations) ?
-                    <Panel  active={props.activePanelIndex === 2}
+                    <EditablePanel  active={props.activePanelIndex === 2}
                             permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserOrganizations)}
                             onClick={() => { props.activePanelIndex != 2 ? props.togglePanel(2) : null}}
                             submit={props.submitForm.bind(this, 'userManagementOrganizationsForm')}
@@ -95,10 +93,10 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                             selectedOrganization={props.selectedOrganization}
                                                             selectOrganization={props.selectOrganization.bind(this)}
                                                             addOrganization={props.addOrganization.bind(this)}/>
-                    </Panel>
+                    </EditablePanel>
                 : null}
                 {props.loggedInUser.permissions.includes(CorePermissions.ViewRoles) ?
-                    <Panel  active={props.activePanelIndex === 3}
+                    <EditablePanel  active={props.activePanelIndex === 3}
                             permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.ManageUserRoles)}
                             onClick={() => { props.activePanelIndex != 3 ? props.togglePanel(3) : null}}
                             submit={props.submitForm.bind(this, 'userManagementRolesForm')}
@@ -113,7 +111,7 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                                     removeRole={props.removeRole.bind(this)}
                                                     organizations={props.organizations}
                                                     onSubmit={props.editUserOrganizations.bind(this)}/>
-                    </Panel>
+                    </EditablePanel>
                 : null }
                 <UserManagementControls right={false} 
                                         canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
@@ -130,7 +128,7 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                                     navigateToUsers={props.navigateToUsers.bind(this)} />
         </div>
     : null}
-    </div>
+    </React.Fragment>
 );
 
 export default UserManagementForm;

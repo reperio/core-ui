@@ -34,9 +34,9 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@reperio/ui-components@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.3.1.tgz#5aefc65bd277186833b84c32ad40ef12d5610f2d"
+"@reperio/ui-components@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.4.2.tgz#5f51a47cd0076c90749efead27d77a9159026e30"
   dependencies:
     "@types/react-bootstrap" "^0.32.13"
     "@types/react-router-bootstrap" "^0.24.5"

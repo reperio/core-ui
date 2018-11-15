@@ -92,7 +92,7 @@ interface UserManagementProps {
 type Form = UserManagementProps & InjectedFormProps<any>;
 
 const UserManagementEmailsForm: React.SFC<Form> = (props: Form) => (
-    <form onSubmit={props.handleSubmit(props.submit)} className="row r-editable-panel-form">
+    <form onSubmit={props.handleSubmit(props.submit)} className="r-editable-panel-form">
     {props.initialValues ?
         <Wrapper>
             <div className="r-wrapper-child">

@@ -4,31 +4,31 @@
     "description": "",
     "main": "webpack.config.js",
     "scripts": {
-    "start": "webpack-dev-server --mode development --open --port 8080 --host localhost --history-api-fallback",
-    "webpack": "webpack"
+        "start": "webpack-dev-server --mode development --open --port 8080 --host localhost --history-api-fallback",
+        "webpack": "webpack"
     },
     "jest": {
         "setupTestFrameworkScriptFile": "./src/test-setup.js",
         "roots": [
             "./src"
-    ],
-    "transform": {
-        "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-    "moduleFileExtensions": [
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json",
-        "node"
-    ],
-    "globals": {
-        "ts-jest": {
-            "tsConfig": "./tsconfig.test.json"
+        ],
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ],
+        "globals": {
+            "ts-jest": {
+                "tsConfig": "./tsconfig.test.json"
+            }
         }
-    }
     },
     "author": "",
     "license": "ISC",

@@ -45,9 +45,9 @@
     react "^16.6.3"
     typescript "^3.1.6"
 
-"@reperio/ui-components@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.4.3.tgz#4b97cfee4fc000863c53254fe7dcef886bb3e4b0"
+"@reperio/ui-components@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.4.4.tgz#22ffdbbce3e25a417739974c42322e55c57760d5"
   dependencies:
     "@types/react-bootstrap" "^0.32.13"
     "@types/react-router-bootstrap" "^0.24.5"

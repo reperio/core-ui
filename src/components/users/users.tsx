@@ -29,12 +29,7 @@ const gridColumns = [
 const Users = (props: UsersProps) => (
     <div className="r-wrapper-container">
         <Wrapper flexColumnDirection={true}>
-            <div className="row">
-                <div className="r-row-child">
-                    <h2>Users</h2>
-                    <hr />
-                </div>
-            </div>
+            <div className="row"></div>
             <div className="row">
                 <div className="r-row-child">
                     <ButtonElement text="Create new user" color="neutral" onClick={() => props.navigateToUserCreate()} />

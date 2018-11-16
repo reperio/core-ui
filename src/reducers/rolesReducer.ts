@@ -56,7 +56,7 @@ export function rolesReducer(state = initialState.roles, action: {type: string, 
                 isPending: false,
                 isError: false,
                 errorMessage: null,
-                roles: null
+                roles: []
             };
         }
         default: {

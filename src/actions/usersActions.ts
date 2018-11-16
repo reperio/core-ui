@@ -223,10 +223,13 @@ export const addEmailAddress = () => (dispatch: Dispatch<any>) => {
     const selector = formValueSelector('userManagementEmailsForm');
 
     const email = selector(state, 'email') as string;
-    dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL,
-        payload: { email }
-    });
+
+    if (email != null) {
+        dispatch({
+            type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL,
+            payload: { email }
+        });
+    }
 }
 
 export const togglePanel = (index: number) => (dispatch: Dispatch<any>) => {

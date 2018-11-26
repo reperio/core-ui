@@ -4,8 +4,6 @@ import {Route, RouteComponentProps} from 'react-router';
 
 import { State } from '../store/initialState';
 import RedirectToLogin from "../components/redirectToLogin";
-import {submitAuthWithOTP} from "../actions/authActions";
-import {bindActionCreators} from "redux";
 
 interface OwnProps {
     path: string;
@@ -37,7 +35,6 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({submitAuthWithOTP}, dispatch)
     };
 }
 

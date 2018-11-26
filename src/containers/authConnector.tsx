@@ -1,16 +1,14 @@
 import React from 'react'
-import {connect} from "react-redux";
-import { setAuthToken, initializeAuth } from '../actions/authActions';
-import { State } from '../store/initialState';
-import { bindActionCreators } from 'redux';
-
 
 interface Props {
     url: string;
     name: string;
+    isAuthInitialized: boolean;
+    setAuthToken(token: string): Promise<any>;
+    initializeAuth(): Promise<any>;
 }
 
-class AuthConnector extends React.Component<Props & StateProps & ActionProps> {
+class AuthConnector extends React.Component<Props> {
     element: HTMLIFrameElement;
 
     eventListener = async (e: WindowEventMap["message"]) => {
@@ -24,8 +22,8 @@ class AuthConnector extends React.Component<Props & StateProps & ActionProps> {
             return;
         }
 
-        await this.props.actions.setAuthToken(value);
-        await this.props.actions.initializeAuth();
+        await this.props.setAuthToken(value);
+        await this.props.initializeAuth();
     };
 
     componentDidMount() {
@@ -44,7 +42,7 @@ class AuthConnector extends React.Component<Props & StateProps & ActionProps> {
     render() {
         return (
             <React.Fragment>
-                {this.props.authSession.isAuthInitialized ? this.props.children : null}
+                {this.props.isAuthInitialized ? this.props.children : null}
                 <iframe src={this.props.url}
                         name={this.props.name}
                         ref={element => this.element = element}
@@ -54,19 +52,4 @@ class AuthConnector extends React.Component<Props & StateProps & ActionProps> {
     }
 }
 
-function mapStateToProps(state: State) {
-    return {
-        authSession: state.authSession
-    };
-}
-
-function mapActionToProps(dispatch: any) {
-    return {
-        actions: bindActionCreators({setAuthToken, initializeAuth}, dispatch)
-    };
-}
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type ActionProps = ReturnType<typeof mapActionToProps>;
-
-export default connect(mapStateToProps, mapActionToProps)(AuthConnector);
+export default AuthConnector;

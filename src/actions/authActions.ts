@@ -5,25 +5,10 @@ import { State } from '../store/initialState';
 import { coreApiService } from "../services/coreApiService";
 import { userService } from "../services/userService";
 import { change } from "redux-form";
-import User from "../models/user";
 
 export const authActionTypes = {
-    AUTH_LOGIN_PENDING: "AUTH_LOGIN_PENDING",
-    AUTH_LOGIN_SUCCESSFUL: "AUTH_LOGIN_SUCCESSFUL",
-    AUTH_LOGIN_ERROR: "AUTH_LOGIN_ERROR",
-    AUTH_OTP_LOGIN_PENDING: "AUTH_OTP_LOGIN_PENDING",
-    AUTH_OTP_LOGIN_ERROR: "AUTH_OTP_LOGIN_ERROR",
     AUTH_SET_TOKEN: "AUTH_SET_TOKEN",
     AUTH_CLEAR_TOKEN: "AUTH_CLEAR_TOKEN",
-    SIGNUP_PENDING: "SIGNUP_PENDING",
-    SIGNUP_SUCCESSFUL: "SIGNUP_SUCCESSFUL",
-    SIGNUP_ERROR: "SIGNUP_ERROR",
-    AUTH_FORGOT_PASSWORD_PENDING: "AUTH_FORGOT_PASSWORD_PENDING",
-    AUTH_FORGOT_PASSWORD_SUCCESS: "AUTH_FORGOT_PASSWORD_SUCCESS",
-    AUTH_FORGOT_PASSWORD_ERROR: "AUTH_FORGOT_PASSWORD_ERROR",
-    AUTH_RESET_PASSWORD_PENDING: "AUTH_RESET_PASSWORD_PENDING",
-    AUTH_RESET_PASSWORD_SUCCESS: "AUTH_RESET_PASSWORD_SUCCESS",
-    AUTH_RESET_PASSWORD_ERROR: "AUTH_RESET_PASSWORD_ERROR",
     AUTH_SEND_VERIFICATION_EMAIL_PENDING: "AUTH_SEND_VERIFICATION_EMAIL_PENDING",
     AUTH_SEND_VERIFICATION_EMAIL_SUCCESS: "AUTH_SEND_VERIFICATION_EMAIL_SUCCESS",
     AUTH_SEND_VERIFICATION_EMAIL_ERROR: "AUTH_SEND_VERIFICATION_EMAIL_ERROR",
@@ -122,151 +107,6 @@ export const loadAuthSessionUser = (oldUserId: string) => async (dispatch: Dispa
         });
     }
 };
-
-export const setAuth = (user: User) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: authActionTypes.AUTH_LOGIN_SUCCESSFUL,
-        payload: {user}
-    });
-};
-
-export const submitAuth = (primaryEmailAddress: string, password: string) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: authActionTypes.AUTH_LOGIN_PENDING,
-        payload: {}
-    });
-
-    try {
-        await coreApiService.authService.login(primaryEmailAddress, password);
-        history.push('/');
-    } catch (e) {
-        dispatch({
-            type: authActionTypes.AUTH_LOGIN_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-};
-
-export const submitAuthWithOTP = (otp: string, next: string = null) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: authActionTypes.AUTH_OTP_LOGIN_PENDING,
-        payload: {}
-    });
-
-    try {
-        await coreApiService.authService.authenticateWithOTP(otp);
-        history.push(next != null ? next : '/');
-    } catch (e) {
-        dispatch({
-            type: authActionTypes.AUTH_OTP_LOGIN_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-}
-
-export const signup = (primaryEmailAddress: string, firstName: string, lastName: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: authActionTypes.SIGNUP_PENDING,
-        payload: {}
-    });
-
-    try {
-        await coreApiService.authService.signup(primaryEmailAddress, firstName, lastName, password, confirmPassword);
-        history.push('/');
-    } catch (e) {
-        dispatch({
-            type: authActionTypes.SIGNUP_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-};
-
-export const recaptcha = (recaptchaResponse: string) => async (dispatch: Dispatch<any>) => {
-    try {
-        const { data: response } = await coreApiService.authService.recaptcha(recaptchaResponse);
-        dispatch(change('signupForm', 'recaptcha', response.success));
-    } catch (e) {
-        dispatch(change('signupForm', 'recaptcha', false));
-    }
-}
-
-export const emailVerification = (token: string) => async (dispatch: Dispatch<any>) => {
-    try {
-        const { data: response } = await coreApiService.authService.emailVerification(token);
-        setTimeout(()=>{
-            history.push('/');
-        }, 3000);
-        dispatch(change('emailVerification', 'response', response));
-    } catch (e) {
-        dispatch(change('emailVerification', 'response', false));
-    }
-}
-
-export const forgotPassword = (primaryEmailAddress: string) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: authActionTypes.AUTH_FORGOT_PASSWORD_PENDING
-    });
-
-    try {
-        await coreApiService.authService.forgotPassword(primaryEmailAddress);
-
-        dispatch({
-            type: authActionTypes.AUTH_FORGOT_PASSWORD_SUCCESS
-        });
-
-        history.push('/');
-    } catch (e) {
-        dispatch({
-            type: authActionTypes.AUTH_FORGOT_PASSWORD_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-};
-
-export const verifyResetPassword = (token: string) => async (dispatch: Dispatch<any>) => {
-    try {
-        const { data: response } = await coreApiService.authService.verifyResetPassword(token);
-        if (response == false) {
-            setTimeout(()=>{
-                history.push('/');
-            }, 3000);
-        }
-        dispatch(change('resetPasswordVerified', 'response', response));
-    } catch (e) {
-        dispatch(change('resetPasswordVerified', 'response', false));
-    }
-}
-
-export const resetPassword = (token: string, password: string, confirmPassword: string) => async (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: authActionTypes.AUTH_RESET_PASSWORD_PENDING
-    });
-
-    try {
-        await coreApiService.authService.resetPassword(token, password, confirmPassword);
-
-        dispatch({
-            type: authActionTypes.AUTH_RESET_PASSWORD_SUCCESS
-        });
-
-        history.push('/');
-    } catch (e) {
-        dispatch({
-            type: authActionTypes.AUTH_RESET_PASSWORD_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-}
 
 export const sendVerificationEmail = (userId: string, email: string) => async (dispatch: Dispatch<any>) => {
     dispatch({

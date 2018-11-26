@@ -2,11 +2,11 @@ import React from 'react'
 import {connect} from "react-redux";
 import Routes from "../components/routes";
 import {TitleBar, ApplicationMenuItem } from '@reperio/ui-components'
-import { initializeAuth, logout } from '../actions/authActions';
+import { initializeAuth, logout, setAuthToken } from '../actions/authActions';
 import { State } from '../store/initialState';
 import { bindActionCreators } from '../../node_modules/redux';
 import NavMenuContainer from "./navMenuContainer";
-import AuthConnector from './authConnector'
+import {AuthConnector} from 'reperio-core-connector'
 
 class AppContainer extends React.Component {
     props: any;
@@ -18,7 +18,9 @@ class AppContainer extends React.Component {
     render() {
         return (
             <AuthConnector url={"http://localhost:8081/auth"}
-                           name={"authIFrame"}>
+                           isAuthInitialized={this.props.authSession.isAuthInitialized}
+                           setAuthToken={this.props.actions.setAuthToken}
+                           initializeAuth={this.props.actions.initializeAuth}>
                 <div className="app-main">
                     <NavMenuContainer/>
                     <div className="page-container">
@@ -55,7 +57,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({logout, initializeAuth}, dispatch)
+        actions: bindActionCreators({logout, initializeAuth, setAuthToken}, dispatch)
     };
 }
 

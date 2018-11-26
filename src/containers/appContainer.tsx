@@ -2,11 +2,13 @@ import React from 'react'
 import {connect} from "react-redux";
 import Routes from "../components/routes";
 import {TitleBar, ApplicationMenuItem } from '@reperio/ui-components'
-import { initializeAuth, logout, setAuthToken } from '../actions/authActions';
+import { logout, setAuthToken } from '../actions/authActions';
 import { State } from '../store/initialState';
 import { bindActionCreators } from '../../node_modules/redux';
 import NavMenuContainer from "./navMenuContainer";
 import {AuthConnector} from 'reperio-core-connector'
+
+declare const CORE_AUTH_UI_URL: string;
 
 class AppContainer extends React.Component {
     props: any;
@@ -18,9 +20,10 @@ class AppContainer extends React.Component {
     render() {
         return (
             <AuthConnector url={"http://localhost:8081/auth"}
+                           loginUrl={CORE_AUTH_UI_URL}
                            isAuthInitialized={this.props.authSession.isAuthInitialized}
-                           setAuthToken={this.props.actions.setAuthToken}
-                           initializeAuth={this.props.actions.initializeAuth}>
+                           authToken={this.props.authSession.reperioCoreJWT}
+                           setAuthToken={this.props.actions.setAuthToken}>
                 <div className="app-main">
                     <NavMenuContainer/>
                     <div className="page-container">
@@ -57,7 +60,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({logout, initializeAuth, setAuthToken}, dispatch)
+        actions: bindActionCreators({logout, setAuthToken}, dispatch)
     };
 }
 

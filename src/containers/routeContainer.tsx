@@ -3,7 +3,6 @@ import {connect} from "react-redux";
 import {Route, RouteComponentProps} from 'react-router';
 
 import { State } from '../store/initialState';
-import RedirectToLogin from "../components/redirectToLogin";
 
 interface OwnProps {
     path: string;
@@ -20,7 +19,7 @@ class RouteContainer extends React.Component<Props> {
 
     render() {
         if (!this.props.authSession.isAuthenticated) {
-            return (<RedirectToLogin />);
+            return null;
         } else {
             return (<Route {...this.props} />);
         }

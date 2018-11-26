@@ -33,17 +33,12 @@ export const logout = () => async (dispatch: Dispatch<any>) => {
     });
 };
 
-export const initializeAuth = () => async (dispatch: Dispatch<any>, getState: () => State) => {
-    await loadAuthSessionUser(null)(dispatch, getState);
-
-    dispatch({
-        type: authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED
-    });
-};
-
 export const setAuthToken = (authToken: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
-    const state = getState();
-    const oldAuthToken = state.authSession.reperioCoreJWT;
+    const oldAuthToken = getState().authSession.reperioCoreJWT;
+    if (oldAuthToken === authToken) {
+        return;
+    }
+
     const oldParsedToken = getParsedToken(oldAuthToken);
     const oldUserId = oldParsedToken != null ? oldParsedToken.currentUserId : null;
 
@@ -53,6 +48,11 @@ export const setAuthToken = (authToken: string) => async (dispatch: Dispatch<any
     });
 
     await loadAuthSessionUser(oldUserId)(dispatch, getState);
+    if (!getState().authSession.isAuthInitialized) {
+        dispatch({
+            type: authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED
+        });
+    }
 };
 
 const getParsedToken = (jwt: string) => {

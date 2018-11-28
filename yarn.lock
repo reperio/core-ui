@@ -34,10 +34,10 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@reperio/core-connector@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@reperio/core-connector/-/core-connector-2.0.1.tgz#86a5a0935edaacfa888cfd9014fbf9be169699e6"
-  integrity sha512-D4wMZa+SB+6XK/LYlBBsvadqx1K6dgBtPinEVNmw3pzDBxU1cRX2VN5nTCdHWUcUbRwRml4n/+rYgflcGb3MKA==
+"@reperio/core-connector@^2.0.8":
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/@reperio/core-connector/-/core-connector-2.0.8.tgz#56f752474860c049dee44421f887bd7e74d2c7d6"
+  integrity sha512-ASQV12VOXW/LAEjUZdZpIpEwHef+2VPu5AXmnPBjuDAEx3tHWbV7Uv7ztVb1EZcqvzU1a4kH3RjzjxY1axcY+A==
   dependencies:
     "@types/react" "^16.7.7"
     axios "^0.18.0"
@@ -171,9 +171,9 @@
     csstype "^2.2.0"
 
 "@types/react@^16.7.7":
-  version "16.7.7"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.7.tgz#1e5e23e7dd922968ed4b484cdec00a5402c9f31b"
-  integrity sha512-dJiq7CKxD1XJ/GqmbnsQisFnzG4z5lntKBw9X9qeSrguxFbrrhGa8cK9s0ONBp8wL1EfGfofEDVhjen26U46pw==
+  version "16.7.8"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.8.tgz#ca24ba280f79debfc86578278a503c6d917d402e"
+  integrity sha512-7Vua2IYokMiPBk0WWXaDt4Cg3XVcwU6HpkuPhvwhBrVEy4SafpcvEfGYByoY9jxyFMiegYQPaSOT+H+AY00CPw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -8043,6 +8043,7 @@ typescript@^2.7.2:
 typescript@^3.1.6:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
+  integrity sha512-tDMYfVtvpb96msS1lDX9MEdHrW4yOuZ4Kdc4Him9oU796XldPYF/t2+uKoX0BBa0hXXwDlqYQbXY5Rzjzc5hBA==
 
 ua-parser-js@^0.7.18:
   version "0.7.18"

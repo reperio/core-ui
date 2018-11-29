@@ -1,10 +1,8 @@
 import {Dispatch} from "react-redux";
-import { history } from '../store/history';
 import { State } from '../store/initialState';
 
 import { coreApiService } from "../services/coreApiService";
 import { userService } from "../services/userService";
-import { change } from "redux-form";
 
 export const authActionTypes = {
     AUTH_SET_TOKEN: "AUTH_SET_TOKEN",

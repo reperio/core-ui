@@ -9,6 +9,7 @@ import NavMenuContainer from "./navMenuContainer";
 import {AuthConnector} from '@reperio/core-connector'
 
 declare const CORE_AUTH_UI_URL: string;
+declare const CORE_AUTH_UI_IFRAME_URL: string;
 
 class AppContainer extends React.Component {
     props: any;
@@ -19,7 +20,7 @@ class AppContainer extends React.Component {
 
     render() {
         return (
-            <AuthConnector url={"http://localhost:8081/auth"}
+            <AuthConnector url={CORE_AUTH_UI_IFRAME_URL}
                            loginUrl={CORE_AUTH_UI_URL}
                            isAuthInitialized={this.props.authSession.isAuthInitialized}
                            authToken={this.props.authSession.reperioCoreJWT}

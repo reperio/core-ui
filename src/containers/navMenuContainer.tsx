@@ -9,7 +9,7 @@ class NavMenuContainer extends React.Component {
     render() {
         return (
             <div className="r-nav-menu">
-                <NavMenu authSession={this.props.authSession} />
+                <NavMenu />
             </div>
         );
     }

@@ -3,87 +3,38 @@ import { authActionTypes } from "../actions/authActions";
 
 export function authSessionReducer(state = initialState.authSession, action: {type: string, payload: any}): StateAuthSession {
     switch (action.type) {
-        case authActionTypes.AUTH_LOGIN_PENDING: {
+        case authActionTypes.AUTH_SET_USER: {
             return {
-                isPending: true,
-                isAuthenticated: false,
-                isError: false,
-                errorMessage: null,
-                user: null
-            };
-        }
-        case authActionTypes.AUTH_LOGIN_SUCCESSFUL: {
-            return {
+                ...state,
                 isPending: false,
                 isAuthenticated: true,
                 isError: false,
                 errorMessage: null,
-                user: action.payload.user
-            };
-        }
-        case authActionTypes.AUTH_LOGIN_ERROR: {
-            return {
-                isPending: false,
-                isAuthenticated: false,
-                isError: true,
-                errorMessage: action.payload.message,
-                user: null
+                user: action.payload.user != null ? Object.assign({}, action.payload.user) : null
             };
         }
         case authActionTypes.AUTH_SET_TOKEN: {
-            if (action.payload.user != null) {
-                return {
-                    isPending: false,
-                    isAuthenticated: true,
-                    isError: false,
-                    errorMessage: null,
-                    user: Object.assign({}, action.payload.user)
-                };
-            } else {
-                return {
-                    isPending: false,
-                    isAuthenticated: false,
-                    isError: false,
-                    errorMessage: null,
-                    user: null
-                };
-            }
+            return {
+                ...state,
+                reperioCoreJWT: action.payload.authToken
+            };
         }
         case authActionTypes.AUTH_CLEAR_TOKEN: {
             return {
+                ...state,
                 isPending: false,
                 isAuthenticated: false,
                 isError: false,
                 errorMessage: null,
-                user: null
+                user: null,
+                reperioCoreJWT: null
             };
         }
-        case authActionTypes.SIGNUP_PENDING: {
+        case authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED: {
             return {
-                isPending: true,
-                isAuthenticated: false,
-                isError: false,
-                errorMessage: null,
-                user: null
-            };
-        }
-        case authActionTypes.SIGNUP_SUCCESSFUL: {
-            return {
-                isPending: false,
-                isAuthenticated: true,
-                isError: false,
-                errorMessage: null,
-                user: action.payload.user
-            };
-        }
-        case authActionTypes.SIGNUP_ERROR: {
-            return {
-                isPending: false,
-                isAuthenticated: false,
-                isError: true,
-                errorMessage: action.payload.message,
-                user: null
-            };
+                ...state,
+                isAuthInitialized: true
+            }
         }
         default: {
             return state;

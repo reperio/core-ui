@@ -18,11 +18,15 @@ export class State {
 }
 
 export class StateAuthSession {
+    isAuthInitialized: boolean;
     isPending: boolean;
     isAuthenticated: boolean;
     isError: boolean;
+    otpIsPending: boolean;
+    otpIsError: boolean;
     errorMessage: string;
     user: User;
+    reperioCoreJWT: string;
 }
 
 export class StateUsers {
@@ -92,11 +96,15 @@ export class StateApplications {
 
 export const initialState: State = {
     authSession: {
+        isAuthInitialized: false,
         isPending: false,
         isAuthenticated: false,
         isError: false,
+        otpIsPending: false,
+        otpIsError: false,
         errorMessage: null,
-        user: null
+        user: null,
+        reperioCoreJWT: null
     },
     users: {
         isPending: false,

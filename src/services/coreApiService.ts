@@ -1,6 +1,6 @@
 import {setAuthToken} from "../actions/authActions"
 import { store } from "../store/store";
-import {ReperioCoreConnector} from "reperio-core-connector";
+import {ReperioCoreConnector} from "@reperio/core-connector";
 
 declare const API_URL: string;
 

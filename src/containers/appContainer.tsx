@@ -6,7 +6,7 @@ import { logout, setAuthToken } from '../actions/authActions';
 import { State } from '../store/initialState';
 import { bindActionCreators } from '../../node_modules/redux';
 import NavMenuContainer from "./navMenuContainer";
-import {AuthConnector} from 'reperio-core-connector'
+import {AuthConnector} from '@reperio/core-connector'
 
 declare const CORE_AUTH_UI_URL: string;
 

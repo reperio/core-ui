@@ -40,7 +40,8 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:3000/api'),
-            CORE_AUTH_UI_URL: JSON.stringify(process.env.CORE_AUTH_UI_URL || 'http://localhost:8081')
+            CORE_AUTH_UI_URL: JSON.stringify(process.env.CORE_AUTH_UI_URL || 'http://localhost:8081'),
+            CORE_AUTH_UI_IFRAME_URL: JSON.stringify(process.env.CORE_AUTH_UI_IFRAME_URL || 'http://localhost:8081/auth')
         })
     ]
 };

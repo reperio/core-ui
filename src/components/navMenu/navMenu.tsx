@@ -1,11 +1,6 @@
 import React from 'react'
 import {Navbar, LinkContainer, NavItem} from '@reperio/ui-components'
 import { NavDropdown } from 'react-bootstrap';
-import { StateAuthSession } from '../../store/initialState';
-
-interface NavMenuProps {
-    authSession: StateAuthSession;
-}
 
 export const HomeLink = () => (
     <LinkContainer exact to="/home">
@@ -27,22 +22,6 @@ export const RolesLink = () => (
     <LinkContainer exact to="/roles">
         <NavItem>
             Roles
-        </NavItem>
-    </LinkContainer>
-);
-
-export const SignupLink = () => (
-    <LinkContainer exact to="/signup">
-        <NavItem>
-            Signup
-        </NavItem>
-    </LinkContainer>
-);
-
-export const LoginLink = () => (
-    <LinkContainer to="/login">
-        <NavItem>
-            Login
         </NavItem>
     </LinkContainer>
 );
@@ -70,17 +49,15 @@ export const AdminDropdown = () => (
     </NavDropdown>
 );
 
-const NavMenu = (props: NavMenuProps) => (
+const NavMenu = () => (
     <Navbar
         applicationName={"test"}
-        authenticated={props.authSession.isAuthenticated}>
+        authenticated={true}>
 
-        {props.authSession.isAuthenticated ? <HomeLink /> : null}
-        {props.authSession.isAuthenticated ? <UsersLink /> : null}
-        {props.authSession.isAuthenticated ? <RolesLink /> : null}
-        {!props.authSession.isAuthenticated ? <SignupLink /> : null}
-        {!props.authSession.isAuthenticated ? <LoginLink /> : null}
-        {props.authSession.isAuthenticated ? <AdminDropdown /> : null}
+        <HomeLink />
+        <UsersLink />
+        <RolesLink />
+        <AdminDropdown />
     </Navbar>
 );
 

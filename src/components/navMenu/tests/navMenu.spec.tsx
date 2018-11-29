@@ -1,54 +1,26 @@
 import * as React from 'react';
 import {shallow} from 'enzyme';
-import NavMenu, {HomeLink, SignupLink, LoginLink} from '../navMenu';
-import User from '../../../models/user';
+import NavMenu, {AdminDropdown, HomeLink, OrganizationsLink, PermissionsLink, RolesLink, UsersLink} from '../navMenu';
 
-test('Checks to see if logged out, shows two links on the navbar: one for signup and one for login', () => {
+
+test('Navbar shows correct items in the correct order', () => {
     const wrapper = shallow(
-        <NavMenu authSession={{
-            isAuthInitialized: true,
-            isAuthenticated: false,
-            user: null,
-            errorMessage: null,
-            isError: null,
-            isPending: false,
-            otpIsPending: false,
-            otpIsError: false,
-            reperioCoreJWT: null
-        }} />
+        <NavMenu />
     );
 
-    expect(wrapper.find(SignupLink)).toHaveLength(1);
-    expect(wrapper.find(LoginLink)).toHaveLength(1);
+    expect(wrapper.children()).toHaveLength(4);
+    expect(wrapper.childAt(0).type()).toBe(HomeLink);
+    expect(wrapper.childAt(1).type()).toBe(UsersLink);
+    expect(wrapper.childAt(2).type()).toBe(RolesLink);
+    expect(wrapper.childAt(3).type()).toBe(AdminDropdown);
 });
 
-test('Checks to see if logged in, does not show login link and the first is home', () => {
-    const user: User = {
-        firstName: 'test',
-        id: 'dka9ef76-7c4a-sdft-s647-85hhhha752f4',
-        lastName: 'user',
-        password: null,
-        primaryEmailAddress: 'test@test.com',
-        selectedOrganizations: [],
-        selectedRoles: [],
-        userEmails: [],
-        userOrganizations: [],
-        userRoles: []
-    };
+test('AdminDropdown shows correct items in the correct order', () => {
     const wrapper = shallow(
-        <NavMenu authSession={{
-            isAuthInitialized: true,
-            isAuthenticated: true,
-            user,
-            errorMessage: null,
-            isError: null,
-            isPending: false,
-            otpIsPending: false,
-            otpIsError: false,
-            reperioCoreJWT: null
-        }} />
+        <AdminDropdown />
     );
 
-    expect(wrapper.find(HomeLink)).toHaveLength(1);
-    expect(wrapper.find(LoginLink)).toHaveLength(0);
+    expect(wrapper.children()).toHaveLength(2);
+    expect(wrapper.childAt(0).type()).toBe(PermissionsLink);
+    expect(wrapper.childAt(1).type()).toBe(OrganizationsLink);
 });

@@ -24,7 +24,7 @@ class AppContainer extends React.Component {
                            loginUrl={CORE_AUTH_UI_URL}
                            isAuthInitialized={this.props.authSession.isAuthInitialized}
                            authToken={this.props.authSession.reperioCoreJWT}
-                           setAuthToken={this.props.actions.setAuthToken}>
+                           setAuthToken={authToken => this.props.actions.setAuthToken(authToken, true)}>
                 <div className="app-main">
                     <NavMenuContainer/>
                     <div className="page-container">

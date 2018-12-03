@@ -46,10 +46,10 @@ interface UserManagementProps {
 
 const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagementProps) => (
     <React.Fragment>
-        {props.redirectToErrorPage ? <Redirect to="/error" /> : null }
-        {props.managedUser != null ?
+    {props.redirectToErrorPage ? <Redirect to="/error" /> : null }
+    {props.managedUser != null ?
         <div className="management-container">
-            {props.activePanelIndex != null ? <Overlay /> : null}
+            {props.activePanelIndex != null ? <EditablePanelOverlay /> : null}
             <div className="management-left">
                 <UserManagementProfile top={true} initialValues={props.managedUser} />
                 <EditablePanel  active={props.activePanelIndex === 0}

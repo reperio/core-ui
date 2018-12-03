@@ -7,6 +7,7 @@ import { State } from '../store/initialState';
 import { bindActionCreators } from '../../node_modules/redux';
 import NavMenuContainer from "./navMenuContainer";
 import {AuthConnector} from '@reperio/core-connector'
+import {TitleBarHeader} from '../components/titleBarHeader';
 
 declare const CORE_AUTH_UI_URL: string;
 declare const CORE_AUTH_UI_IFRAME_URL: string;
@@ -29,6 +30,7 @@ class AppContainer extends React.Component {
                     <NavMenuContainer/>
                     <div className="page-container">
                         <TitleBar
+                            title={<TitleBarHeader/>}
                             isAuthenticated={this.props.authSession.isAuthenticated}
                             profile={this.props.authSession.isAuthenticated ? {
                                 initials: `${this.props.authSession.user.firstName.charAt(0).toUpperCase()}${this.props.authSession.user.lastName.charAt(0).toUpperCase()}`,

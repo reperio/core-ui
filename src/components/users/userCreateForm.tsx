@@ -15,12 +15,7 @@ const UserCreateForm: React.SFC<Form> = (props: Form) => (
     <form onSubmit={props.handleSubmit(props.onSubmit)}>
         <Wrapper>
             <div className="r-wrapper-child ">
-                <div className="row">
-                    <div className="r-row-child">
-                        <h2>User Create</h2>
-                        <hr />
-                    </div>
-                </div>
+                <div className="row"></div>
                 <div className="row">
                     <div className="r-row-child">
                         <label>First Name</label>

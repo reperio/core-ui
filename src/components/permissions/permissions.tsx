@@ -24,12 +24,7 @@ const Permissions = (props: PermissionsProps) => {
     return (
         <div className="r-wrapper-container">
             <Wrapper flexColumnDirection={true}>
-                <div className="row">
-                    <div className="r-row-child">
-                        <h2>Permissions</h2>
-                        <hr />
-                    </div>
-                </div>
+                <div className="row"></div>
                 <div className="row">
                     <div className="r-row-child">
                         <Grid

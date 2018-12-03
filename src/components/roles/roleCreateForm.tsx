@@ -3,7 +3,7 @@ import {Field, reduxForm, InjectedFormProps} from 'redux-form'
 import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
 import Application from '../../models/application';
 import Organization from '../../models/organization';
-import Permission from '../../models/permission';
+import { Permission } from '../../models/permission';
 
 interface OrganizationCreateProps {
     navigateToRoles(): void;

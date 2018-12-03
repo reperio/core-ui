@@ -1,5 +1,5 @@
 import Role from "./role";
-import Permission from "./permission";
+import { Permission } from "./permission";
 
 export default class RolePermission {
     roleId: string;

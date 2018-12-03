@@ -6,7 +6,7 @@ import { permissionService } from "../services/permissionService";
 import RolePermission from "../models/rolePermission";
 import Role from "../models/role";
 import Dropdown from "../models/dropdown";
-import Permission from "../models/permission";
+import { Permission } from "../models/permission";
 
 export const rolesActionTypes = {
     ROLES_GET_PENDING: "ROLES_GET_PENDING",

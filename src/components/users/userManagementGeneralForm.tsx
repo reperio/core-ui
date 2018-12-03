@@ -9,7 +9,7 @@ interface UserManagementProps {
 type Form = UserManagementProps & InjectedFormProps<any>;
 
 const UserManagementGeneralForm: React.SFC<Form> = (props: Form) => (
-    <form onSubmit={props.handleSubmit(props.submit)} className="panel-form">
+    <form onSubmit={props.handleSubmit(props.submit)} className="r-editable-panel-form">
         <Wrapper>
             <div className="r-wrapper-child">
                 <div className="row">

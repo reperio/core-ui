@@ -6,13 +6,14 @@ import PermissionsArray from '../permissions/permissionsArray';
 import Dropdown from '../../models/dropdown';
 import RolePermission from '../../models/rolePermission';
 import Role from '../../models/role';
-import Permission from '../../models/permission';
+import { Permission } from '../../models/permission';
 import { Redirect } from 'react-router';
 
 interface PermissionManagementProps {
     navigateToPermissions(): void;
     onSubmit(): void;
     removePermission(): void;
+    canUpdatePermissions: boolean;
     errorMessage: string;
     initialValues: Permission;
     isError: boolean;
@@ -54,7 +55,7 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                             </div>
                         </Wrapper>
                     </div>
-                    <div className="row">
+                    <fieldset disabled={!props.canUpdatePermissions} className="row">
                         <Wrapper>
                             <div className="r-wrapper-child ">
                                 <div className="row">
@@ -89,8 +90,8 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                                 </div>
                             </div>
                         </Wrapper>
-                    </div>
-                    <div className="row">
+                    </fieldset>
+                    <fieldset disabled={!props.canUpdatePermissions} className="row">
                         <Wrapper flexColumnDirection={true}>
                             <div className="r-wrapper-child ">
                                 <div className="row">
@@ -112,19 +113,22 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                                                 .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label))
                                             }
                                             removePermission={props.removePermission}
+                                            canUpdateRoles={props.canUpdatePermissions}
                                             component={PermissionsArray}/>
                             </div>
                         </Wrapper>
-                    </div>
+                    </fieldset>
                     <div className="row management-controls-bottom">
                         <Wrapper>
                             <div className="row management-submission-controls-container">
                                 <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToPermissions()} />
                                 </div>
-                                <div className="r-row-child management-submission-controls">
-                                    <ButtonElement type="submit"  color="success" wide text="Save" />
-                                </div>
+                                {props.canUpdatePermissions ? 
+                                    <div className="r-row-child management-submission-controls">
+                                        <ButtonElement type="submit"  color="success" wide text="Save" />
+                                    </div>
+                                : null }
                             </div>
                         </Wrapper>
                     </div>
@@ -162,9 +166,11 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                                 <div className="r-row-child management-submission-controls">
                                     <ButtonElement type="button" color="cancel" wide text="Cancel" onClick={() => props.navigateToPermissions()} />
                                 </div>
-                                <div className="r-row-child management-submission-controls">
-                                    <ButtonElement type="submit"  color="success" wide text="Save" />
-                                </div>
+                                {props.canUpdatePermissions ? 
+                                    <div className="r-row-child management-submission-controls">
+                                        <ButtonElement type="submit"  color="success" wide text="Save" />
+                                    </div>
+                                : null }
                             </div>
                         </Wrapper>
                     </div>

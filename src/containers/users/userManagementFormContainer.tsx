@@ -3,7 +3,7 @@ import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, 
     addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress, togglePanel, cancelUserPanel, editUserGeneral, 
-    editUserEmails, editUserOrganizations} from '../../actions/usersActions';
+    editUserEmails, editUserOrganizations, deleteUser } from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
 import { sendVerificationEmail } from '../../actions/authActions';
@@ -16,6 +16,7 @@ import Dropdown from '../../models/dropdown';
 import { connect } from 'react-redux';
 import {submitForm} from '../../actions/miscActions';
 import UserManagementForm from '../../components/users/userManagementForm';
+import { CorePermissions } from '../../models/permission';
 
 class UserManagementFormValues {
     id: string;
@@ -36,8 +37,15 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
 
      async componentDidMount() {
         this.props.actions.clearManagementInitialUser();
-        await this.props.actions.getOrganizations();
-        await this.props.actions.getRoles();
+        
+        if (this.props.authSession.user.permissions.includes(CorePermissions.ViewOrganizations)) {
+            await this.props.actions.getOrganizations();
+        }
+
+        if (this.props.authSession.user.permissions.includes(CorePermissions.ViewRoles)) {
+            await this.props.actions.getRoles();
+        }
+
         await this.props.actions.loadManagementInitialUser(this.props.match.params.userId);
      }
 
@@ -121,6 +129,10 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         this.props.actions.editUserOrganizations(form.id, selectedOrganizations);
     }
 
+    deleteUser() {
+        this.props.actions.deleteUser(this.props.user.id);
+    }
+
     render() {
         return (
             <UserManagementForm activePanelIndex={this.props.activePanelIndex}
@@ -128,6 +140,7 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
                                 addOrganization={this.addOrganization.bind(this)}
                                 addRole={this.addRole.bind(this)}
                                 cancelUserPanel={this.cancelUserPanel.bind(this)}
+                                deleteUser={this.deleteUser.bind(this)}
                                 editUserEmails={this.editUserEmails.bind(this)}
                                 editUserGeneral={this.editUserGeneral.bind(this)}
                                 editUserOrganizations={this.editUserOrganizations.bind(this)}
@@ -147,7 +160,8 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
                                 setPrimaryEmailAddress={this.setPrimaryEmailAddress.bind(this)}
                                 togglePanel={this.togglePanel.bind(this)}
                                 toggleRoleDetails={this.toggleRoleDetails.bind(this)}
-                                user={this.props.user}/>
+                                loggedInUser={this.props.authSession.user}
+                                managedUser={this.props.user}/>
         );
     }
 }
@@ -194,7 +208,8 @@ function mapActionToProps(dispatch: any) {
                 editUserGeneral,
                 submitForm,
                 editUserEmails,
-                editUserOrganizations
+                editUserOrganizations,
+                deleteUser
             }, dispatch)
         };
     }

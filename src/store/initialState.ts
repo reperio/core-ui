@@ -1,7 +1,7 @@
 import Role from "../models/role";
 import Organization from "../models/organization";
 import User from "../models/user";
-import Permission from "../models/permission";
+import { Permission } from "../models/permission";
 import Application from "../models/application";
 
 export class State {

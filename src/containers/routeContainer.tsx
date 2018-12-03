@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 import {connect} from "react-redux";
-import {Route, RouteComponentProps} from 'react-router';
+import {Route, RouteComponentProps, Redirect} from 'react-router';
 
 import { State } from '../store/initialState';
 
@@ -8,6 +8,7 @@ interface OwnProps {
     path: string;
     exact: boolean;
     component: ComponentType<any>;
+    requiredPermissions?: string[];
 }
 
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
@@ -17,10 +18,17 @@ type Props = RouteComponentProps<any> & StateProps & DispatchProps & OwnProps;
 
 class RouteContainer extends React.Component<Props> {
 
+    hasPermission() {
+        return this.props.requiredPermissions ? this.props.requiredPermissions.every(val => this.props.authSession.user.permissions.includes(val)) : null;
+    }
+
     render() {
+        const hasPermission = this.hasPermission();
         if (!this.props.authSession.isAuthenticated) {
             return null;
-        } else {
+        } else if (hasPermission != null && !hasPermission) {
+            return (<Redirect to="error" />);
+        }else {
             return (<Route {...this.props} />);
         }
     }

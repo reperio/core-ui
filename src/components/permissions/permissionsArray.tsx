@@ -5,6 +5,7 @@ import Dropdown from '../../models/dropdown';
 interface PermissionsArrayProps {
     togglePermissionDetails(index: number): void;
     removePermission(index: number): void;
+    canUpdateRoles: boolean;
     initialValues: Dropdown[];
     toggle: boolean;
 }
@@ -22,7 +23,9 @@ const PermissionsArray: React.SFC<PermissionsArrayProps> = (props: PermissionsAr
                                     {props.initialValues[index].label}
                                 </div>
                                 <div className="r-row-child">
-                                    <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removePermission(index)} />
+                                    {props.canUpdateRoles ? 
+                                        <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removePermission(index)} />
+                                    : null }
                                 </div>
                             </div>
                         </div>

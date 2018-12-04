@@ -1,7 +1,7 @@
 import React from 'react'
 import {Field, reduxForm, InjectedFormProps} from 'redux-form'
 import { TextboxElement, ButtonElement, PickerElement, Wrapper } from '@reperio/ui-components';
-import User from '../../models/user';
+import { User } from '@reperio/core-connector';
 
 interface OrganizationCreateProps {
     navigateToOrganizations(): void;

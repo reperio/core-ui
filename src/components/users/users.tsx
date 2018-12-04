@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, ButtonElement, Wrapper } from '@reperio/ui-components';
-import User from '../../models/user';
+import { User } from '@reperio/core-connector';
 
 interface UsersProps {
     navigateToManagement(permissionName: string): void;

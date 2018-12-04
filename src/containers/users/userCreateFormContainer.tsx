@@ -7,7 +7,7 @@ import { createUser } from '../../actions/usersActions';
 import { RouteComponentProps } from 'react-router';
 import { history } from '../../store/history';
 import Dropdown from '../../models/dropdown';
-import UserOrganization from '../../models/userOrganization';
+import { UserOrganization } from '@reperio/core-connector';
 
 
 class UserCreateFormValues {

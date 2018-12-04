@@ -1,14 +1,11 @@
 import React from 'react'
 import { Wrapper, ButtonElement, PickerElement } from '@reperio/ui-components';
 import {Field, reduxForm, InjectedFormProps, FieldArray } from 'redux-form';
-import Organization from '../../models/organization';
-import User from '../../models/user';
-import Dropdown from '../../models/dropdown';
-import Role from '../../models/role';
 import RolePermissionFieldArray from '../roles/rolePermissionFieldArray';
+import { User, Role, Organization } from '@reperio/core-connector';
 
 interface UserManagementProps {
-    addRole(selectedRole: Dropdown): void;
+    addRole(selectedRole: Role): void;
     navigateToUsers(): void;
     onSubmit(): void;
     removeRole(roleId: string): void;
@@ -21,11 +18,12 @@ interface UserManagementProps {
     isError: boolean;
     organizations: Organization[];
     roles: Role[];
-    selectedRole: Dropdown;
+    selectedRole: Role;
     toggleRoleDetails: boolean;
     redirectToErrorPage: boolean;
     activePanelIndex: number;
     active: boolean;
+    activeRoleDetailIndex: number;
 }
 
 type Form = UserManagementProps & InjectedFormProps<any>;
@@ -47,7 +45,7 @@ const UserManagementRolesForm: React.SFC<Form> = (props: Form) => (
                                     options={
                                         props.roles
                                             .filter((role: Role) => {
-                                                return !props.initialValues.selectedRoles.map((x: Dropdown)=> x.value).includes(role.id)
+                                                return !props.initialValues.selectedRoles.map((x: Role)=> x.id).includes(role.id)
                                             })
                                             .map((role: Role, index: number) => { 
                                                 return {
@@ -68,6 +66,7 @@ const UserManagementRolesForm: React.SFC<Form> = (props: Form) => (
                 : null}
                 <FieldArray name="roles"
                             active={props.active}
+                            activeRoleDetailIndex={props.activeRoleDetailIndex}
                             rerenderOnEveryChange={true}
                             initialValues={props.initialValues.selectedRoles}
                             organizations={props.organizations}

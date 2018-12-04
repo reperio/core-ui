@@ -21,7 +21,7 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class OrganizationCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: OrganizationCreateFormValues) {
-        await this.props.actions.createOrganization(form.name, form.selectedUsers);
+        await this.props.actions.createOrganization(form.name, form.selectedUsers.map(x=> x.value));
     };
 
     async componentDidMount() {

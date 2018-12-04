@@ -1,8 +1,7 @@
-import Role from "../models/role";
-import Organization from "../models/organization";
-import User from "../models/user";
-import { Permission } from "../models/permission";
-import Application from "../models/application";
+import { User, Permission, Role, Organization, Application } from '@reperio/core-connector'
+import { OrganizationViewModel } from '../models/organizationViewModel';
+import { RoleViewModel } from '../models/roleViewModel';
+import { UserViewModel } from '../models/userViewModel';
 
 export class State {
     authSession: StateAuthSession;
@@ -40,8 +39,8 @@ export class StateUserManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialUser: User;
-    user: User;
+    initialUser: UserViewModel;
+    user: UserViewModel;
 }
 export class StatePermissions {
     isPending: boolean;
@@ -68,8 +67,7 @@ export class StateRoleManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialRole: Role;
-    permissions: Permission[];
+    initialRole: RoleViewModel;
 }
 
 export class StateOrganizations {
@@ -83,8 +81,7 @@ export class StateOrganizationManagement {
     isPending: boolean;
     isError: boolean;
     errorMessage: string;
-    initialOrganization: Organization;
-    users: User[];
+    initialOrganization: OrganizationViewModel;
 }
 
 export class StateApplications {
@@ -141,8 +138,7 @@ export const initialState: State = {
         isPending: false,
         isError: false,
         errorMessage: null,
-        initialRole: null,
-        permissions: []
+        initialRole: null
     },
     organizations: {
         isPending: false,
@@ -154,8 +150,7 @@ export const initialState: State = {
         isPending: false,
         isError: false,
         errorMessage: null,
-        initialOrganization: null,
-        users: []
+        initialOrganization: null
     },
     applications: {
         isPending: false,

@@ -34,10 +34,9 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@reperio/core-connector@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@reperio/core-connector/-/core-connector-2.0.8.tgz#56f752474860c049dee44421f887bd7e74d2c7d6"
-  integrity sha512-ASQV12VOXW/LAEjUZdZpIpEwHef+2VPu5AXmnPBjuDAEx3tHWbV7Uv7ztVb1EZcqvzU1a4kH3RjzjxY1axcY+A==
+"@reperio/core-connector@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@reperio/core-connector/-/core-connector-2.0.9.tgz#b25b44bc57cd522c63cb619ae2c15c861c8caeb6"
   dependencies:
     "@types/react" "^16.7.7"
     axios "^0.18.0"
@@ -173,7 +172,6 @@
 "@types/react@^16.7.7":
   version "16.7.8"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.8.tgz#ca24ba280f79debfc86578278a503c6d917d402e"
-  integrity sha512-7Vua2IYokMiPBk0WWXaDt4Cg3XVcwU6HpkuPhvwhBrVEy4SafpcvEfGYByoY9jxyFMiegYQPaSOT+H+AY00CPw==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -6761,7 +6759,6 @@ react@^16.2.0, react@^16.4.2:
 react@^16.6.3:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react/-/react-16.6.3.tgz#25d77c91911d6bbdd23db41e70fb094cc1e0871c"
-  integrity sha512-zCvmH2vbEolgKxtqXL2wmGCUxUyNheYn/C+PD1YAjfxHC54+MhdruyhO7QieQrYsYeTxrn93PM2y0jRH1zEExw==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -7273,7 +7270,6 @@ sax@^1.2.4, sax@~1.2.1:
 scheduler@^0.11.2:
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.11.2.tgz#a8db5399d06eba5abac51b705b7151d2319d33d3"
-  integrity sha512-+WCP3s3wOaW4S7C1tl3TEXp4l9lJn0ZK8G3W3WKRWmw77Z2cIFUW2MiNTMHn5sCjxN+t7N43HAOOgMjyAg5hlg==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
@@ -7704,7 +7700,6 @@ stream-shift@^1.0.0:
 strict-uri-encode@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
-  integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
 strict-uri-encode@^2.0.0:
   version "2.0.0"
@@ -8068,7 +8063,6 @@ typescript@^2.7.2:
 typescript@^3.1.6:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
-  integrity sha512-tDMYfVtvpb96msS1lDX9MEdHrW4yOuZ4Kdc4Him9oU796XldPYF/t2+uKoX0BBa0hXXwDlqYQbXY5Rzjzc5hBA==
 
 ua-parser-js@^0.7.18:
   version "0.7.18"

@@ -1,6 +1,6 @@
 import {Dispatch} from "react-redux";
-import { applicationService } from "../services/applicationService";
-import Application from "../models/application";
+import { coreApiService } from "../services/coreApiService";
+import { Application } from "@reperio/core-connector";
 
 export const applicationsActionTypes = {
     APPLICATIONS_GET_PENDING: "APPLICATIONS_GET_PENDING",
@@ -24,7 +24,7 @@ export const getApplications = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const applications: Application[] = (await applicationService.getApplications()).data;
+        const applications: Application[] = (await coreApiService.applicationService.getApplications()).data;
         dispatch({
             type: applicationsActionTypes.APPLICATIONS_GET_SUCCESS,
             payload: applications

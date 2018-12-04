@@ -1,9 +1,9 @@
 import React from 'react'
 import { Grid, ButtonElement } from '@reperio/ui-components';
-import User from '../../models/user';
+import { User } from '@reperio/core-connector';
 
 interface OrganizationManagementUsersProps {
-    removeUser(index: number): void;
+    removeUser(userId: string): void;
     canUpdateOrganizations: boolean;
     gridData: User[];
 }
@@ -42,7 +42,7 @@ const OrganizationManagementUsers = (props: OrganizationManagementUsersProps) =>
                     filterable: false,
                     Cell: (row: any) => (
                         <div>
-                            <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeUser(row.index)} />
+                            <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removeUser(row.original.id)} />
                         </div>
                     )
                 }

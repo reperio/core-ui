@@ -1,10 +1,11 @@
 import React from 'react'
 import Dropdown from "../../models/dropdown";
 import { ButtonElement } from "@reperio/ui-components";
+import { Organization } from '@reperio/core-connector';
 
 interface OrganizationFieldArrayProps {
     removeOrganization(index: number): void;
-    initialValues: Dropdown[];
+    initialValues: Organization[];
     active: boolean;
 }
 
@@ -17,7 +18,7 @@ const OrganizationFieldArray: React.SFC<OrganizationFieldArrayProps> = (props: O
                 <div className="r-row-child">
                     <div className="row">
                         <div className="r-row-child">
-                            {props.initialValues[index].label}
+                            {(props.initialValues[index].personal ? 'Personal - ' : '') + props.initialValues[index].name}
                         </div>
                         <div className="r-row-child">
                             {props.active ?

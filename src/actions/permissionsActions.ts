@@ -1,9 +1,8 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
-import { permissionService } from "../services/permissionService";
 import {reset} from "redux-form";
-import RolePermission from "../models/rolePermission";
-import { Permission } from "../models/permission";
+import { Permission, RolePermission } from "@reperio/core-connector";
+import { coreApiService } from "../services/coreApiService";
 
 export const permissionsActionTypes = {
     PERMISSIONS_GET_PENDING: "PERMISSIONS_GET_PENDING",
@@ -37,7 +36,7 @@ export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const permissions: Permission[] = (await permissionService.getPermissions()).data;
+        const permissions: Permission[] = (await coreApiService.permissionService.getPermissions()).data;
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_GET_SUCCESS,
             payload: permissions
@@ -58,7 +57,7 @@ export const loadManagementInitialPermission = (permissionName: string) => async
             type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING
         });
 
-        const permission: Permission = permissionName != null ? (await permissionService.getPermissionById(permissionName)).data : null;
+        const permission: Permission = permissionName != null ? (await coreApiService.permissionService.getPermissionById(permissionName)).data : null;
 
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS,
@@ -99,8 +98,7 @@ export const editPermission = (permissionName: string, displayName: string, desc
         });
 
     try {
-        await permissionService.editPermission(permissionName, displayName, description, isSystemAdminPermission, rolePermissions);
-
+        await coreApiService.permissionService.editPermission(permissionName, displayName, description, isSystemAdminPermission, rolePermissions);
 
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_SAVE_SUCCESS

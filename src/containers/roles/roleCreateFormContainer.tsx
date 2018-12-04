@@ -25,7 +25,7 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class RoleCreateFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: RoleCreateFormValues) {
-        await this.props.actions.createRole(form.name, form.selectedApplication, form.selectedOrganization, form.selectedPermissions);
+        await this.props.actions.createRole(form.name, form.selectedApplication.value, form.selectedOrganization.value, form.selectedPermissions.map(x=> x.value));
     };
 
     async componentDidMount() {

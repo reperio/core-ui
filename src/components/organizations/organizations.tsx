@@ -1,6 +1,6 @@
 import React from 'react'
 import {Grid, Wrapper, ButtonElement} from '@reperio/ui-components';
-import Organization from '../../models/organization';
+import { Organization } from '@reperio/core-connector';
 
 interface OrganizationsProps {
     navigateToCreate(): void;

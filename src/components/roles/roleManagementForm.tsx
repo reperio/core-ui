@@ -2,9 +2,9 @@ import React from 'react'
 import {Field, FieldArray, reduxForm, InjectedFormProps} from 'redux-form'
 import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
 import PermissionsArray from '../permissions/permissionsArray';
-import { Permission } from '../../models/permission';
-import Role from '../../models/role';
 import Dropdown from '../../models/dropdown';
+import { RoleViewModel } from '../../models/roleViewModel';
+import { Permission, Role } from '@reperio/core-connector';
 
 interface RoleManagementProps {
     addPermission(selectedPermission: Dropdown): void;
@@ -17,6 +17,7 @@ interface RoleManagementProps {
     canUpdateRoles: boolean;
     errorMessage: string;
     initialValues: Role;
+    selectedPermissions: Permission[];
     isError: boolean;
     permissions: Permission[];
     selectedPermission: Dropdown;
@@ -73,7 +74,7 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                                     options={
                                                         props.permissions
                                                             .filter((permission: Permission) => {
-                                                                return !props.initialValues.selectedPermissions.map((x:any)=> x.value).includes(permission.name)
+                                                                return !props.selectedPermissions.map((x:Permission)=> x.name).includes(permission.name)
                                                             })
                                                             .map((permission: Permission, index: number) => { 
                                                                 return {
@@ -95,7 +96,7 @@ const RoleManagementForm: React.SFC<Form> = (props: Form) => (
                                 <FieldArray name="permissions"
                                             canUpdateRoles={props.canUpdateRoles}
                                             rerenderOnEveryChange={true}
-                                            initialValues={props.initialValues.selectedPermissions}
+                                            initialValues={props.selectedPermissions}
                                             toggle={false}
                                             removePermission={props.removePermission}
                                             component={PermissionsArray}/>

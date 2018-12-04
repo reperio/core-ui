@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { editRole, loadManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole} from '../../actions/rolesActions';
+import { getPermissions } from '../../actions/permissionsActions';
 import RoleManagementForm from '../../components/roles/roleManagementForm';
 import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
@@ -11,9 +12,7 @@ import Dropdown from '../../models/dropdown';
 import { CorePermissions } from '../../models/permission';
 
 class RoleManagementFormValues {
-    id: string;
     name: string;
-    selectedPermissions: Dropdown[];
 }
 
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
@@ -23,15 +22,11 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class RoleManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: RoleManagementFormValues) {
-        const permissions = form.selectedPermissions
-            .map((permission: Dropdown) => {
-                return permission.value
-            });
-
-        await this.props.actions.editRole(form.id, form.name, permissions);
+        await this.props.actions.editRole(this.props.initialRole.role.id, form.name, this.props.initialRole.selectedPermissions.map(x=> x.name));
     };
 
     async componentDidMount() {
+        await this.props.actions.getPermissions();
         await this.props.actions.loadManagementInitialRole(this.props.match.params.roleId);
     }
 
@@ -60,7 +55,8 @@ class RoleManagementFormContainer extends React.Component<RouteComponentProps<an
             <RoleManagementForm navigateToRoles={this.navigateToRoles.bind(this)}
                                 canUpdateRoles={this.props.authSession.user.permissions.includes(CorePermissions.UpdateRoles)}
                                 canDeleteRoles={this.props.authSession.user.permissions.includes(CorePermissions.DeleteRoles)}
-                                initialValues={this.props.initialRole}
+                                initialValues={this.props.initialRole ? this.props.initialRole.role : null}
+                                selectedPermissions={this.props.initialRole ? this.props.initialRole.selectedPermissions : null}
                                 isError={this.props.isError}
                                 errorMessage={this.props.errorMessage}
                                 removePermission={this.removePermission.bind(this)}
@@ -76,17 +72,11 @@ class RoleManagementFormContainer extends React.Component<RouteComponentProps<an
 
 function mapStateToProps(state: State) {
     const selector = formValueSelector('roleManagementForm');
-    const roleManagement = state.roleManagement;
     return {
-        initialRole: roleManagement.initialRole != null ? {
-            id: roleManagement.initialRole.id,
-            name: roleManagement.initialRole.name,
-            organization: roleManagement.initialRole.organization,
-            selectedPermissions: roleManagement.initialRole.selectedPermissions
-        } : null,
-        isError: roleManagement.isError,
-        errorMessage: roleManagement.errorMessage,
-        permissions: roleManagement.permissions,
+        initialRole: state.roleManagement.initialRole,
+        isError: state.roleManagement.isError,
+        errorMessage: state.roleManagement.errorMessage,
+        permissions: state.permissions.permissions,
         selectedPermission: selector(state, 'selectedPermission') as Dropdown,
         authSession: state.authSession
     };
@@ -94,7 +84,7 @@ function mapStateToProps(state: State) {
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editRole, loadManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole}, dispatch)
+        actions: bindActionCreators({editRole, loadManagementInitialRole, removePermissionFromRole, selectPermission, addPermission, deleteRole, getPermissions}, dispatch)
     };
 }
 

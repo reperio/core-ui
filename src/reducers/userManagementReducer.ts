@@ -1,28 +1,26 @@
 import {initialState, StateUserManagement} from "../store/initialState";
 import { usersActionTypes } from "../actions/usersActions";
-import UserEmail from "../models/userEmail";
-import User from "../models/user";
-import SelectedRole from "../models/selectedRole";
-import Dropdown from "../models/dropdown";
+import { User, Role, UserEmail, Organization } from "@reperio/core-connector";
+import { UserViewModel } from "../models/userViewModel";
 
 export function userManagementReducer(state = initialState.userManagement, action: {type: string, payload: any}): StateUserManagement {
     switch (action.type) {
         case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS: {
-            const user: User = action.payload.user;
+            const userViewModel: UserViewModel = action.payload.userViewModel;
 
-            if (user) {
-                user.userEmails.forEach((userEmail: UserEmail) => {
-                    userEmail.primary = userEmail.email === user.primaryEmailAddress ? true : false
+            if (userViewModel) {
+                userViewModel.user.userEmails.forEach((userEmail: UserEmail) => {
+                    userEmail.primary = userEmail.email === userViewModel.user.primaryEmailAddress ? true : false
                 });
-                user.userEmails = user.userEmails.filter((userEmail: UserEmail) => !userEmail.deleted);
+                userViewModel.selectedUserEmails = userViewModel.user.userEmails.filter((userEmail: UserEmail) => !userEmail.deleted);
             }
 
             return {
                 isPending: false,
                 isError: false,
-                initialUser: user,
+                initialUser: userViewModel,
                 errorMessage: null,
-                user
+                user: userViewModel
             };
         }
         case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING: {
@@ -45,7 +43,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_REMOVE_ORGANIZATION: {
             const {index} = action.payload;
-            const newList = state.user.selectedOrganizations.filter((selectedOrganization: Dropdown, i: number) => {
+            const newList = state.user.selectedOrganizations.filter((selectedOrganization: Organization, i: number) => {
                 return i != index;
             });
             return {
@@ -71,25 +69,9 @@ export function userManagementReducer(state = initialState.userManagement, actio
                 initialUser: state.initialUser
             };
         }
-        case usersActionTypes.USERS_MANAGEMENT_SHOW_ROLE_DETAIL: {
-            const {index} = action.payload;
-            const newList = state.user.selectedRoles;
-            if (newList.length != 0) {
-                newList[index].role.visible ? newList[index].role.visible = !newList[index].role.visible : newList[index].role.visible = true;
-            }
-            return {
-                isPending: true,
-                isError: false,
-                user: Object.assign({}, state.user, {
-                    selectedRoles: newList
-                }),
-                errorMessage: null,
-                initialUser: state.initialUser
-            };
-        }
         case usersActionTypes.USERS_MANAGEMENT_REMOVE_ROLE: {
             const {index} = action.payload;
-            const newList = state.user.selectedRoles.filter((selectedRole: SelectedRole, i: number) => {
+            const newList = state.user.selectedRoles.filter((selectedRole: Role, i: number) => {
                 return i != index;
             });
             return {
@@ -103,8 +85,8 @@ export function userManagementReducer(state = initialState.userManagement, actio
             };
         }
         case usersActionTypes.USERS_MANAGEMENT_ADD_ROLE: {
-            const {payload} = action.payload;
-            const newList = state.user.selectedRoles.concat([payload]);
+            const {role} = action.payload;
+            const newList = state.user.selectedRoles.concat([role]);
             return {
                 isPending: true,
                 isError: false,
@@ -117,14 +99,14 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL: {
             const {index} = action.payload;
-            const newList = state.user.userEmails.filter((userEmail: UserEmail, i: number) => {
+            const newList = state.user.selectedUserEmails.filter((userEmail: UserEmail, i: number) => {
                 return i != index;
             });
             return {
                 isPending: true,
                 isError: false,
                 user: Object.assign({}, state.user, {
-                    userEmails: newList
+                    selectedUserEmails: newList
                 }),
                 errorMessage: null,
                 initialUser: state.initialUser
@@ -132,12 +114,12 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL: {
             const {email} = action.payload;
-            const newList = state.user.userEmails.concat([{email, emailVerified: false, deleted: false, id: null, userId: null, user: null, primary: false}]);
+            const newList = state.user.selectedUserEmails.concat([{email, emailVerified: false, deleted: false, id: null, userId: null, user: null, primary: false}]);
             return {
                 isPending: true,
                 isError: false,
                 user: Object.assign({}, state.user, {
-                    userEmails: newList
+                    selectedUserEmails: newList
                 }),
                 errorMessage: null,
                 initialUser: state.initialUser
@@ -145,7 +127,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
         }
         case usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL: {
             const {index} = action.payload;
-            const newList = state.initialUser.userEmails;
+            const newList = state.initialUser.selectedUserEmails;
 
             newList.forEach((userEmail: UserEmail) => {
                 userEmail.primary = false;
@@ -157,7 +139,7 @@ export function userManagementReducer(state = initialState.userManagement, actio
                 isPending: true,
                 isError: false,
                 user: Object.assign({}, state.user, {
-                    userEmails: newList
+                    selectedUserEmails: newList
                 }),
                 errorMessage: null,
                 initialUser: state.initialUser

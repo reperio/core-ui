@@ -10,20 +10,16 @@ import { sendVerificationEmail } from '../../actions/authActions';
 import { formValueSelector } from 'redux-form';
 import { RouteComponentProps } from 'react-router';
 import { history } from '../../store/history';
-import SelectedRole from '../../models/selectedRole';
-import UserEmail from '../../models/userEmail';
 import Dropdown from '../../models/dropdown';
 import { connect } from 'react-redux';
 import {submitForm} from '../../actions/miscActions';
 import UserManagementForm from '../../components/users/userManagementForm';
-import { CorePermissions } from '../../models/permission';
+import { Role, UserEmail, Organization, CorePermissions } from '@reperio/core-connector'
 
 class UserManagementFormValues {
-    id: string;
     firstName: string;
     lastName: string;
     selectedOrganizations: Dropdown[];
-    selectedRoles: SelectedRole[];
     userEmails: UserEmail[];
 }
 
@@ -53,12 +49,12 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         history.push('/users');
     }
 
-    selectOrganization(organization: Dropdown) {
-        this.props.actions.selectOrganization(organization);
+    selectOrganization(dropdown: Dropdown) {
+        this.props.actions.selectOrganization(dropdown.value);
     }
 
-    selectRole(role: SelectedRole) {
-        this.props.actions.selectRole(role);
+    selectRole(dropdown: Dropdown) {
+        this.props.actions.selectRole(dropdown.value);
     }
 
     removeOrganization(index: number) {
@@ -70,7 +66,7 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
     }
 
     toggleRoleDetails(index: number) {
-        this.props.actions.toggleRoleDetails(index);
+        this.props.actions.toggleRoleDetails(index, this.props.activeRoleDetailIndex);
     }
 
     removeRole(index: number) {
@@ -78,7 +74,7 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
     }
 
     addRole(role: Dropdown) {
-        this.props.actions.addRole(role, this.props.roles);
+        this.props.actions.addRole(role);
     }
 
     setPrimaryEmailAddress(index: number) {
@@ -94,7 +90,7 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
     }
 
     sendVerificationEmail(index: number) {
-        this.props.actions.sendVerificationEmail(this.props.user.id, this.props.user.userEmails[index].email);
+        this.props.actions.sendVerificationEmail(this.props.user.user.id, this.props.user.user.userEmails[index].email);
     }
 
     togglePanel(index: number) {
@@ -106,45 +102,33 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
     }
 
     editUserGeneral(form: UserManagementFormValues) {
-        this.props.actions.editUserGeneral(form.id, form.firstName, form.lastName);
+        this.props.actions.editUserGeneral(this.props.initialUser.user.id, form.firstName, form.lastName);
     }
 
     cancelUserPanel() {
         this.props.actions.cancelUserPanel();
     }
 
-    editUserEmails(form: UserManagementFormValues) {
-        const primaryEmailAddress = form.userEmails
-            .filter((x: UserEmail)=> x.primary);
-
-        this.props.actions.editUserEmails(form.id, form.userEmails, this.props.initialUser, primaryEmailAddress);
+    editUserEmails() {
+        this.props.actions.editUserEmails();
     }
 
-    editUserOrganizations(form: UserManagementFormValues) {
-        const selectedOrganizations = form.selectedOrganizations
-            .map((organization: Dropdown) => {
-                return organization.value
-            });
-
-        this.props.actions.editUserOrganizations(form.id, selectedOrganizations);
+    editUserOrganizations() {
+        this.props.actions.editUserOrganizations(this.props.initialUser.user.id);
     }
 
     deleteUser() {
-        this.props.actions.deleteUser(this.props.user.id);
+        this.props.actions.deleteUser(this.props.initialUser.user.id);
     }
 
-    editUserRoles(form: UserManagementFormValues) {
-        const selectedRoles = form.selectedRoles
-            .map((role: SelectedRole) => {
-                return role.value
-            });
-
-        this.props.actions.editUserRoles(this.props.user.id, selectedRoles);
+    editUserRoles() {
+        this.props.actions.editUserRoles(this.props.initialUser.user.id, this.props.user.selectedRoles.map(role=> role.id));
     }
 
     render() {
         return (
             <UserManagementForm activePanelIndex={this.props.activePanelIndex}
+                                activeRoleDetailIndex={this.props.activeRoleDetailIndex}
                                 addEmailAddress={this.addEmailAddress.bind(this)}
                                 addOrganization={this.addOrganization.bind(this)}
                                 addRole={this.addRole.bind(this)}
@@ -187,9 +171,10 @@ function mapStateToProps(state: State) {
         organizations: state.organizations.organizations,
         roles: state.roles.roles,
         authSession: state.authSession,
-        selectedOrganization: organizationsSelector(state, 'selectedOrganization') as Dropdown,
-        selectedRole: rolesSelector(state, 'selectedRole') as SelectedRole,
+        selectedOrganization: organizationsSelector(state, 'selectedOrganization') as Organization,
+        selectedRole: rolesSelector(state, 'selectedRole') as Role,
         redirectToErrorPage: state.organizations.isError || state.roles.isError || state.userManagement.isError,
+        activeRoleDetailIndex: rolesSelector(state, 'activeRoleDetailIndex') as number,
         activePanelIndex: selector(state, 'activePanelIndex') as number
     };
 }

@@ -9,7 +9,7 @@ import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
 import Dropdown from '../../models/dropdown';
-import { CorePermissions } from '../../models/permission';
+import { CorePermissions } from '@reperio/core-connector';
 
 class RoleManagementFormValues {
     name: string;

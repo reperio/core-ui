@@ -1,5 +1,5 @@
 import {initialState, StatePermissionManagement, StatePermissions} from "../store/initialState";
-import { permissionsActionTypes } from "../actions/permissionsActions";
+import { permissionsActionTypes } from "../actionTypes/permissionsActionTypes";
 
 export function permissionManagementReducer(state = initialState.permissionManagement, action: {type: string, payload: any}): StatePermissionManagement {
     switch (action.type) {
@@ -58,7 +58,7 @@ export function permissionManagementReducer(state = initialState.permissionManag
                 return i != index;
             });
             return {
-                isPending: true,
+                isPending: false,
                 isError: false,
                 initialPermission: Object.assign({}, state.initialPermission, {
                     rolePermissions: newList

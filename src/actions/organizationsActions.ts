@@ -3,7 +3,7 @@ import { history } from '../store/history';
 import { reset, change } from "redux-form";
 import Dropdown from "../models/dropdown";
 import { coreApiService } from "../services/coreApiService";
-import { Organization, User } from "../../node_modules/@reperio/core-connector";
+import { Organization, User } from "@reperio/core-connector";
 import { OrganizationViewModel } from "../models/organizationViewModel";
 import { State } from "../store/initialState";
 

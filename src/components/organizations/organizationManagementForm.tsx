@@ -3,7 +3,7 @@ import {Field, reduxForm, InjectedFormProps} from 'redux-form'
 import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
 import OrganizationManagementUsers from './organizationManagementUsers';
 import Dropdown from '../../models/dropdown';
-import { User, Organization } from '../../../node_modules/@reperio/core-connector';
+import { User, Organization } from '@reperio/core-connector';
 import { OrganizationViewModel } from '../../models/organizationViewModel';
 
 interface OrganizationManagementProps {

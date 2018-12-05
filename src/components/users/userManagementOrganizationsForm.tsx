@@ -4,7 +4,7 @@ import {Field, reduxForm, InjectedFormProps, FieldArray } from 'redux-form';
 import Dropdown from '../../models/dropdown';
 import OrganizationFieldArray from '../organizations/organizationFieldArray';
 import { UserViewModel } from '../../models/userViewModel';
-import { Organization } from '../../../node_modules/@reperio/core-connector';
+import { Organization } from '@reperio/core-connector';
 
 interface UserManagementProps {
     submit(): void;

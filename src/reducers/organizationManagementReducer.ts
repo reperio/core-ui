@@ -1,6 +1,6 @@
 import {initialState, StateOrganizationManagement} from "../store/initialState";
 import { organizationsActionTypes } from "../actions/organizationsActions";
-import { User } from "../../node_modules/@reperio/core-connector";
+import { User } from "@reperio/core-connector";
 
 export function organizationManagementReducer(state = initialState.organizationManagement, action: {type: string, payload: any}): StateOrganizationManagement {
     switch (action.type) {

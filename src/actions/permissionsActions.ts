@@ -16,8 +16,7 @@ function getErrorMessageFromStatusCode(statusCode: number) {
 
 export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     dispatch({
-        type: permissionsActionTypes.PERMISSIONS_GET_PENDING,
-        payload: {}
+        type: permissionsActionTypes.PERMISSIONS_GET_PENDING
     });
 
     try {
@@ -73,14 +72,6 @@ export const editPermission = (permissionName: string, displayName: string, desc
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
     });
-
-    const rp = rolePermissions
-        .map((rolePermission: RolePermission) => {
-            return {
-                roleId: rolePermission.roleId,
-                permissionName: rolePermission.permissionName
-            }
-        });
 
     try {
         await coreApiService.permissionService.editPermission(permissionName, displayName, description, isSystemAdminPermission, rolePermissions);

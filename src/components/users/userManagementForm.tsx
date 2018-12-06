@@ -7,10 +7,8 @@ import UserManagementRolesForm from '../../components/users/userManagementRolesF
 import UserManagementControls from '../../components/users/userManagementControls';
 import { Redirect } from 'react-router';
 import Dropdown from '../../models/dropdown';
-import User from '../../models/user';
-import Organization from '../../models/organization';
-import Role from '../../models/role';
-import { CorePermissions } from '../../models/permission';
+import { UserViewModel } from '../../models/userViewModel';
+import { Organization, Role, User, CorePermissions } from '@reperio/core-connector';
 import { EditablePanel, EditablePanelOverlay } from '@reperio/ui-components';
 
 interface UserManagementProps {
@@ -35,13 +33,14 @@ interface UserManagementProps {
     togglePanel(panel: number): void;
     toggleRoleDetails(): void;
     activePanelIndex: number;
+    activeRoleDetailIndex: number;
     loggedInUser: User;
-    managedUser: User;
+    managedUser: UserViewModel;
     organizations: Organization[];
     redirectToErrorPage: boolean;
     roles: Role[];
-    selectedOrganization: Dropdown;
-    selectedRole: Dropdown;
+    selectedOrganization: Organization;
+    selectedRole: Role;
 }
 
 const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagementProps) => (
@@ -51,14 +50,14 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
         <div className="management-container">
             {props.activePanelIndex != null ? <EditablePanelOverlay /> : null}
             <div className="management-left">
-                <UserManagementProfile top={true} initialValues={props.managedUser} />
+                <UserManagementProfile top={true} userViewModel={props.managedUser} />
                 <EditablePanel  active={props.activePanelIndex === 0}
                                 permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.UpdateBasicUserInfo)}
                                 onClick={() => { props.activePanelIndex != 0 ? props.togglePanel(0) : null}}
                                 submit={props.submitForm.bind(this, 'userManagementGeneralForm')}
                                 cancel={props.cancelUserPanel.bind(this)}>
                     <UserManagementGeneralForm  active={props.activePanelIndex === 0}
-                                                initialValues={props.managedUser}
+                                                initialValues={props.managedUser.user}
                                                 onSubmit={props.editUserGeneral.bind(this)}/>
                 </EditablePanel>
                 <EditablePanel  active={props.activePanelIndex === 1}
@@ -120,7 +119,7 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
             </div>
             <UserManagementControls right={true} 
                                     children={
-                                        <UserManagementProfile  top={false} initialValues={props.managedUser} />
+                                        <UserManagementProfile  top={false} userViewModel={props.managedUser} />
                                     }
                                     canDeleteUser={props.loggedInUser.permissions.includes(CorePermissions.DeleteUsers)}
                                     deleteUser={props.deleteUser.bind(this)}

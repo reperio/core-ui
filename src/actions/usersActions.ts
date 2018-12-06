@@ -1,16 +1,12 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
-import { userService } from "../services/userService";
 import { change, reset, formValueSelector } from "redux-form";
 import { store } from "../store/store";
-import User from "../models/user";
-import UserOrganization from "../models/userOrganization";
+import { User, Role, Organization, UserEmail } from '@reperio/core-connector';
 import Dropdown from "../models/dropdown";
-import UserRole from "../models/userRole";
-import SelectedRole from "../models/selectedRole";
-import UserEmail from "../models/userEmail";
-import Role from "../models/role";
-import Organization from "../models/organization";
+import { State } from "../store/initialState";
+import { coreApiService } from "../services/coreApiService";
+import { UserViewModel } from "../models/userViewModel";
 
 export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
@@ -60,7 +56,7 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const users: User[] = (await userService.getUsers()).data;
+        const users: User[] = (await coreApiService.userService.getUsers()).data;
         dispatch({
             type: usersActionTypes.USERS_GET_SUCCESS,
             payload: users
@@ -81,7 +77,7 @@ export const createUser = (primaryEmailAddress: string, firstName: string, lastN
     });
 
     try {
-        await userService.createUser(primaryEmailAddress, firstName, lastName, password, confirmPassword, organizationIds);
+        await coreApiService.userService.createUser(primaryEmailAddress, firstName, lastName, password, confirmPassword, organizationIds);
         dispatch({
             type: usersActionTypes.USERS_CREATE_SUCCESS
         });
@@ -103,36 +99,34 @@ export const clearManagementInitialUser = () => async (dispatch: Dispatch<any>) 
     });
 };
 
-export const loadManagementInitialUser = (userId: string) => async (dispatch: Dispatch<any>) => {
+export const loadManagementInitialUser = (userId: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
     try {
         dispatch({
             type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_PENDING
         });
 
-        let user: User = userId != null ? (await userService.getUserById(userId)).data : null;
-        user.selectedOrganizations = user.userOrganizations
-            .map((userOrganization:UserOrganization) => {
-                return {
-                    value: userOrganization.organization.id, 
-                    label: (userOrganization.organization.personal ? 'Personal - ' : '') + userOrganization.organization.name
-                }
-            })
-            .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label));
+        const userViewModel: UserViewModel = {
+            user: userId != null ? (await coreApiService.userService.getUserById(userId)).data : null,
+            selectedOrganizations: [],
+            selectedRoles: [],
+            selectedUserEmails: []
+        };
+
+        userViewModel.selectedOrganizations = getState().organizations.organizations
+            .filter((organization: Organization) => userViewModel.user.userOrganizations
+                .map(userOrganization => userOrganization.organizationId).includes(organization.id)
+            )
+            .sort((a: Organization, b: Organization) => a.name.localeCompare(b.name));
     
-        user.selectedRoles = user.userRoles
-            .map((userRole: UserRole) => {
-                const selectedRole: SelectedRole = {
-                    value: userRole.role.id, 
-                    label: userRole.role.name,
-                    role: userRole.role,
-                    organizationId: userRole.role.organizationId
-                };
-                return selectedRole;
-            });
+        userViewModel.selectedRoles = getState().roles.roles
+            .filter((role: Role) => userViewModel.user.userRoles
+                .map(userRole => userRole.roleId).includes(role.id)
+            )
+            .sort((a: Role, b: Role) => a.name.localeCompare(b.name));
     
         dispatch({
             type: usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS,
-            payload: { user }
+            payload: { userViewModel }
         });
         dispatch(reset("userManagement"));
     }
@@ -146,16 +140,23 @@ export const loadManagementInitialUser = (userId: string) => async (dispatch: Di
     }
 };
 
-export const selectOrganization = (organization: Dropdown) => (dispatch: Dispatch<any>) => {
-    dispatch(change('userManagementOrganizationsForm', 'selectedOrganization', organization.value ? { name: organization.label, id: organization.value } : ""));
+export const selectOrganization = (organizationId: string) => (dispatch: Dispatch<any>, getState: () => State) => {
+    if (organizationId != null) {
+        const organization = getState().organizations.organizations.filter(x=> x.id === organizationId)
+        dispatch(change('userManagementOrganizationsForm', 'selectedOrganization', organization));
+    }
 }
 
-export const selectRole = (role: SelectedRole) => (dispatch: Dispatch<any>) => {
-    dispatch(change('userManagementRolesForm', 'selectedOrganization', role.value ? { name: role.label, id: role.value } : ""));
+export const selectRole = (roleId: string) => (dispatch: Dispatch<any>, getState: () => State) => {
+    if (roleId != null) {
+        const role = getState().roles.roles.filter(x=> x.id === roleId)
+        dispatch(change('userManagementRolesForm', 'selectedOrganization', role));
+    }
 }
 
-export const addOrganization = (organization: Dropdown) => (dispatch: Dispatch<any>) => {
-    if (organization != null) {
+export const addOrganization = (selectedOrganization: Dropdown) => (dispatch: Dispatch<any>, getState: ()=> State) => {
+    if (selectedOrganization != null) {
+        const organization = getState().organizations.organizations.filter((organization: Organization) => organization.id == selectedOrganization.value)[0];
         dispatch({
             type: usersActionTypes.USERS_MANAGEMENT_ADD_ORGANIZATION,
             payload: { organization }
@@ -171,26 +172,20 @@ export const removeOrganization = (index: number) => (dispatch: Dispatch<any>) =
     });
 }
 
-export const toggleRoleDetails = (index: number) => (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_SHOW_ROLE_DETAIL,
-        payload: { index }
-    });
+export const toggleRoleDetails = (index: number, activePanelIndex: number) => (dispatch: Dispatch<any>) => {
+    if (activePanelIndex === index) {
+        index = null;
+    }
+    dispatch(change('userManagementRolesForm', 'activeRoleDetailIndex', index));
 }
 
-export const addRole = (selectedRole: Dropdown, roles: Role[]) => (dispatch: Dispatch<any>) => {
+export const addRole = (selectedRole: Dropdown) => (dispatch: Dispatch<any>, getState: ()=> State) => {
 
     if (selectedRole != null) {
-        const matchedRole = roles.filter((role: Role) => role.id == selectedRole.value)[0];
-        const payload = {
-            label: selectedRole.label,
-            value: selectedRole.value,
-            role: matchedRole,
-            organizationId: matchedRole.organizationId
-        }
+        const role = getState().roles.roles.filter((role: Role) => role.id == selectedRole.value)[0];
         dispatch({
             type: usersActionTypes.USERS_MANAGEMENT_ADD_ROLE,
-            payload: { payload }
+            payload: { role }
         });
         dispatch(change('userManagementRolesForm', 'selectedRole', null));
     }
@@ -217,19 +212,14 @@ export const setPrimaryEmailAddress = (index: number) => (dispatch: Dispatch<any
     });
 }
 
-export const addEmailAddress = () => (dispatch: Dispatch<any>) => {
-    const state = store.getState();
-
+export const addEmailAddress = () => (dispatch: Dispatch<any>, getState: () => State) => {
     const selector = formValueSelector('userManagementEmailsForm');
 
-    const email = selector(state, 'email') as string;
-
-    if (email != null) {
-        dispatch({
-            type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL,
-            payload: { email }
-        });
-    }
+    const email = selector(getState(), 'email') as string;
+    dispatch({
+        type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL,
+        payload: { email }
+    });
 }
 
 export const togglePanel = (index: number) => (dispatch: Dispatch<any>) => {
@@ -240,21 +230,22 @@ export const cancelUserPanel = () => (dispatch: Dispatch<any>) => {
     dispatch({
         type: usersActionTypes.RESET_USER_MANAGEMENT
     });
+    dispatch(reset("userManagementGeneralForm"));
     dispatch(change('userManagementForm', 'activePanelIndex', null));
 }
 
-export const editUserGeneral = (userId: string, firstName: string, lastName: string) => async (dispatch: Dispatch<any>) => {
+export const editUserGeneral = (userId: string, firstName: string, lastName: string) => async (dispatch: Dispatch<any>, getState: ()=> State) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        await userService.editUserGeneral(userId, firstName, lastName);
+        await coreApiService.userService.editUserGeneral(userId, firstName, lastName);
         dispatch(change('userManagementForm', 'activePanelIndex', null));
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });
-        loadManagementInitialUser(userId)(dispatch);
+        loadManagementInitialUser(userId)(dispatch, getState);
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_EDIT_ERROR,
@@ -265,21 +256,22 @@ export const editUserGeneral = (userId: string, firstName: string, lastName: str
     }
 };
 
-export const editUserEmails = (userId: string, userEmails: UserEmail[], initialUser: User, primaryEmailAddress: UserEmail[]) => async (dispatch: Dispatch<any>) => {
+export const editUserEmails = () => async (dispatch: Dispatch<any>, getState: ()=> State) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        const added = userEmails.filter((userEmail: UserEmail) => userEmail.id == null);
-        const deleted = initialUser.userEmails.filter((userEmail: UserEmail) => !userEmails.map((x: UserEmail) => x.id).includes(userEmail.id));
+        const user = getState().userManagement.user;
+        const added = user.selectedUserEmails.filter((userEmail: UserEmail) => userEmail.id == null);
+        const deleted = user.user.userEmails.filter((userEmail: UserEmail) => !user.selectedUserEmails.map((x: UserEmail) => x.id).includes(userEmail.id));
 
-        await userService.editUserEmails(userId, initialUser, added, deleted, primaryEmailAddress.length > 0 ? primaryEmailAddress[0] : null);
+        await coreApiService.userService.editUserEmails(user.user.id, added, deleted);
         dispatch(change('userManagementForm', 'activePanelIndex', null));
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });
-        loadManagementInitialUser(userId)(dispatch);
+        loadManagementInitialUser(user.user.id)(dispatch, getState);
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_EDIT_ERROR,
@@ -290,18 +282,19 @@ export const editUserEmails = (userId: string, userEmails: UserEmail[], initialU
     }
 };
 
-export const editUserOrganizations = (userId: string, organizationIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const editUserOrganizations = (userId: string) => async (dispatch: Dispatch<any>, getState: ()=> State) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        await userService.editUserOrganizations(userId, organizationIds);
+        const organizationIds = getState().userManagement.user.selectedOrganizations.map(organization => organization.id);
+        await coreApiService.userService.editUserOrganizations(userId, organizationIds);
         dispatch(change('userManagementForm', 'activePanelIndex', null));
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });
-        loadManagementInitialUser(userId)(dispatch);
+        loadManagementInitialUser(userId)(dispatch, getState);
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_EDIT_ERROR,
@@ -312,18 +305,18 @@ export const editUserOrganizations = (userId: string, organizationIds: string[])
     }
 };
 
-export const editUserRoles = (userId: string, roleIds: string[]) => async (dispatch: Dispatch<any>) => {
+export const editUserRoles = (userId: string, roleIds: string[]) => async (dispatch: Dispatch<any>, getState: () => State) => {
     dispatch({
         type: usersActionTypes.USERS_EDIT_PENDING
     });
 
     try {
-        await userService.editUserRoles(userId, roleIds);
+        await coreApiService.userService.editUserRoles(userId, roleIds);
         dispatch(change('userManagementForm', 'activePanelIndex', null));
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });
-        loadManagementInitialUser(userId)(dispatch);
+        loadManagementInitialUser(userId)(dispatch, getState);
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_EDIT_ERROR,
@@ -340,7 +333,7 @@ export const deleteUser = (userId: string) => async (dispatch: Dispatch<any>) =>
     });
 
     try {
-        await userService.deleteUser(userId);
+        await coreApiService.userService.deleteUser(userId);
         dispatch({
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });

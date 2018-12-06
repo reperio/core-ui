@@ -1,12 +1,13 @@
 import {ButtonElement} from '@reperio/ui-components';
 import React from 'react';
 import Dropdown from '../../models/dropdown';
+import { Permission } from '@reperio/core-connector';
 
 interface PermissionsArrayProps {
     togglePermissionDetails(index: number): void;
     removePermission(index: number): void;
     canUpdateRoles: boolean;
-    initialValues: Dropdown[];
+    initialValues: Permission[];
     toggle: boolean;
 }
 
@@ -14,13 +15,13 @@ const PermissionsArray: React.SFC<PermissionsArrayProps> = (props: PermissionsAr
     return (
         <div>
             <div className="r-row-child">
-                {props.initialValues.map((member:any, index:number) =>
+                {props.initialValues.map((permission:Permission, index:number) =>
                     <div key={index}>
                         <hr />
                         <div className="r-row-child">
                             <div className="row" onClick={() => props.toggle ? props.togglePermissionDetails(index) :  null}>
                                 <div className="r-row-child">
-                                    {props.initialValues[index].label}
+                                    {permission.name}
                                 </div>
                                 <div className="r-row-child">
                                     {props.canUpdateRoles ? 

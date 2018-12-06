@@ -3,8 +3,8 @@ import {Field, reduxForm, InjectedFormProps} from 'redux-form'
 import {TextboxElement, ButtonElement, Wrapper, PickerElement} from '@reperio/ui-components';
 import OrganizationManagementUsers from './organizationManagementUsers';
 import Dropdown from '../../models/dropdown';
-import User from '../../models/user';
-import Organization from '../../models/organization';
+import { User, Organization } from '@reperio/core-connector';
+import { OrganizationViewModel } from '../../models/organizationViewModel';
 
 interface OrganizationManagementProps {
     addUser(s: Dropdown): void;
@@ -17,6 +17,7 @@ interface OrganizationManagementProps {
     canUpdateOrganizations: boolean;
     errorMessage: string;
     initialValues: Organization;
+    selectedUsers: User[];
     isError: boolean;
     selectedUser: Dropdown;
     users: User[];
@@ -74,7 +75,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                                                     options={
                                                         props.users
                                                             .filter((user: User) => {
-                                                                return !props.initialValues.selectedUsers.map((x:any)=> x.value).includes(user.id)
+                                                                return !props.selectedUsers.map((x:User)=> x.id).includes(user.id)
                                                             })
                                                             .map((user: User, index: number) => { 
                                                                 return {
@@ -100,7 +101,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                                         <OrganizationManagementUsers    gridData={                                            
                                                                             props.users
                                                                                 .filter((user: User) => {
-                                                                                    return props.initialValues.selectedUsers.map((x:Dropdown)=> x.value).includes(user.id)
+                                                                                    return props.selectedUsers.map((x:User)=> x.id).includes(user.id)
                                                                                 })}
                                                                         removeUser={props.removeUser}
                                                                         canUpdateOrganizations={props.canUpdateOrganizations} />

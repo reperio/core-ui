@@ -1,12 +1,11 @@
 import { Dispatch } from "react-redux";
 import { history } from '../store/history';
-import { organizationService } from "../services/organizationService";
 import { reset, change } from "redux-form";
-import { userService } from "../services/userService";
-import Organization from "../models/organization";
-import UserOrganization from "../models/userOrganization";
-import User from "../models/user";
 import Dropdown from "../models/dropdown";
+import { coreApiService } from "../services/coreApiService";
+import { Organization, User } from "@reperio/core-connector";
+import { OrganizationViewModel } from "../models/organizationViewModel";
+import { State } from "../store/initialState";
 
 export const organizationsActionTypes = {
     ORGANIZATIONS_GET_PENDING: "ORGANIZATIONS_GET_PENDING",
@@ -46,7 +45,7 @@ export const getOrganizations = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const organizations: Organization[] = (await organizationService.getOrganizations()).data;
+        const organizations: Organization[] = (await coreApiService.organizationService.getOrganizations()).data;
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_GET_SUCCESS,
             payload: organizations
@@ -61,27 +60,25 @@ export const getOrganizations = () => async (dispatch: Dispatch<any>) => {
     }
 };
 
-export const loadManagementInitialOrganization = (organizationId: string) => async (dispatch: Dispatch<any>) => {
+export const loadManagementInitialOrganization = (organizationId: string) => async (dispatch: Dispatch<any>, getState: ()=> State) => {
     try {
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_PENDING
         });
 
-        const organization: Organization = organizationId != null ? (await organizationService.getOrganizationById(organizationId)).data : null;
-        const users: User[] = (await userService.getUsers()).data;
+        const organizationViewModel: OrganizationViewModel = {
+            organization: organizationId != null ? (await coreApiService.organizationService.getOrganizationById(organizationId)).data : null,
+            selectedUsers: []
+        };
     
-        organization.selectedUsers = organization.userOrganizations
-            .map((userOrganization: UserOrganization) => {
-                return {
-                    value: userOrganization.user.id, 
-                    label: `${userOrganization.user.firstName} ${userOrganization.user.lastName} - ${userOrganization.user.primaryEmailAddress}`
-                }
-            })
-            .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label));
+        organizationViewModel.selectedUsers = getState().users.users
+            .filter(x => organizationViewModel.organization.userOrganizations
+                .map(x=> x.userId).includes(x.id))
+            .sort((a: User, b: User) => a.firstName.localeCompare(b.firstName));
     
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS,
-            payload: { organization, users }
+            payload: { organizationViewModel }
         });
     
         dispatch(reset("organizationManagement"))
@@ -96,10 +93,10 @@ export const loadManagementInitialOrganization = (organizationId: string) => asy
     }
 };
 
-export const removeUserFromOrganization = (index: number) => (dispatch: Dispatch<any>) => {
+export const removeUserFromOrganization = (userId: string) => (dispatch: Dispatch<any>) => {
     dispatch({
         type: organizationsActionTypes.ORGANIZATION_MANAGEMENT_REMOVE_USER_INITIAL_ORGANIZATION,
-        payload: { index }
+        payload: { userId }
     });
 }
 
@@ -107,8 +104,9 @@ export const selectUser = (user: Dropdown) => (dispatch: Dispatch<any>) => {
     dispatch(change('organizationManagementForm', 'selectedUser', user.value ? { name: user.label, id: user.value } : ""));
 }
 
-export const addUser = (user: Dropdown) => (dispatch: Dispatch<any>) => {
-    if (user != null) {
+export const addUser = (selectedUser: Dropdown) => (dispatch: Dispatch<any>, getState: () => State) => {
+    if (selectedUser != null) {
+        const user = getState().users.users.filter((user: User) => user.id == selectedUser.value)[0];
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_ADD_USER_INITIAL_ORGANIZATION,
             payload: { user }
@@ -124,7 +122,7 @@ export const editOrganization = (organizationId: string, name: string, userIds: 
     });
 
     try {
-        await organizationService.editOrganization(organizationId, name, userIds);
+        await coreApiService.organizationService.editOrganization(organizationId, name, userIds);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_SAVE_SUCCESS
@@ -141,13 +139,13 @@ export const editOrganization = (organizationId: string, name: string, userIds: 
     }
 };
 
-export const createOrganization = (name: string, userIds: Dropdown[]) => async (dispatch: Dispatch<any>) => {
+export const createOrganization = (name: string, userIds: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: organizationsActionTypes.ORGANIZATIONS_CREATE_PENDING
     });
 
     try {
-        await organizationService.createOrganization(name, userIds);
+        await coreApiService.organizationService.createOrganization(name, userIds);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_CREATE_SUCCESS
@@ -169,7 +167,7 @@ export const deleteOrganization = (organizationId: string) => async (dispatch: D
     });
 
     try {
-        await organizationService.deleteOrganization(organizationId);
+        await coreApiService.organizationService.deleteOrganization(organizationId);
 
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_DELETE_SUCCESS

@@ -1,12 +1,11 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
-import { roleService } from "../services/roleService";
 import {reset, change} from "redux-form";
-import { permissionService } from "../services/permissionService";
-import RolePermission from "../models/rolePermission";
-import Role from "../models/role";
 import Dropdown from "../models/dropdown";
-import { Permission } from "../models/permission";
+import { Role, Permission } from "@reperio/core-connector";
+import { RoleViewModel } from "../models/roleViewModel";
+import { State } from "../store/initialState";
+import { coreApiService } from "../services/coreApiService";
 
 export const rolesActionTypes = {
     ROLES_GET_PENDING: "ROLES_GET_PENDING",
@@ -47,7 +46,7 @@ export const getRoles = () => async (dispatch: Dispatch<any>) => {
     });
 
     try {
-        const roles: Role[] = (await roleService.getRoles()).data;
+        const roles: Role[] = (await coreApiService.roleService.getRoles()).data;
         dispatch({
             type: rolesActionTypes.ROLES_GET_SUCCESS,
             payload: roles
@@ -68,27 +67,25 @@ export const clearManagementInitialRole = () => (dispatch: Dispatch<any>) => {
     });
 };
 
-export const loadManagementInitialRole = (roleId: string) => async (dispatch: Dispatch<any>) => {
+export const loadManagementInitialRole = (roleId: string) => async (dispatch: Dispatch<any>, getState: () => State) => {
     try {
         dispatch({
             type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING
         });
 
-        const role: Role = roleId != null ? (await roleService.getRoleById(roleId)).data : null;
-        const permissions: Permission[] = (await permissionService.getPermissions()).data;
-    
-        role.selectedPermissions = role.rolePermissions
-            .map((rolePermission: RolePermission) => {
-                return {
-                    value: rolePermission.permission.name, 
-                    label: rolePermission.permission.displayName
-                }
-            })
-            .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label));
+        const roleViewModel: RoleViewModel = {
+            role: roleId != null ? (await coreApiService.roleService.getRoleById(roleId)).data : null,
+            selectedPermissions: []
+        };
+
+        roleViewModel.selectedPermissions = getState().permissions.permissions
+            .filter(x=> roleViewModel.role.rolePermissions
+                .map(x=> x.permissionName).includes(x.name))
+            .sort((a: Permission, b: Permission) => a.displayName.localeCompare(b.displayName));
     
         dispatch({
             type: rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS,
-            payload: { role, permissions }
+            payload: { roleViewModel }
         });
     
         dispatch(reset("roleManagement"))
@@ -113,8 +110,10 @@ export const selectPermission = (permission: Dropdown) => (dispatch: Dispatch<an
     dispatch(change('roleManagementForm', 'selectedPermission', permission.value ? {name: permission.label, id: permission.value} : ""));
 }
 
-export const addPermission = (permission: Dropdown) => (dispatch: Dispatch<any>) => {
-    if (permission != null) {
+export const addPermission = (selectedPermission: Dropdown) => (dispatch: Dispatch<any>, getState: ()=> State) => {
+    if (selectedPermission != null) {
+        const test = getState().permissions.permissions;
+        const permission = test.filter((permission: Permission) => permission.name == selectedPermission.value)[0];
         dispatch({
             type: rolesActionTypes.ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE,
             payload: { permission }
@@ -129,7 +128,7 @@ export const editRole = (roleId: string, name: string, permissions: string[]) =>
     });
 
     try {
-        await roleService.editRole(roleId, name, permissions);
+        await coreApiService.roleService.editRole(roleId, name, permissions);
 
         dispatch({
             type: rolesActionTypes.ROLES_SAVE_SUCCESS
@@ -145,13 +144,13 @@ export const editRole = (roleId: string, name: string, permissions: string[]) =>
     }
 };
 
-export const createRole = (name: string, application: Dropdown, organization: Dropdown, permissions: Dropdown[]) => async (dispatch: Dispatch<any>) => {
+export const createRole = (name: string, applicationId: string, organizationId: string, permissions: string[]) => async (dispatch: Dispatch<any>) => {
     dispatch({
         type: rolesActionTypes.ROLES_CREATE_PENDING
     });
 
     try {
-        await roleService.createRole(name, application, organization, permissions);
+        await coreApiService.roleService.createRole(name, applicationId, organizationId, permissions);
 
         dispatch({
             type: rolesActionTypes.ROLES_CREATE_SUCCESS
@@ -174,7 +173,7 @@ export const deleteRole = (roleId: string) => async (dispatch: Dispatch<any>) =>
     });
 
     try {
-        await roleService.deleteRole(roleId);
+        await coreApiService.roleService.deleteRole(roleId);
 
         dispatch({
             type: rolesActionTypes.ROLES_DELETE_SUCCESS

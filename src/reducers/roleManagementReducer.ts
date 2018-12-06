@@ -4,13 +4,12 @@ import { rolesActionTypes } from "../actions/rolesActions";
 export function roleManagementReducer(state = initialState.roleManagement, action: {type: string, payload: any}): StateRoleManagement {
     switch (action.type) {
         case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_SUCCESS: {
-            const {role, permissions} = action.payload;
+            const {roleViewModel, permissions} = action.payload;
             return {
                 isPending: true,
                 isError: false,
-                initialRole: role,
-                errorMessage: null,
-                permissions: permissions
+                initialRole: roleViewModel,
+                errorMessage: null
             };
         }
         case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_ERROR: {
@@ -18,8 +17,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 isPending: false,
                 isError: true,
                 initialRole: null,
-                errorMessage: action.payload.message,
-                permissions: null
+                errorMessage: action.payload.message
             };
         }
         case rolesActionTypes.ROLES_MANAGEMENT_LOAD_INITIAL_ROLE_PENDING: {
@@ -27,8 +25,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 isPending: true,
                 isError: false,
                 initialRole: null,
-                errorMessage: null,
-                permissions: null
+                errorMessage: null
             };
         }
         case rolesActionTypes.ROLES_SAVE_PENDING: {
@@ -36,8 +33,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 isPending: true,
                 isError: false,
                 errorMessage: null,
-                initialRole: state.initialRole,
-                permissions: state.permissions
+                initialRole: state.initialRole
             };
         }
         case rolesActionTypes.ROLES_SAVE_SUCCESS: {
@@ -45,8 +41,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 isPending: false,
                 isError: false,
                 errorMessage: null,
-                initialRole: null,
-                permissions: null
+                initialRole: null
             };
         }
         case rolesActionTypes.ROLES_SAVE_ERROR: {
@@ -54,8 +49,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 isPending: false,
                 isError: true,
                 errorMessage: action.payload.message,
-                initialRole: state.initialRole,
-                permissions: state.permissions
+                initialRole: state.initialRole
             };
         }
         case rolesActionTypes.ROLE_MANAGEMENT_REMOVE_PERMISSION_INITIAL_ROLE: {
@@ -69,8 +63,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 initialRole: Object.assign({}, state.initialRole, {
                     selectedPermissions: newList
                 }),
-                errorMessage: null,
-                permissions: state.permissions
+                errorMessage: null
             };
         }
         case rolesActionTypes.ROLES_MANAGEMENT_ADD_PERMISSION_INITIAL_ROLE: {
@@ -82,8 +75,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 initialRole: Object.assign({}, state.initialRole, {
                     selectedPermissions: newList
                 }),
-                errorMessage: null,
-                permissions: state.permissions
+                errorMessage: null
             };
         }
         case rolesActionTypes.CLEAR_ROLE_MANAGEMENT: {
@@ -91,8 +83,7 @@ export function roleManagementReducer(state = initialState.roleManagement, actio
                 isPending: false,
                 isError: false,
                 initialRole: null,
-                errorMessage: null,
-                permissions: null
+                errorMessage: null
             };
         }
         default: {

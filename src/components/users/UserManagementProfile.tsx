@@ -1,23 +1,29 @@
 import React from 'react'
 import { Wrapper } from '@reperio/ui-components';
+import { UserViewModel } from '../../models/userViewModel';
 
-const UserManagementProfile = (props: any) => (
+interface UserManagementProfileProps {
+    userViewModel: UserViewModel,
+    top: boolean
+}
+
+const UserManagementProfile = (props: UserManagementProfileProps) => (
     <div className={`${props.top ? 'row management-top' : 'row'}`}>
         <Wrapper>
             <div className="r-wrapper-child">
-            {props.initialValues ? 
+            {props.userViewModel ? 
                 <div style={{display: 'flex'}}>
                     <div className="r-row-child">
                         <div className="profile-circle">
-                            {props.initialValues.firstName.charAt(0).toUpperCase()}{props.initialValues.lastName.charAt(0).toUpperCase()}
+                            {props.userViewModel.user.firstName.charAt(0).toUpperCase()}{props.userViewModel.user.lastName.charAt(0).toUpperCase()}
                         </div>
                     </div>
                     <div className="r-row-child">
                         <div className="row management-name">
-                                {props.initialValues.firstName} {props.initialValues.lastName}
+                                {props.userViewModel.user.firstName} {props.userViewModel.user.lastName}
                         </div>
                         <div className="row profile-primaryEmailAddress">
-                            {props.initialValues.primaryEmailAddress}
+                            {props.userViewModel.user.primaryEmailAddress}
                         </div>
                     </div>
                 </div>

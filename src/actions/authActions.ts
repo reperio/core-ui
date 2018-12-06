@@ -1,8 +1,6 @@
 import {Dispatch} from "react-redux";
 import { State } from '../store/initialState';
-
 import { coreApiService } from "../services/coreApiService";
-import { userService } from "../services/userService";
 
 export const authActionTypes = {
     AUTH_SET_TOKEN: "AUTH_SET_TOKEN",
@@ -70,7 +68,7 @@ const retrieveUserById = async (userId: string) => {
     }
 
     try {
-        const {data} = (await userService.getUserById(userId));
+        const {data} = (await coreApiService.userService.getUserById(userId));
         return data;
     } catch (e) {
         if (e && e.response && e.response.status === 401) {

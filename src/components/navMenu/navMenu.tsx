@@ -3,7 +3,7 @@ import {Navbar, LinkContainer, NavItem} from '@reperio/ui-components'
 import { NavDropdown } from 'react-bootstrap';
 
 import { StateAuthSession } from '../../store/initialState';
-import { CorePermissions } from '../../models/permission';
+import { CorePermissions } from '@reperio/core-connector';
 
 interface NavMenuProps {
     authSession: StateAuthSession;

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Grid, Wrapper, ButtonElement} from '@reperio/ui-components';
-import Role from '../../models/role';
+import { Role } from '@reperio/core-connector';
 
 interface RolesProps {
     navigateToCreate(): void;

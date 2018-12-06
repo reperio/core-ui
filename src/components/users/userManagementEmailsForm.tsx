@@ -1,8 +1,8 @@
 import React from 'react'
 import { TextboxElement, Wrapper, ButtonElement, CheckboxElement } from '@reperio/ui-components';
 import {Field, reduxForm, InjectedFormProps, FieldArray } from 'redux-form';
-import UserEmail from '../../models/userEmail';
-import User from '../../models/user';
+import { UserEmail, User } from '@reperio/core-connector';
+import { UserViewModel } from '../../models/userViewModel';
 
 interface UserEmailFieldArrayProps {
     removeEmailAddress(index: number): void;
@@ -86,7 +86,7 @@ interface UserManagementProps {
     canDeleteEmail: boolean;
     canResendVerificationEmail: boolean;
     canSetPrimary: boolean;
-    initialValues: User;
+    initialValues: UserViewModel;
 }
 
 type Form = UserManagementProps & InjectedFormProps<any>;
@@ -113,12 +113,12 @@ const UserManagementEmailsForm: React.SFC<Form> = (props: Form) => (
                         </div>
                     </div>
                 : null}
-                <FieldArray name="userEmails"
+                <FieldArray name="selectedUserEmails"
                             active={props.active}
                             canDeleteEmail={props.canDeleteEmail}
                             canResendVerificationEmail={props.canResendVerificationEmail}
                             canSetPrimary={props.canSetPrimary}
-                            initialValues={{userEmails: props.initialValues.userEmails, primaryEmailAddress: props.initialValues.primaryEmailAddress}}
+                            initialValues={{userEmails: props.initialValues.selectedUserEmails, primaryEmailAddress: props.initialValues.user.primaryEmailAddress}}
                             setPrimaryEmailAddress={props.setPrimaryEmailAddress}
                             sendVerificationEmail={props.sendVerificationEmail}
                             removeEmailAddress={props.removeEmailAddress}

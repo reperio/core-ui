@@ -4,10 +4,8 @@ import {TextboxElement, TextareaElement, ButtonElement, Wrapper, CheckboxElement
 import moment from 'moment';
 import PermissionsArray from '../permissions/permissionsArray';
 import Dropdown from '../../models/dropdown';
-import RolePermission from '../../models/rolePermission';
-import Role from '../../models/role';
-import { Permission } from '../../models/permission';
 import { Redirect } from 'react-router';
+import { Permission, Role, RolePermission } from '@reperio/core-connector';
 
 interface PermissionManagementProps {
     navigateToPermissions(): void;
@@ -105,12 +103,7 @@ const PermissionManagementForm: React.SFC<Form> = (props: Form) => (
                                                 [].concat(...props.initialValues.rolePermissions
                                                     .map((x: RolePermission) => x.role)
                                                 )
-                                                .map((y:Role)=> { 
-                                                    return {
-                                                        label: y.name, value: y.id 
-                                                    }
-                                                })
-                                                .sort((a: Dropdown, b: Dropdown) => a.label.localeCompare(b.label))
+                                                .sort((a: Role, b: Role) => a.name.localeCompare(b.name))
                                             }
                                             removePermission={props.removePermission}
                                             canUpdateRoles={props.canUpdatePermissions}

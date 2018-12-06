@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {shallow} from 'enzyme';
 import NavMenu, {HomeLink} from '../navMenu';
-import User from '../../../models/user';
+import { User } from '@reperio/core-connector';
 
 test('Checks to see if the first is home', () => {
     const user: User = {
@@ -10,8 +10,6 @@ test('Checks to see if the first is home', () => {
         lastName: 'user',
         password: null,
         primaryEmailAddress: 'test@test.com',
-        selectedOrganizations: [],
-        selectedRoles: [],
         userEmails: [],
         userOrganizations: [],
         userRoles: [],

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Wrapper, ButtonElement, PickerElement } from '@reperio/ui-components';
 import {Field, reduxForm, InjectedFormProps, FieldArray } from 'redux-form';
-import Organization from '../../models/organization';
-import User from '../../models/user';
 import Dropdown from '../../models/dropdown';
 import OrganizationFieldArray from '../organizations/organizationFieldArray';
+import { UserViewModel } from '../../models/userViewModel';
+import { Organization } from '@reperio/core-connector';
 
 interface UserManagementProps {
     submit(): void;
@@ -16,7 +16,7 @@ interface UserManagementProps {
     togglePanel(index: number): void;
     cancelUserOrganizations(): void;
     errorMessage: string;
-    initialValues: User;
+    initialValues: UserViewModel;
     isError: boolean;
     organizations: Organization[];
     selectedOrganization: Dropdown;
@@ -44,7 +44,7 @@ const UserManagementOrganizationsForm: React.SFC<Form> = (props: Form) => (
                                 options={
                                     props.organizations
                                         .filter((organization: Organization) => {
-                                            return !props.initialValues.selectedOrganizations.map((x: Dropdown)=> x.value).includes(organization.id)
+                                            return !props.initialValues.selectedOrganizations.map((x: Organization)=> x.id).includes(organization.id)
                                         })
                                         .map((organization: Organization, index: number) => { 
                                             return {

@@ -3,17 +3,16 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { loadManagementInitialOrganization, editOrganization, removeUserFromOrganization, deleteOrganization, selectUser, addUser } from '../../actions/organizationsActions';
+import { getUsers } from '../../actions/usersActions';
 import OrganizationManagementForm from '../../components/organizations/organizationManagementForm';
 import { formValueSelector } from 'redux-form';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
 import Dropdown from '../../models/dropdown';
-import { CorePermissions } from '../../models/permission';
+import { CorePermissions } from '@reperio/core-connector';
 
 class UserManagementFormValues {
-    id: string;
     name: string;
-    selectedUsers: Dropdown[];
 }
 
 interface StateProps extends ReturnType<typeof mapStateToProps> {}
@@ -23,11 +22,11 @@ interface DispatchProps extends ReturnType<typeof mapActionToProps> {}
 class OrganizationManagementFormContainer extends React.Component<RouteComponentProps<any> & StateProps & DispatchProps> {
 
     async onSubmit(form: UserManagementFormValues) {
-        const selectedUsers = form.selectedUsers.map((selectedUser: Dropdown) => selectedUser.value);
-        await this.props.actions.editOrganization(form.id, form.name, selectedUsers);
+        await this.props.actions.editOrganization(this.props.initialOrganization.organization.id, form.name, this.props.initialOrganization.selectedUsers.map(x=> x.id));
     };
 
     async componentDidMount() {
+        await this.props.actions.getUsers();
         await this.props.actions.loadManagementInitialOrganization(this.props.match.params.organizationId);
     }
 
@@ -35,8 +34,8 @@ class OrganizationManagementFormContainer extends React.Component<RouteComponent
         history.push('/organizations');
     }
 
-    removeUser(index: number){
-        this.props.actions.removeUserFromOrganization(index);
+    removeUser(userId: string){
+        this.props.actions.removeUserFromOrganization(userId);
     }
 
     selectUser(permission: Dropdown) {
@@ -56,7 +55,8 @@ class OrganizationManagementFormContainer extends React.Component<RouteComponent
             <OrganizationManagementForm navigateToOrganizations={this.navigateToOrganizations.bind(this)}
                                         canUpdateOrganizations={this.props.authSession.user.permissions.includes(CorePermissions.UpdateOrganizations)}
                                         canDeleteOrganizations={this.props.authSession.user.permissions.includes(CorePermissions.DeleteOrganizations)}
-                                        initialValues={this.props.initialOrganization}
+                                        initialValues={this.props.initialOrganization ? this.props.initialOrganization.organization : null}
+                                        selectedUsers={this.props.initialOrganization ? this.props.initialOrganization.selectedUsers : null}
                                         isError={this.props.isError}
                                         errorMessage={this.props.errorMessage}
                                         removeUser={this.removeUser.bind(this)}
@@ -78,14 +78,14 @@ function mapStateToProps(state: State) {
         isError: organizationManagement.isError,
         errorMessage: organizationManagement.errorMessage,
         authSession: state.authSession,
-        users: organizationManagement.users,
+        users: state.users.users,
         selectedUser: selector(state, 'selectedUser') as Dropdown
     };
 }
 
 function mapActionToProps(dispatch: any) {
     return {
-        actions: bindActionCreators({editOrganization, loadManagementInitialOrganization, removeUserFromOrganization, deleteOrganization, addUser, selectUser}, dispatch)
+        actions: bindActionCreators({editOrganization, loadManagementInitialOrganization, removeUserFromOrganization, deleteOrganization, addUser, selectUser, getUsers}, dispatch)
     };
 }
 

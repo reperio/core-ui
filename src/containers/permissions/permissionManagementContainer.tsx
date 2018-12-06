@@ -6,8 +6,7 @@ import { loadManagementInitialPermission, editPermission, removePermissionFromRo
 import PermissionManagementForm from '../../components/permissions/permissionManagementForm';
 import { history } from '../../store/history';
 import { RouteComponentProps } from 'react-router';
-import RolePermission from '../../models/rolePermission';
-import { CorePermissions } from '../../models/permission';
+import { RolePermission, CorePermissions } from '@reperio/core-connector';
 
 class UserManagementFormValues {
     displayName: string;

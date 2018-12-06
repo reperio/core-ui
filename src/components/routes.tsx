@@ -16,7 +16,7 @@ import OrganizationsContainer from "../containers/organizations/organizationsCon
 import OrganizationManagementContainer from "../containers/organizations/organizationManagementContainer";
 import OrganizationCreateFormContainer from "../containers/organizations/organizationCreateFormContainer";
 import ErrorContainer from '../containers/errorContainer';
-import { CorePermissions } from '../models/permission';
+import { CorePermissions } from '@reperio/core-connector';
 
 const Routes = () => (
     <div className="app-content">

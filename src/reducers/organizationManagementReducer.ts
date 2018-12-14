@@ -1,5 +1,5 @@
 import {initialState, StateOrganizationManagement} from "../store/initialState";
-import { organizationsActionTypes } from "../actions/organizationsActions";
+import { organizationsActionTypes } from "../actionTypes/organizationActionTypes";
 import { User } from "@reperio/core-connector";
 
 export function organizationManagementReducer(state = initialState.organizationManagement, action: {type: string, payload: any}): StateOrganizationManagement {
@@ -59,7 +59,7 @@ export function organizationManagementReducer(state = initialState.organizationM
                 return user.id != userId
             });
             return {
-                isPending: true,
+                isPending: false,
                 isError: false,
                 initialOrganization: Object.assign({}, state.initialOrganization, {
                     selectedUsers: newList
@@ -71,7 +71,7 @@ export function organizationManagementReducer(state = initialState.organizationM
             const {user} = action.payload;
             const newList = state.initialOrganization.selectedUsers.concat([user]);
             return {
-                isPending: true,
+                isPending: false,
                 isError: false,
                 initialOrganization: Object.assign({}, state.initialOrganization, {
                     selectedUsers: newList

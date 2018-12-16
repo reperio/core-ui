@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:10.4
+    ports: 
+      - "5432:5432"
+    container_name: "reperio_ui-postgres"
+    volumes:
+      - data-volume:/usr/local/pgsql/data
+    networks: 
+      - reperio
+    build: ./docker-database/
+  redis:
+    image: redis:4.0.11
+    ports:
+      - "6379:6379"
+    container_name: "reperio_ui-redis"
+    volumes:
+      - redis-data:/data
+    networks: 
+      - reperio
+  platform-api:
+    image: reperio/platform-api
+    ports: 
+      - "3000:3000"
+    container_name: "reperio_ui-platform-api"
+    networks: 
+      - reperio
+    environment: 
+      CORE_DB_HOST: reperio_ui-postgres
+  auth-ui:
+    image: reperio/auth-ui
+    ports: 
+      - "8081:8081"
+    container_name: "reperio_ui-auth-ui"
+    networks: 
+      - reperio
+
+volumes:
+    data-volume:
+    redis-data:
+
+networks:
+  reperio:
+    external:
+      name: reperio

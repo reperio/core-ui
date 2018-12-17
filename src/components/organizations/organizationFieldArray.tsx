@@ -11,26 +11,24 @@ interface OrganizationFieldArrayProps {
 
 const OrganizationFieldArray: React.SFC<OrganizationFieldArrayProps> = (props: OrganizationFieldArrayProps) => (
     <div className="row">
-        <div className="r-row-child no-padding-container">
-        <hr />
-        {props.initialValues.map((member:any, index:number) =>
-            <div key={index}>
-                <div className="r-row-child">
-                    <div className="row">
-                        <div className="r-row-child">
+        <table className="field-array-table">
+            <tbody>
+                {props.initialValues.map((member:any, index:number) =>
+                <tr key={index}>
+                    <td>
+                        <div className="field-array-item">
                             {(props.initialValues[index].personal ? 'Personal - ' : '') + props.initialValues[index].name}
                         </div>
-                        <div className="r-row-child">
+                        <div className="field-array-item">
                             {props.active ?
                                 <ButtonElement type="button" color="danger" text="Leave" onClick={() => props.removeOrganization(index)} />
-                            : null}
+                                : null}
                         </div>
-                    </div>
-                </div>
-                <hr />
-            </div>
-        )}
-        </div>
+                    </td>
+                </tr>
+                )}
+            </tbody>
+        </table>
     </div>
 );
 

@@ -14,25 +14,26 @@ interface PermissionsArrayProps {
 const PermissionsArray: React.SFC<PermissionsArrayProps> = (props: PermissionsArrayProps) => {
     return (
         <div>
-            <div className="r-row-child">
-                {props.initialValues.map((permission:Permission, index:number) =>
-                    <div key={index}>
-                        <hr />
-                        <div className="r-row-child">
-                            <div className="row" onClick={() => props.toggle ? props.togglePermissionDetails(index) :  null}>
-                                <div className="r-row-child">
-                                    {permission.name}
+            <table className="field-array-table">
+                <tbody>
+                    {props.initialValues.map((permission: Permission, index: number) =>
+                        <tr key={index}>
+                            <td>
+                                <div className="field-array-item" onClick={() => props.toggle ? props.togglePermissionDetails(index) : null}>
+                                    <div className="r-row-child">
+                                        {permission.name}
+                                    </div>
+                                    <div className="r-row-child">
+                                        {props.canUpdateRoles ?
+                                            <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removePermission(index)} />
+                                            : null}
+                                    </div>
                                 </div>
-                                <div className="r-row-child">
-                                    {props.canUpdateRoles ? 
-                                        <ButtonElement type="button" color="danger" text="Remove" onClick={() => props.removePermission(index)} />
-                                    : null }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     )
 };

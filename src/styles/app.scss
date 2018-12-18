@@ -190,6 +190,10 @@ fieldset {
   padding: 0px;
 }
 
+.no-margin-container {
+    margin: 0;
+}
+
 .dropdown-menu > li > a{
   color:black !important;
 }
@@ -197,4 +201,26 @@ fieldset {
 .nav > .open > .dropdown-toggle {
   background-color: transparent !important;
   color: gray !important;
+}
+
+.field-array-table {
+    width: 100%;
+
+    & > tbody > tr:first-of-type {
+        border-top: 2px solid $primary-color;
+    }
+
+    & > tbody > tr {
+        border-bottom: 2px solid $primary-color;
+    }
+
+    & > tbody > tr > td {
+        padding: 15px 4px 15px 4px;
+    }
+
+    & .field-array-item {
+        display: flex;
+        flex-direction: row;
+        
+    }
 }

@@ -3,22 +3,7 @@ import { history } from '../store/history';
 import {reset} from "redux-form";
 import { Permission, RolePermission } from "@reperio/core-connector";
 import { coreApiService } from "../services/coreApiService";
-
-export const permissionsActionTypes = {
-    PERMISSIONS_GET_PENDING: "PERMISSIONS_GET_PENDING",
-    PERMISSIONS_GET_SUCCESS: "PERMISSIONS_GET_SUCCESS",
-    PERMISSIONS_GET_ERROR: "PERMISSIONS_GET_ERROR",
-    PERMISSIONS_SAVE_PENDING: "PERMISSIONS_SAVE_PENDING",
-    PERMISSIONS_SAVE_SUCCESS: "PERMISSIONS_SAVE_SUCCESS",
-    PERMISSIONS_SAVE_ERROR: "PERMISSIONS_SAVE_ERROR",
-    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_SUCCESS",
-    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_ERROR: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_ERROR",
-    PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING: "PERMISSIONS_MANAGEMENT_LOAD_INITIAL_PERMISSION_PENDING",
-    PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION: "PERMISSION_MANAGEMENT_REMOVE_ROLE_INITIAL_PERMISSION",
-    PERMISSIONS_UPDATE_ROLE: "PERMISSIONS_UPDATE_ROLE",
-    CLEAR_PERMISSIONS: "CLEAR_PERMISSIONS",
-    CLEAR_PERMISSION_MANAGEMENT: "CLEAR_PERMISSION_MANAGEMENT"
-};
+import {permissionsActionTypes} from '../actionTypes/permissionsActionTypes';
 
 function getErrorMessageFromStatusCode(statusCode: number) {
     switch (statusCode) {
@@ -31,8 +16,7 @@ function getErrorMessageFromStatusCode(statusCode: number) {
 
 export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     dispatch({
-        type: permissionsActionTypes.PERMISSIONS_GET_PENDING,
-        payload: {}
+        type: permissionsActionTypes.PERMISSIONS_GET_PENDING
     });
 
     try {
@@ -88,14 +72,6 @@ export const editPermission = (permissionName: string, displayName: string, desc
     dispatch({
         type: permissionsActionTypes.PERMISSIONS_SAVE_PENDING
     });
-
-    const rp = rolePermissions
-        .map((rolePermission: RolePermission) => {
-            return {
-                roleId: rolePermission.roleId,
-                permissionName: rolePermission.permissionName
-            }
-        });
 
     try {
         await coreApiService.permissionService.editPermission(permissionName, displayName, description, isSystemAdminPermission, rolePermissions);

@@ -1,7 +1,7 @@
 import {Dispatch} from "react-redux";
 import {usersActionTypes} from '../actions/usersActions';
 import {organizationsActionTypes} from '../actions/organizationsActions';
-import {permissionsActionTypes} from '../actions/permissionsActions';
+import {permissionsActionTypes} from '../actionTypes/permissionsActionTypes';
 import {rolesActionTypes} from '../actions/rolesActions';
 
 export const clearState = () => (dispatch: Dispatch<any>) => {

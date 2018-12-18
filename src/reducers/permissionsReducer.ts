@@ -1,5 +1,5 @@
 import {initialState, StatePermissions} from "../store/initialState";
-import { permissionsActionTypes } from "../actions/permissionsActions";
+import { permissionsActionTypes } from "../actionTypes/permissionsActionTypes";
 
 export function permissionsReducer(state = initialState.permissions, action: {type: string, payload: any}): StatePermissions {
     switch (action.type) {

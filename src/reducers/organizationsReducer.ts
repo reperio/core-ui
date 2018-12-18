@@ -1,5 +1,5 @@
 import {initialState, StateOrganizations} from "../store/initialState";
-import { organizationsActionTypes } from "../actions/organizationsActions";
+import { organizationsActionTypes } from "../actionTypes/organizationActionTypes";
 
 export function organizationsReducer(state = initialState.organizations, action: {type: string, payload: any}): StateOrganizations {
     switch (action.type) {

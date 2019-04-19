@@ -10,7 +10,8 @@ const organizations: Organization[] = [{
     id: '123',
     name: 'test',
     personal: false,
-    userOrganizations: []
+    userOrganizations: [],
+    organizationAddress: []
 }];
 
 const mockCoreApiService = {
@@ -263,7 +264,8 @@ describe("organizations actions", () => {
                     primaryEmailAddress: 'test@test.com',
                     userEmails: [],
                     userOrganizations: [],
-                    userRoles: []
+                    userRoles: [],
+                    userPhones: []
                 }]
             }
         };

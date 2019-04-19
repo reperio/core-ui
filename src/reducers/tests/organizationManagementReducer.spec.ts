@@ -8,7 +8,8 @@ const organizationViewModel: OrganizationViewModel = {
         name: 'test',
         id: '',
         personal: false,
-        userOrganizations: []
+        userOrganizations: [],
+        organizationAddress: []
     },
     selectedUsers: [
         {
@@ -20,7 +21,8 @@ const organizationViewModel: OrganizationViewModel = {
             primaryEmailAddress: 'test@test.com',
             userEmails: [],
             userOrganizations: [],
-            userRoles: []
+            userRoles: [],
+            userPhones: []
         }
     ]
 };

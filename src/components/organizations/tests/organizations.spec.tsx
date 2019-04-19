@@ -13,9 +13,10 @@ const orgData : Organization[] = [
                 userId: '',
                 organizationId: '',
                 user:  null,
-                organization: null
+                organization: null,
             }
-        ]
+        ],
+        organizationAddress: []
     }
 ];
 

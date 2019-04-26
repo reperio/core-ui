@@ -62,8 +62,7 @@ export const AdminDropdown = (props: AdminDropdownProps) => (
 
 const NavMenu = (props: NavMenuProps) => (
     <Navbar
-        applicationName={"test"}
-        authenticated={true}>
+        applicationName={"Core"}>
 
         <React.Fragment>
             <HomeLink />

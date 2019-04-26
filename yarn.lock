@@ -43,9 +43,10 @@
     query-string "^6.2.0"
     react "^16.6.3"
 
-"@reperio/ui-components@^0.4.5":
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.4.5.tgz#8394b22661e3e8a13834084f2c6c392e9b6b7b5f"
+"@reperio/ui-components@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-0.7.1.tgz#fafaa441df4e8b8eed284cf8faa108833049f958"
+  integrity sha512-i4Sv1ucK617U8l4heTQ5Bhv+nf32tgycR9IexMR6kmBZoLjaxoNV/6Q7xBg9iadAXo74tmWbsgjkPpd+p8jAzg==
   dependencies:
     "@types/react-bootstrap" "^0.32.13"
     "@types/react-router-bootstrap" "^0.24.5"

@@ -1,40 +1,6 @@
 @import 'variables';
 @import '~@reperio/ui-components/lib/styles.min.css';
 
-.app-container {
-    display: flex;
-    flex-direction: column;
-    height:100%;
-    width: 100%;
-    min-width: 1280px;
-
-    .app-root {
-        display: flex;
-        flex: 1 1 auto;
-
-        .app-main {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-
-            .app-sidebar {
-                background-color: $dark1
-            }
-
-            .app-content {
-                flex: 1;
-                padding-top: 20px;
-                padding-left: 50px;
-                padding-right: 50px;
-                padding-bottom: 40px;
-                display: flex;
-                flex-grow: 1;
-                overflow-y: auto;
-            }
-        }
-    }
-}
-
 .row {
   margin-left: 0px;
   margin-right: 0px;

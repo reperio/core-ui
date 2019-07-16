@@ -49,10 +49,10 @@ export const loadManagementInitialOrganization = (organizationId: string) => asy
             selectedUsers: []
         };
     
-        organizationViewModel.selectedUsers = getState().users.users
+        /*organizationViewModel.selectedUsers = getState().users.users
             .filter(x => organizationViewModel.organization.userOrganizations
                 .map(x=> x.userId).includes(x.id))
-            .sort((a: User, b: User) => a.firstName.localeCompare(b.firstName));
+            .sort((a: User, b: User) => a.firstName.localeCompare(b.firstName));*/
     
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_MANAGEMENT_LOAD_INITIAL_ORGANIZATION_SUCCESS,

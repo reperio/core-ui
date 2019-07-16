@@ -59,7 +59,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                             </div>
                         </Wrapper>
                     </fieldset>
-                    <fieldset disabled={!props.canUpdateOrganizations} className="row">
+                    {/*<fieldset disabled={!props.canUpdateOrganizations} className="row">
                         <Wrapper flexColumnDirection={true}>
                             <div className="r-wrapper-child ">
                                 <div className="row">
@@ -68,7 +68,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                                         <hr />
                                     </div>
                                 </div>
-                                {props.canUpdateOrganizations ? 
+                                {props.canUpdateOrganizations ?
                                     <div className="row">
                                         <div className="r-row-child">
                                             <Field  name="selectedUser"
@@ -77,7 +77,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                                                             .filter((user: User) => {
                                                                 return !props.selectedUsers.map((x:User)=> x.id).includes(user.id)
                                                             })
-                                                            .map((user: User, index: number) => { 
+                                                            .map((user: User, index: number) => {
                                                                 return {
                                                                     value: user.id,
                                                                     label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`
@@ -85,8 +85,8 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                                                             })
                                                     }
                                                     pickerValue={props.selectedUser ? props.selectedUser: ""}
-                                                    placeholder="Users" 
-                                                    component={PickerElement} 
+                                                    placeholder="Users"
+                                                    component={PickerElement}
                                                     onChange={props.selectUser} />
                                         </div>
                                         <div className="r-row-child">
@@ -98,7 +98,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                             <div>
                                 <div className="row">
                                     <div className="r-row-child">
-                                        <OrganizationManagementUsers    gridData={                                            
+                                        <OrganizationManagementUsers    gridData={
                                                                             props.users
                                                                                 .filter((user: User) => {
                                                                                     return props.selectedUsers.map((x:User)=> x.id).includes(user.id)
@@ -109,7 +109,7 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                                 </div>
                             </div>
                         </Wrapper>
-                    </fieldset>
+                    </fieldset>*/}
                     <div className="row management-controls-bottom">
                         <Wrapper>
                             <div className="row management-submission-controls-container">

@@ -113,8 +113,8 @@ export const loadManagementInitialUser = (userId: string) => async (dispatch: Di
         };
 
         userViewModel.selectedOrganizations = getState().organizations.organizations
-            .filter((organization: Organization) => userViewModel.user.userOrganizations
-                .map(userOrganization => userOrganization.organizationId).includes(organization.id)
+            .filter((organization: Organization) => userViewModel.user.userRoles
+                .map(userRole => userRole.role.organizationId).includes(organization.id)
             )
             .sort((a: Organization, b: Organization) => a.name.localeCompare(b.name));
     

@@ -59,57 +59,6 @@ const OrganizationManagementForm: React.SFC<Form> = (props: Form) => (
                             </div>
                         </Wrapper>
                     </fieldset>
-                    <fieldset disabled={!props.canUpdateOrganizations} className="row">
-                        <Wrapper flexColumnDirection={true}>
-                            <div className="r-wrapper-child ">
-                                <div className="row">
-                                    <div className="r-row-child">
-                                        <h2>Users</h2>
-                                        <hr />
-                                    </div>
-                                </div>
-                                {props.canUpdateOrganizations ? 
-                                    <div className="row">
-                                        <div className="r-row-child">
-                                            <Field  name="selectedUser"
-                                                    options={
-                                                        props.users
-                                                            .filter((user: User) => {
-                                                                return !props.selectedUsers.map((x:User)=> x.id).includes(user.id)
-                                                            })
-                                                            .map((user: User, index: number) => { 
-                                                                return {
-                                                                    value: user.id,
-                                                                    label: `${user.firstName} ${user.lastName} - ${user.primaryEmailAddress}`
-                                                                }
-                                                            })
-                                                    }
-                                                    pickerValue={props.selectedUser ? props.selectedUser: ""}
-                                                    placeholder="Users" 
-                                                    component={PickerElement} 
-                                                    onChange={props.selectUser} />
-                                        </div>
-                                        <div className="r-row-child">
-                                            <ButtonElement type="button" color="neutral" text="Add" onClick={() => {props.addUser(props.selectedUser)}} />
-                                        </div>
-                                    </div>
-                                : null }
-                            </div>
-                            <div>
-                                <div className="row">
-                                    <div className="r-row-child">
-                                        <OrganizationManagementUsers    gridData={                                            
-                                                                            props.users
-                                                                                .filter((user: User) => {
-                                                                                    return props.selectedUsers.map((x:User)=> x.id).includes(user.id)
-                                                                                })}
-                                                                        removeUser={props.removeUser}
-                                                                        canUpdateOrganizations={props.canUpdateOrganizations} />
-                                    </div>
-                                </div>
-                            </div>
-                        </Wrapper>
-                    </fieldset>
                     <div className="row management-controls-bottom">
                         <Wrapper>
                             <div className="row management-submission-controls-container">

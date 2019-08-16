@@ -35,8 +35,6 @@ class AppContainer extends React.Component {
                                 profile={this.props.authSession.isAuthenticated ? {
                                     initials: `${this.props.authSession.user.firstName.charAt(0).toUpperCase()}${this.props.authSession.user.lastName.charAt(0).toUpperCase()}`,
                                     name: `${this.props.authSession.user.firstName} ${this.props.authSession.user.lastName}`,
-                                    accountName: 'Reper.io',
-                                    phone: '1234567890',
                                     email: `${this.props.authSession.user.primaryEmailAddress}`,
                                     onLogout: this.logout.bind(this)
                                 }: null}

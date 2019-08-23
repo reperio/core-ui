@@ -13,22 +13,11 @@ export function authSessionReducer(state = initialState.authSession, action: {ty
                 user: action.payload.user != null ? Object.assign({}, action.payload.user) : null
             };
         }
-        case authActionTypes.AUTH_SET_TOKEN: {
+        case authActionTypes.AUTH_SET_REDIRECT_TO_LOGIN: {
             return {
                 ...state,
-                reperioCoreJWT: action.payload.authToken
-            };
-        }
-        case authActionTypes.AUTH_CLEAR_TOKEN: {
-            return {
-                ...state,
-                isPending: false,
-                isAuthenticated: false,
-                isError: false,
-                errorMessage: null,
-                user: null,
-                reperioCoreJWT: null
-            };
+                redirectToLogin: true
+            }
         }
         case authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED: {
             return {

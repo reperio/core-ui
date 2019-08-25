@@ -25,7 +25,7 @@ export class StateAuthSession {
     otpIsError: boolean;
     errorMessage: string;
     user: User;
-    reperioCoreJWT: string;
+    redirectToLogin: boolean;
 }
 
 export class StateUsers {
@@ -101,7 +101,7 @@ export const initialState: State = {
         otpIsError: false,
         errorMessage: null,
         user: null,
-        reperioCoreJWT: null
+        redirectToLogin: false
     },
     users: {
         isPending: false,

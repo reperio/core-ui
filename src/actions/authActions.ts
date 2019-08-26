@@ -30,13 +30,19 @@ export const logout = () => async (dispatch: Dispatch<any>) => {
 };
 
 export const setLoggedInUser = (user: User, initializeAuth: boolean = false) => async (dispatch: Dispatch<any>, getState: () => State) => {
-    dispatch({
-        type: authActionTypes.AUTH_SET_USER,
-        payload: {user}
-    });
-    if (initializeAuth) {
+    if (user != null) {
         dispatch({
-            type: authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED
+            type: authActionTypes.AUTH_SET_USER,
+            payload: {user}
+        });
+        if (initializeAuth) {
+            dispatch({
+                type: authActionTypes.AUTH_SET_IS_AUTH_INITIALIZED
+            });
+        }
+    } else {
+        dispatch({
+            type: authActionTypes.AUTH_SET_REDIRECT_TO_LOGIN
         });
     }
 };

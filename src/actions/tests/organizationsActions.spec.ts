@@ -11,7 +11,8 @@ const organizations: Organization[] = [{
     name: 'test',
     personal: false,
     userOrganizations: [],
-    organizationAddress: []
+    organizationAddress: [],
+    supportNumber: '513-123-4567'
 }];
 
 const mockCoreApiService = {
@@ -113,13 +114,13 @@ describe("organizations actions", () => {
         authSession: {
             isAuthInitialized: false,
             isPending: false,
+            redirectToLogin: false,
             isAuthenticated: false,
             isError: false,
             otpIsPending: false,
             otpIsError: false,
             errorMessage: null,
-            user: null,
-            reperioCoreJWT: null
+            user: null
         },
         users: {
             isPending: false,

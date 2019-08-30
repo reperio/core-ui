@@ -9,7 +9,8 @@ const organizationViewModel: OrganizationViewModel = {
         id: '',
         personal: false,
         userOrganizations: [],
-        organizationAddress: []
+        organizationAddress: [], 
+        supportNumber: '513-123-4567'
     },
     selectedUsers: [
         {

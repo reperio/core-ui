@@ -9,7 +9,8 @@ import { Organization } from '@reperio/core-connector';
         id: '',
         personal: false,
         userOrganizations: [],
-        organizationAddress: []
+        organizationAddress: [], 
+        supportNumber: '513-123-4567'
     };
 
      const baseState: StateOrganizations = {

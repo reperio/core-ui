@@ -16,7 +16,8 @@ const orgData : Organization[] = [
                 organization: null,
             }
         ],
-        organizationAddress: []
+        organizationAddress: [], 
+        supportNumber: '513-123-4567'
     }
 ];
 

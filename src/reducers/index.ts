@@ -12,6 +12,7 @@ import { roleManagementReducer } from "./roleManagementReducer";
 import { organizationsReducer } from "./organizationsReducer";
 import { organizationManagementReducer } from "./organizationManagementReducer";
 import { applicationsReducer } from "./applicationsReducer";
+import { queryResultReducer } from "./queryResultReducer";
 
 export const createRootReducer = (history: any) => combineReducers({
     router: connectRouter(history),
@@ -25,5 +26,6 @@ export const createRootReducer = (history: any) => combineReducers({
     roleManagement: roleManagementReducer,
     organizations: organizationsReducer,
     organizationManagement: organizationManagementReducer,
-    applications: applicationsReducer
+    applications: applicationsReducer,
+    queryResult: queryResultReducer
 });

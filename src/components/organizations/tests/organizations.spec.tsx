@@ -26,7 +26,8 @@ it('Checks to see if organization create button calls a function', () => {
     const wrapper = mount(
         <Organizations  navigateToManagement={() => {}} 
                         navigateToCreate={mockCreate} 
-                        gridData={[]} />
+                        gridData={[]}
+                        pages={0} />
                     );
 
     wrapper.find('button').at(0).simulate('click');
@@ -39,7 +40,8 @@ it('Checks if grid has data in it', () => {
     const wrapper = mount(
         <Organizations  navigateToManagement={() => {}} 
                         navigateToCreate={() => {}} 
-                        gridData={orgData} />
+                        gridData={orgData}
+                        pages={0} />
                     );
 
     expect(wrapper.find('.rt-td').first().text()).toEqual(orgData[0].name);
@@ -50,7 +52,8 @@ it('Check if clicking row calls function', () => {
     const wrapper = mount(
         <Organizations  navigateToManagement={mockManage} 
                         navigateToCreate={() => {}} 
-                        gridData={orgData} />
+                        gridData={orgData}
+                        pages={0} />
                     );
 
     wrapper.find('.rt-td').first().simulate('click');

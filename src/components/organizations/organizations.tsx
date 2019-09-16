@@ -6,6 +6,8 @@ interface OrganizationsProps {
     navigateToCreate(): void;
     navigateToManagement(organizationId: string): void;
     gridData: Organization[];
+    pages: number;
+    onFetchData?(page: number, pageSize: number, sorted: boolean, filtered: boolean): any
 }
 
 const Organizations = (props: OrganizationsProps) => {
@@ -43,7 +45,10 @@ const Organizations = (props: OrganizationsProps) => {
                                     }
                                 }}
                             }}
-                            filterable={true} />
+                            filterable={true}
+                            manual={true}
+                            onFetchData={props.onFetchData}
+                            pages={props.pages} />
                     </div>
                 </div>
             </Wrapper>

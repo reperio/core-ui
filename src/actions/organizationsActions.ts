@@ -3,7 +3,7 @@ import { history } from '../store/history';
 import { reset, change } from "redux-form";
 import Dropdown from "../models/dropdown";
 import { coreApiService } from "../services/coreApiService";
-import { Organization, User } from "@reperio/core-connector";
+import { Organization, User, QueryParameters, QueryResult } from "@reperio/core-connector";
 import { OrganizationViewModel } from "../models/organizationViewModel";
 import { State } from "../store/initialState";
 import { organizationsActionTypes } from "../actionTypes/organizationActionTypes";
@@ -31,6 +31,27 @@ export const getOrganizations = () => async (dispatch: Dispatch<any>) => {
     } catch (e) {
         dispatch({
             type: organizationsActionTypes.ORGANIZATIONS_GET_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const getOrganizationsQuery = (query: QueryParameters) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: organizationsActionTypes.ORGANIZATIONS_QUERY_GET_PENDING
+    });
+
+    try {
+        const result: QueryResult = (await coreApiService.organizationService.getOrganizationsQuery(query)).data;
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_QUERY_GET_SUCCESS,
+            payload: result
+        });
+    } catch (e) {
+        dispatch({
+            type: organizationsActionTypes.ORGANIZATIONS_QUERY_GET_ERROR,
             payload: {
                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }

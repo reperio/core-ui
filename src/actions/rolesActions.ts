@@ -2,7 +2,7 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import {reset, change} from "redux-form";
 import Dropdown from "../models/dropdown";
-import { Role, Permission } from "@reperio/core-connector";
+import { Role, Permission, QueryParameters, QueryResult } from "@reperio/core-connector";
 import { RoleViewModel } from "../models/roleViewModel";
 import { State } from "../store/initialState";
 import { coreApiService } from "../services/coreApiService";
@@ -11,6 +11,9 @@ export const rolesActionTypes = {
     ROLES_GET_PENDING: "ROLES_GET_PENDING",
     ROLES_GET_SUCCESS: "ROLES_GET_SUCCESS",
     ROLES_GET_ERROR: "ROLES_GET_ERROR",
+    ROLES_QUERY_GET_PENDING: "ROLES_QUERY_GET_PENDING",
+    ROLES_QUERY_GET_SUCCESS: "ROLES_QUERY_GET_SUCCESS",
+    ROLES_QUERY_GET_ERROR: "ROLES_QUERY_GET_ERROR",
     ROLES_SAVE_PENDING: "ROLES_SAVE_PENDING",
     ROLES_SAVE_SUCCESS: "ROLES_SAVE_SUCCESS",
     ROLES_SAVE_ERROR: "ROLES_SAVE_ERROR",
@@ -54,6 +57,27 @@ export const getRoles = () => async (dispatch: Dispatch<any>) => {
     } catch (e) {
         dispatch({
             type: rolesActionTypes.ROLES_GET_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const getRolesQuery = (query: QueryParameters) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: rolesActionTypes.ROLES_QUERY_GET_PENDING
+    });
+
+    try {
+        const result: QueryResult = (await coreApiService.roleService.getRolesQuery(query)).data;
+        dispatch({
+            type: rolesActionTypes.ROLES_QUERY_GET_SUCCESS,
+            payload: result
+        });
+    } catch (e) {
+        dispatch({
+            type: rolesActionTypes.ROLES_QUERY_GET_ERROR,
             payload: {
                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }

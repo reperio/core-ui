@@ -2,7 +2,7 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { change, reset, formValueSelector } from "redux-form";
 import { store } from "../store/store";
-import { User, Role, Organization, UserEmail } from '@reperio/core-connector';
+import { User, Role, Organization, UserEmail, QueryParameters, QueryResult} from '@reperio/core-connector';
 import Dropdown from "../models/dropdown";
 import { State } from "../store/initialState";
 import { coreApiService } from "../services/coreApiService";
@@ -12,6 +12,9 @@ export const usersActionTypes = {
     USERS_GET_PENDING: "USERS_GET_PENDING",
     USERS_GET_SUCCESS: "USERS_GET_SUCCESS",
     USERS_GET_ERROR: "USERS_GET_ERROR",
+    USERS_QUERY_GET_PENDING: "USERS_QUERY_GET_PENDING",
+    USERS_QUERY_GET_SUCCESS: "USERS_QUERY_GET_SUCCESS",
+    USERS_QUERY_GET_ERROR: "USERS_QUERY_GET_ERROR",
     USERS_CREATE_PENDING: "USERS_CREATE_PENDING",
     USERS_CREATE_SUCCESS: "USERS_CREATE_SUCCESS",
     USERS_CREATE_ERROR: "USERS_CREATE_ERROR",
@@ -64,6 +67,27 @@ export const getUsers = () => async (dispatch: Dispatch<any>) => {
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_GET_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const getUsersQuery = (query: QueryParameters) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: usersActionTypes.USERS_QUERY_GET_PENDING
+    });
+
+    try {
+        const result: QueryResult = (await coreApiService.userService.getUsersQuery(query)).data;
+        dispatch({
+            type: usersActionTypes.USERS_QUERY_GET_SUCCESS,
+            payload: result
+        });
+    } catch (e) {
+        dispatch({
+            type: usersActionTypes.USERS_QUERY_GET_ERROR,
             payload: {
                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }

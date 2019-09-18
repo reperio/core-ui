@@ -15,7 +15,9 @@ const initialValues: Permission[] = [{
 test('Checks if grid has data in it', () => {
     const wrapper = mount(
         <Permissions    navigateToManagement={() => {}}
-                        gridData={initialValues} />
+                        gridData={initialValues}
+                        onFetchData={()=> {}}
+                        pages={1} />
                     );
 
     expect(wrapper.find('.rt-td').first().text()).toEqual(initialValues[0].name);
@@ -25,7 +27,9 @@ test('Check if clicking row calls function', () => {
     const mockManage = jest.fn();
     const wrapper = mount(
         <Permissions    navigateToManagement={mockManage}
-                        gridData={initialValues} />
+                        gridData={initialValues}
+                        onFetchData={()=> {}}
+                        pages={1} />
                     );
 
     wrapper.find('.rt-td').first().simulate('click');

@@ -14,6 +14,7 @@ export class State {
     organizations: StateOrganizations;
     organizationManagement: StateOrganizationManagement;
     applications: StateApplications;
+    queryResult: StateQueryResult;
 }
 
 export class StateAuthSession {
@@ -25,7 +26,12 @@ export class StateAuthSession {
     otpIsError: boolean;
     errorMessage: string;
     user: User;
-    reperioCoreJWT: string;
+    redirectToLogin: boolean;
+}
+
+export class StateQueryResult {
+    pages: number;
+    data: any[];
 }
 
 export class StateUsers {
@@ -101,7 +107,7 @@ export const initialState: State = {
         otpIsError: false,
         errorMessage: null,
         user: null,
-        reperioCoreJWT: null
+        redirectToLogin: false
     },
     users: {
         isPending: false,
@@ -157,5 +163,9 @@ export const initialState: State = {
         isError: false,
         errorMessage: null,
         applications: []
+    },
+    queryResult: {
+        pages: 0,
+        data: []
     }
 };

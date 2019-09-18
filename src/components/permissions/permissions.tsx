@@ -5,6 +5,8 @@ import { Permission } from '@reperio/core-connector';
 interface PermissionsProps {
     navigateToManagement(permissionName: string): void;
     gridData: Permission[];
+    pages: number;
+    onFetchData?(page: number, pageSize: number, sorted: boolean, filtered: boolean): any
 }
 
 const Permissions = (props: PermissionsProps) => {
@@ -37,7 +39,10 @@ const Permissions = (props: PermissionsProps) => {
                                     }
                                 }}
                             }}
-                            filterable={true} />
+                            filterable={true}
+                            manual={true}
+                            onFetchData={props.onFetchData}
+                            pages={props.pages} />
                     </div>
                 </div>
             </Wrapper>

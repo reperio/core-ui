@@ -10,7 +10,9 @@ const organizations: Organization[] = [{
     id: '123',
     name: 'test',
     personal: false,
-    userOrganizations: []
+    userOrganizations: [],
+    organizationAddress: [],
+    supportNumber: '513-123-4567'
 }];
 
 const mockCoreApiService = {
@@ -112,13 +114,13 @@ describe("organizations actions", () => {
         authSession: {
             isAuthInitialized: false,
             isPending: false,
+            redirectToLogin: false,
             isAuthenticated: false,
             isError: false,
             otpIsPending: false,
             otpIsError: false,
             errorMessage: null,
-            user: null,
-            reperioCoreJWT: null
+            user: null
         },
         users: {
             isPending: false,
@@ -174,6 +176,10 @@ describe("organizations actions", () => {
             isError: false,
             errorMessage: null,
             applications: []
+        },
+        queryResult: {
+            data: [],
+            pages: 0
         }
     };
 
@@ -263,7 +269,8 @@ describe("organizations actions", () => {
                     primaryEmailAddress: 'test@test.com',
                     userEmails: [],
                     userOrganizations: [],
-                    userRoles: []
+                    userRoles: [],
+                    userPhones: []
                 }]
             }
         };

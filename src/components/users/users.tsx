@@ -6,6 +6,8 @@ interface UsersProps {
     navigateToManagement(permissionName: string): void;
     navigateToUserCreate(): void;
     gridData: User[];
+    pages: number;
+    onFetchData?(page: number, pageSize: number, sorted: boolean, filtered: boolean): any
 }
 
 const gridColumns = [
@@ -47,7 +49,10 @@ const Users = (props: UsersProps) => (
                                 }
                             }}
                         }}
-                        filterable={true} />
+                        filterable={true}
+                        manual={true}
+                        onFetchData={props.onFetchData}
+                        pages={props.pages} />
                 </div>
             </div>
         </Wrapper>

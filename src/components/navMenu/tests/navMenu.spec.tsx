@@ -13,19 +13,20 @@ test('Checks to see if the first is home', () => {
         userEmails: [],
         userOrganizations: [],
         userRoles: [],
-        permissions: []
+        permissions: [],
+        userPhones: []
     };
     const wrapper = shallow(
         <NavMenu authSession={{
             isAuthInitialized: true,
             isAuthenticated: true,
+            redirectToLogin: false,
             user,
             errorMessage: null,
             isError: null,
             isPending: false,
             otpIsPending: false,
-            otpIsError: false,
-            reperioCoreJWT: null
+            otpIsError: false
         }} />
     );
 

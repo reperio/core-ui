@@ -43,5 +43,11 @@ module.exports = {
             CORE_AUTH_UI_URL: JSON.stringify(process.env.CORE_AUTH_UI_URL || 'http://localhost:8081'),
             CORE_AUTH_UI_IFRAME_URL: JSON.stringify(process.env.CORE_AUTH_UI_IFRAME_URL || 'http://localhost:8081/auth')
         })
-    ]
+    ],
+    mode: 'development',
+    devServer: {
+        host: process.env.HOST || '0.0.0.0',
+        port: process.env.PORT || 8080,
+        historyApiFallback: true
+    }
 };

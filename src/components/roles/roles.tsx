@@ -6,6 +6,8 @@ interface RolesProps {
     navigateToCreate(): void;
     navigateToManagement(permissionName: string): void;
     gridData: Role[];
+    pages: number;
+    onFetchData?(page: number, pageSize: number, sorted: boolean, filtered: boolean): any
 }
 
 const Roles = (props: RolesProps) => {
@@ -38,7 +40,10 @@ const Roles = (props: RolesProps) => {
                                     }
                                 }}
                             }}
-                            filterable={true} />
+                            filterable={true}
+                            manual={true}
+                            onFetchData={props.onFetchData}
+                            pages={props.pages} />
                     </div>
                 </div>
             </Wrapper>

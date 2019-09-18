@@ -4,7 +4,8 @@
     "description": "",
     "main": "webpack.config.js",
     "scripts": {
-        "start": "webpack-dev-server --mode development --open --port 8080 --host localhost --history-api-fallback",
+        "start": "webpack-dev-server",
+        "install-packages-then-start": "yarn && yarn start",
         "webpack": "webpack",
         "test": "jest"
     },
@@ -34,8 +35,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@reperio/core-connector": "^3.0.0",
-        "@reperio/ui-components": "^0.4.5",
+        "@reperio/core-connector": "^4.4.0",
+        "@reperio/ui-components": "^1.2.0",
         "@types/react-router-bootstrap": "^0.24.4",
         "@types/socket.io-client": "^1.4.32",
         "axios": "^0.18.0",

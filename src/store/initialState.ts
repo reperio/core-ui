@@ -14,6 +14,7 @@ export class State {
     organizations: StateOrganizations;
     organizationManagement: StateOrganizationManagement;
     applications: StateApplications;
+    queryResult: StateQueryResult;
 }
 
 export class StateAuthSession {
@@ -26,6 +27,11 @@ export class StateAuthSession {
     errorMessage: string;
     user: User;
     redirectToLogin: boolean;
+}
+
+export class StateQueryResult {
+    pages: number;
+    data: any[];
 }
 
 export class StateUsers {
@@ -157,5 +163,9 @@ export const initialState: State = {
         isError: false,
         errorMessage: null,
         applications: []
+    },
+    queryResult: {
+        pages: 0,
+        data: []
     }
 };

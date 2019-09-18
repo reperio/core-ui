@@ -1,7 +1,7 @@
 import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import {reset} from "redux-form";
-import { Permission, RolePermission } from "@reperio/core-connector";
+import { Permission, RolePermission, QueryParameters, QueryResult } from "@reperio/core-connector";
 import { coreApiService } from "../services/coreApiService";
 import {permissionsActionTypes} from '../actionTypes/permissionsActionTypes';
 
@@ -28,6 +28,27 @@ export const getPermissions = () => async (dispatch: Dispatch<any>) => {
     } catch (e) {
         dispatch({
             type: permissionsActionTypes.PERMISSIONS_GET_ERROR,
+            payload: {
+                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
+            }
+        });
+    }
+};
+
+export const getPermissionsQuery = (query: QueryParameters) => async (dispatch: Dispatch<any>) => {
+    dispatch({
+        type: permissionsActionTypes.PERMISSIONS_QUERY_GET_PENDING
+    });
+
+    try {
+        const result: QueryResult = (await coreApiService.permissionService.getPermissionsQuery(query)).data;
+        dispatch({
+            type: permissionsActionTypes.PERMISSIONS_QUERY_GET_SUCCESS,
+            payload: result
+        });
+    } catch (e) {
+        dispatch({
+            type: permissionsActionTypes.PERMISSIONS_QUERY_GET_ERROR,
             payload: {
                 message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
             }

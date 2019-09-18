@@ -176,6 +176,10 @@ describe("organizations actions", () => {
             isError: false,
             errorMessage: null,
             applications: []
+        },
+        queryResult: {
+            data: [],
+            pages: 0
         }
     };
 

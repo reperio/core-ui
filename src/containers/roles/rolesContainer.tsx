@@ -34,7 +34,7 @@ class RolesContainer extends React.Component<RouteComponentProps<any> & StatePro
         return (
             <Roles  navigateToManagement={this.navigateToManagement.bind(this)} 
                     navigateToCreate={this.navigateToCreate.bind(this)} 
-                    gridData={this.props.roles.roles}
+                    gridData={this.props.rolesQuery.data}
                     onFetchData={this.queryData.bind(this)}
                     pages={this.props.rolesQuery.pages}  />
         );

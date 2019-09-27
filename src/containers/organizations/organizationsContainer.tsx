@@ -34,7 +34,7 @@ class OrganizationsContainer extends React.Component<RouteComponentProps<any> & 
         return (
             <Organizations  navigateToManagement={this.navigateToManagement.bind(this)} 
                             navigateToCreate={this.navigateToCreate.bind(this)} 
-                            gridData={this.props.organizations.organizations}
+                            gridData={this.props.organizationsQuery.data}
                             onFetchData={this.queryData.bind(this)}
                             pages={this.props.organizationsQuery.pages}  />
         );

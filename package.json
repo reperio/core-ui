@@ -36,11 +36,12 @@
     "license": "ISC",
     "dependencies": {
         "@reperio/core-connector": "^4.4.0",
-        "@reperio/ui-components": "^1.2.0",
+        "@reperio/ui-components": "^1.5.0",
         "@types/react-router-bootstrap": "^0.24.4",
         "@types/socket.io-client": "^1.4.32",
         "axios": "^0.18.0",
         "connected-react-router": "^5.0.1",
+        "copy-webpack-plugin": "^5.0.4",
         "enzyme": "^3.7.0",
         "enzyme-adapter-react-16": "^1.7.0",
         "file-loader": "^1.1.11",

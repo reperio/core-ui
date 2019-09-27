@@ -50,7 +50,8 @@ const OrganizationManagementUsers = (props: OrganizationManagementUsersProps) =>
         }
         defaultPageSize={10}
         data={props.gridData}
-        filterable={true} />
+        filterable={true}
+        pages={-1} /> // page unknown
 );
 
 export default OrganizationManagementUsers;

@@ -29,7 +29,7 @@ class PermissionsContainer extends React.Component<RouteComponentProps<any> & St
     render() {
         return (
             <Permissions    navigateToManagement={this.navigateToManagement.bind(this)}
-                            gridData={this.props.permissions.permissions}
+                            gridData={this.props.permissionsQuery.data}
                             onFetchData={this.queryData.bind(this)}
                             pages={this.props.permissionsQuery.pages}  />
         );

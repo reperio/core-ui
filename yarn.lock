@@ -52,10 +52,10 @@
     query-string "^6.2.0"
     react "^16.6.3"
 
-"@reperio/ui-components@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-1.5.0.tgz#a152f5b70ad825912f5004a26083f39bfb3eeeb2"
-  integrity sha512-Z+ThR7XnyhwJERzUZ1j9gQCPB4dyNCTPB55OXGpuUz1YGUyL1Uz1z4dG/KAdXCdQ1bO/PNA9pl++5gZFANjjiA==
+"@reperio/ui-components@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@reperio/ui-components/-/ui-components-1.5.1.tgz#b0fa6e869491ba0a93dceb3abcc6642a087c2146"
+  integrity sha512-Eka7UUwK9t+LJqyL5xpdtlsduhJUJIVFxChAncht0IAclimg2y4D4DC0qx6zxAKSYMRZJGcGfogBoYaKA0qBxA==
   dependencies:
     "@reperio/core-connector" "^3.5.0"
     "@types/lodash" "^4.14.138"

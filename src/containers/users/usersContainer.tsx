@@ -32,7 +32,7 @@ class UsersContainer extends React.Component<RouteComponentProps<any> & StatePro
 
     render() {
         return (
-            <Users  gridData={this.props.users.users} 
+            <Users  gridData={this.props.usersQuery.data} 
                     navigateToManagement={this.navigateToManagement.bind(this)} 
                     navigateToUserCreate={this.navigateToUserCreate.bind(this)}
                     onFetchData={this.queryData.bind(this)}

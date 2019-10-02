@@ -20,7 +20,7 @@ const Organizations = (props: OrganizationsProps) => {
         {
             Header: "Personal",
             id: "personal",
-            accessor: (organization: Organization) => organization.personal.toString()
+            accessor: (organization: Organization) => organization.personal ? organization.personal.toString() : ''
         }
     ];
 

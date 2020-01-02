@@ -10,7 +10,6 @@ test('Checks to see if the first is home', () => {
         lastName: 'user',
         password: null,
         primaryEmailAddress: 'test@test.com',
-        userEmails: [],
         userOrganizations: [],
         userRoles: [],
         permissions: [],

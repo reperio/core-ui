@@ -20,7 +20,6 @@ const organizationViewModel: OrganizationViewModel = {
             password: null,
             permissions: [],
             primaryEmailAddress: 'test@test.com',
-            userEmails: [],
             userOrganizations: [],
             userRoles: [],
             userPhones: []

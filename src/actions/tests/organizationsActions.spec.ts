@@ -267,7 +267,6 @@ describe("organizations actions", () => {
                     password: null,
                     permissions: [],
                     primaryEmailAddress: 'test@test.com',
-                    userEmails: [],
                     userOrganizations: [],
                     userRoles: [],
                     userPhones: []

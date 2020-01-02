@@ -2,7 +2,7 @@ import {Dispatch} from "react-redux";
 import { history } from '../store/history';
 import { change, reset, formValueSelector } from "redux-form";
 import { store } from "../store/store";
-import { User, Role, Organization, UserEmail, QueryParameters, QueryResult} from '@reperio/core-connector';
+import { User, Role, Organization, QueryParameters, QueryResult} from '@reperio/core-connector';
 import Dropdown from "../models/dropdown";
 import { State } from "../store/initialState";
 import { coreApiService } from "../services/coreApiService";
@@ -34,9 +34,6 @@ export const usersActionTypes = {
     USERS_MANAGEMENT_SHOW_ROLE_DETAIL: "USERS_MANAGEMENT_SHOW_ROLE_DETAIL",
     USERS_MANAGEMENT_ADD_ROLE: "USERS_MANAGEMENT_ADD_ROLE",
     USERS_MANAGEMENT_REMOVE_ROLE: "USERS_MANAGEMENT_REMOVE_ROLE",
-    USERS_MANAGEMENT_REMOVE_EMAIL: "USERS_MANAGEMENT_REMOVE_EMAIL",
-    USERS_MANAGEMENT_ADD_EMAIL: "USERS_MANAGEMENT_ADD_EMAIL",
-    USERS_MANAGEMENT_SET_PRIMARY_EMAIL: "USERS_MANAGEMENT_SET_PRIMARY_EMAIL",
     CLEAR_USERS: "CLEAR_USERS",
     CLEAR_USER_MANAGEMENT: "CLEAR_USER_MANAGEMENT",
     RESET_USER_MANAGEMENT: "RESET_USER_MANAGEMENT"
@@ -132,8 +129,7 @@ export const loadManagementInitialUser = (userId: string) => async (dispatch: Di
         const userViewModel: UserViewModel = {
             user: userId != null ? (await coreApiService.userService.getUserById(userId)).data : null,
             selectedOrganizations: [],
-            selectedRoles: [],
-            selectedUserEmails: []
+            selectedRoles: []
         };
 
         userViewModel.selectedOrganizations = getState().organizations.organizations
@@ -222,30 +218,6 @@ export const removeRole = (index: number) => (dispatch: Dispatch<any>) => {
     });
 }
 
-export const removeEmailAddress = (index: number) => (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL,
-        payload: { index }
-    });
-}
-
-export const setPrimaryEmailAddress = (index: number) => (dispatch: Dispatch<any>) => {
-    dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL,
-        payload: { index }
-    });
-}
-
-export const addEmailAddress = () => (dispatch: Dispatch<any>, getState: () => State) => {
-    const selector = formValueSelector('userManagementEmailsForm');
-
-    const email = selector(getState(), 'email') as string;
-    dispatch({
-        type: usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL,
-        payload: { email }
-    });
-}
-
 export const togglePanel = (index: number) => (dispatch: Dispatch<any>) => {
     dispatch(change('userManagementForm', 'activePanelIndex', index));
 }
@@ -270,32 +242,6 @@ export const editUserGeneral = (userId: string, firstName: string, lastName: str
             type: usersActionTypes.USERS_EDIT_SUCCESS
         });
         loadManagementInitialUser(userId)(dispatch, getState);
-    } catch (e) {
-        dispatch({
-            type: usersActionTypes.USERS_EDIT_ERROR,
-            payload: {
-                message: getErrorMessageFromStatusCode(e.response != null ? e.response.status : null)
-            }
-        });
-    }
-};
-
-export const editUserEmails = () => async (dispatch: Dispatch<any>, getState: ()=> State) => {
-    dispatch({
-        type: usersActionTypes.USERS_EDIT_PENDING
-    });
-
-    try {
-        const user = getState().userManagement.user;
-        const added = user.selectedUserEmails.filter((userEmail: UserEmail) => userEmail.id == null);
-        const deleted = user.user.userEmails.filter((userEmail: UserEmail) => !user.selectedUserEmails.map((x: UserEmail) => x.id).includes(userEmail.id));
-
-        await coreApiService.userService.editUserEmails(user.user.id, added, deleted);
-        dispatch(change('userManagementForm', 'activePanelIndex', null));
-        dispatch({
-            type: usersActionTypes.USERS_EDIT_SUCCESS
-        });
-        loadManagementInitialUser(user.user.id)(dispatch, getState);
     } catch (e) {
         dispatch({
             type: usersActionTypes.USERS_EDIT_ERROR,

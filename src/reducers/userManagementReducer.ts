@@ -7,14 +7,6 @@ export function userManagementReducer(state = initialState.userManagement, actio
     switch (action.type) {
         case usersActionTypes.USERS_MANAGEMENT_LOAD_INITIAL_USER_SUCCESS: {
             const userViewModel: UserViewModel = action.payload.userViewModel;
-
-            if (userViewModel) {
-                userViewModel.user.userEmails.forEach((userEmail: UserEmail) => {
-                    userEmail.primary = userEmail.email === userViewModel.user.primaryEmailAddress ? true : false
-                });
-                userViewModel.selectedUserEmails = userViewModel.user.userEmails.filter((userEmail: UserEmail) => !userEmail.deleted);
-            }
-
             return {
                 isPending: false,
                 isError: false,
@@ -92,54 +84,6 @@ export function userManagementReducer(state = initialState.userManagement, actio
                 isError: false,
                 user: Object.assign({}, state.user, {
                     selectedRoles: newList
-                }),
-                errorMessage: null,
-                initialUser: state.initialUser
-            };
-        }
-        case usersActionTypes.USERS_MANAGEMENT_REMOVE_EMAIL: {
-            const {index} = action.payload;
-            const newList = state.user.selectedUserEmails.filter((userEmail: UserEmail, i: number) => {
-                return i != index;
-            });
-            return {
-                isPending: true,
-                isError: false,
-                user: Object.assign({}, state.user, {
-                    selectedUserEmails: newList
-                }),
-                errorMessage: null,
-                initialUser: state.initialUser
-            };
-        }
-        case usersActionTypes.USERS_MANAGEMENT_ADD_EMAIL: {
-            const {email} = action.payload;
-            const newList = state.user.selectedUserEmails.concat([{email, emailVerified: false, deleted: false, id: null, userId: null, user: null, primary: false}]);
-            return {
-                isPending: true,
-                isError: false,
-                user: Object.assign({}, state.user, {
-                    selectedUserEmails: newList
-                }),
-                errorMessage: null,
-                initialUser: state.initialUser
-            };
-        }
-        case usersActionTypes.USERS_MANAGEMENT_SET_PRIMARY_EMAIL: {
-            const {index} = action.payload;
-            const newList = state.initialUser.selectedUserEmails;
-
-            newList.forEach((userEmail: UserEmail) => {
-                userEmail.primary = false;
-            });
-
-            newList[index].primary = true;
-
-            return {
-                isPending: true,
-                isError: false,
-                user: Object.assign({}, state.user, {
-                    selectedUserEmails: newList
                 }),
                 errorMessage: null,
                 initialUser: state.initialUser

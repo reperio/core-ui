@@ -4,7 +4,6 @@ interface UserViewModel {
     user: User;
     selectedOrganizations: Organization[],
     selectedRoles: Role[]
-    selectedUserEmails: UserEmail[];
 }
 
 export { UserViewModel }

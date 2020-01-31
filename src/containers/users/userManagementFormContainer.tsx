@@ -2,8 +2,8 @@ import React from 'react'
 import {bindActionCreators} from "redux";
 import { State } from '../../store/initialState';
 import { selectOrganization, addOrganization, removeOrganization, clearManagementInitialUser, loadManagementInitialUser, toggleRoleDetails, 
-    addRole, removeRole, selectRole, removeEmailAddress, setPrimaryEmailAddress, addEmailAddress, togglePanel, cancelUserPanel, editUserGeneral, 
-    editUserEmails, editUserOrganizations, editUserRoles, deleteUser } from '../../actions/usersActions';
+    addRole, removeRole, selectRole, togglePanel, cancelUserPanel,
+    editUserGeneral, editUserOrganizations, editUserRoles, deleteUser } from '../../actions/usersActions';
 import { getOrganizations } from '../../actions/organizationsActions';
 import { getRoles } from '../../actions/rolesActions';
 import { sendVerificationEmail } from '../../actions/authActions';
@@ -20,7 +20,6 @@ class UserManagementFormValues {
     firstName: string;
     lastName: string;
     selectedOrganizations: Dropdown[];
-    userEmails: UserEmail[];
 }
 
 interface OwnProps {}
@@ -77,20 +76,8 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         this.props.actions.addRole(role);
     }
 
-    setPrimaryEmailAddress(index: number) {
-        this.props.actions.setPrimaryEmailAddress(index);
-    }
-
-    removeEmailAddress(index: number) {
-        this.props.actions.removeEmailAddress(index);
-    }
-
-    addEmailAddress() {
-        this.props.actions.addEmailAddress();
-    }
-
     sendVerificationEmail(index: number) {
-        this.props.actions.sendVerificationEmail(this.props.user.user.id, this.props.user.user.userEmails[index].email);
+        this.props.actions.sendVerificationEmail(this.props.user.user.id, this.props.user.user.primaryEmailAddress);
     }
 
     togglePanel(index: number) {
@@ -109,10 +96,6 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         this.props.actions.cancelUserPanel();
     }
 
-    editUserEmails() {
-        this.props.actions.editUserEmails();
-    }
-
     editUserOrganizations() {
         this.props.actions.editUserOrganizations(this.props.initialUser.user.id);
     }
@@ -129,19 +112,16 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
         return (
             <UserManagementForm activePanelIndex={this.props.activePanelIndex}
                                 activeRoleDetailIndex={this.props.activeRoleDetailIndex}
-                                addEmailAddress={this.addEmailAddress.bind(this)}
                                 addOrganization={this.addOrganization.bind(this)}
                                 addRole={this.addRole.bind(this)}
                                 cancelUserPanel={this.cancelUserPanel.bind(this)}
                                 deleteUser={this.deleteUser.bind(this)}
-                                editUserEmails={this.editUserEmails.bind(this)}
                                 editUserGeneral={this.editUserGeneral.bind(this)}
                                 editUserOrganizations={this.editUserOrganizations.bind(this)}
                                 editUserRoles={this.editUserRoles.bind(this)}
                                 navigateToUsers={this.navigateToUsers.bind(this)} 
                                 organizations={this.props.organizations}
                                 redirectToErrorPage={this.props.redirectToErrorPage}
-                                removeEmailAddress={this.removeEmailAddress.bind(this)}
                                 removeOrganization={this.removeOrganization.bind(this)}
                                 removeRole={this.removeRole.bind(this)}
                                 roles={this.props.roles}
@@ -151,7 +131,6 @@ class UserManagementFormContainer extends React.Component<RouteComponentProps<an
                                 selectedRole={this.props.selectedRole}
                                 submitForm={this.submitForm.bind(this)}
                                 sendVerificationEmail={this.sendVerificationEmail.bind(this)}
-                                setPrimaryEmailAddress={this.setPrimaryEmailAddress.bind(this)}
                                 togglePanel={this.togglePanel.bind(this)}
                                 toggleRoleDetails={this.toggleRoleDetails.bind(this)}
                                 loggedInUser={this.props.authSession.user}
@@ -194,15 +173,11 @@ function mapActionToProps(dispatch: any) {
                 removeRole, 
                 getRoles, 
                 selectRole, 
-                removeEmailAddress, 
-                setPrimaryEmailAddress, 
-                addEmailAddress,
                 sendVerificationEmail,
                 togglePanel,
                 cancelUserPanel,
                 editUserGeneral,
                 submitForm,
-                editUserEmails,
                 editUserOrganizations,
                 deleteUser,
                 editUserRoles

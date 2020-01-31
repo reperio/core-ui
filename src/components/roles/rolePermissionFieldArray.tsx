@@ -23,7 +23,9 @@ const RolePermissionFieldArray: React.SFC<RolePermissionFieldArrayProps> = (prop
                                 <div className="row no-margin-container">
                                     <div onClick={() => props.toggle && props.active ? props.toggleRoleDetails(index) :  null}>
                                         <div className={`fa ${props.active ? props.activeRoleDetailIndex === index ? 'fa-caret-down' : 'fa-caret-right' :''} fa-lg roles-permissions-row-arrow`}></div>
-                                        {props.organizations.filter((organization: Organization) => organization.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].name}
+                                        {(props.organizations.filter((organization: Organization) => organization.id == props.initialValues[index].organizationId).length ? 
+                                            props.organizations.filter((organization: Organization) => organization.id == props.initialValues[index].organizationId)[0].name + ' - ' + props.initialValues[index].name
+                                            : '')}
                                     </div>
                                     <div className="r-row-child">
                                         {props.active ?

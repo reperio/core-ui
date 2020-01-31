@@ -12,23 +12,19 @@ import { Organization, Role, User, CorePermissions } from '@reperio/core-connect
 import { EditablePanel, EditablePanelOverlay } from '@reperio/ui-components';
 
 interface UserManagementProps {
-    addEmailAddress(): void;
     addOrganization(selectedRole: Dropdown): void;
     addRole(selectedRole: Dropdown): void;
     cancelUserPanel(): void;
     deleteUser(): void;
     editUserOrganizations(): void;
     editUserGeneral(): void;
-    editUserEmails(): void;
     editUserRoles(): void;
     navigateToUsers(): void;
-    removeEmailAddress(): void;
     removeOrganization(organizationId: string): void;
     removeRole(roleId: string): void;
     selectOrganization(): void;
     selectRole(): void;
     sendVerificationEmail(): void;
-    setPrimaryEmailAddress(): void;
     submitForm(): void;
     togglePanel(panel: number): void;
     toggleRoleDetails(): void;
@@ -59,23 +55,6 @@ const UserManagementForm: React.SFC<UserManagementProps> = (props: UserManagemen
                     <UserManagementGeneralForm  active={props.activePanelIndex === 0}
                                                 initialValues={props.managedUser.user}
                                                 onSubmit={props.editUserGeneral.bind(this)}/>
-                </EditablePanel>
-                <EditablePanel  active={props.activePanelIndex === 1}
-                                permissionToEdit={props.loggedInUser.permissions.includes(CorePermissions.AddEmail) || props.loggedInUser.permissions.includes(CorePermissions.DeleteEmail) || props.loggedInUser.permissions.includes(CorePermissions.SetPrimaryEmail) || props.loggedInUser.permissions.includes(CorePermissions.ResendVerificationEmails)}
-                                onClick={() => { props.activePanelIndex != 1 ? props.togglePanel(1) : null}}
-                                submit={props.submitForm.bind(this, 'userManagementEmailsForm')}
-                                cancel={props.cancelUserPanel.bind(this)}>
-                    <UserManagementEmailsForm   active={props.activePanelIndex === 1}
-                                                initialValues={props.managedUser}
-                                                canAddEmails={props.loggedInUser.permissions.includes(CorePermissions.AddEmail)}
-                                                canDeleteEmail={props.loggedInUser.permissions.includes(CorePermissions.DeleteEmail)}
-                                                canResendVerificationEmail={props.loggedInUser.permissions.includes(CorePermissions.ResendVerificationEmails)}
-                                                canSetPrimary={props.loggedInUser.permissions.includes(CorePermissions.SetPrimaryEmail)}
-                                                onSubmit={props.editUserEmails.bind(this)}
-                                                setPrimaryEmailAddress={props.setPrimaryEmailAddress.bind(this)}
-                                                removeEmailAddress={props.removeEmailAddress.bind(this)}
-                                                addEmailAddress={props.addEmailAddress.bind(this)}
-                                                sendVerificationEmail={props.sendVerificationEmail.bind(this)}/>
                 </EditablePanel>
                 {props.loggedInUser.permissions.includes(CorePermissions.ViewOrganizations) ?
                     <EditablePanel  active={props.activePanelIndex === 2}

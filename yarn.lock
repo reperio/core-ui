@@ -43,10 +43,10 @@
     query-string "^6.2.0"
     react "^16.6.3"
 
-"@reperio/core-connector@^4.4.0":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@reperio/core-connector/-/core-connector-4.4.0.tgz#9953568b7ecbba3a754edba5efbcf9318ca5839e"
-  integrity sha512-gnMGGL94VSMqCPDr4HG4dttahQ7WQ3bJflMhcSdsw4H1O8rKD/ZLVHVZ8Vl6uAO9ei3GxvPng5EzOhiv24CsHA==
+"@reperio/core-connector@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@reperio/core-connector/-/core-connector-4.5.0.tgz#2a47b9c75c4894fd6bead177ed4abff6c14147cf"
+  integrity sha512-exJSbrtw8bD9Pe6yZ0hwPxedf06eullquIvBwqsYGXL+unQLI2fmomyodYSNmspGdDZTIkpbX+WS06BrnZiEvQ==
   dependencies:
     axios "^0.18.0"
     query-string "^6.2.0"
